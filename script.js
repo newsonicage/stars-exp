@@ -1,10 +1,14 @@
 // AUDIO
 const music = document.getElementById("bg-music");
-const hover = document.getElementById("hover-sound");
+const hoverSounds = [
+  document.getElementById("hover-sound-1"),
+  document.getElementById("hover-sound-2"),
+  document.getElementById("hover-sound-3"),
+];
 
 // volume levels
 if (music) music.volume = 0.2;
-if (hover) hover.volume = 0.12;
+hoverSounds.forEach(s => { if (s) s.volume = 0.12; });
 
 // start music on first interaction
 document.body.addEventListener("click", () => {
@@ -17,10 +21,11 @@ function enterSite() {
 }
 
 // HOVER SOUND
-function playHover() {
-  if (!hover) return;
-  hover.currentTime = 0;
-  hover.play().catch(()=>{});
+function playHover(n) {
+  const s = hoverSounds[n - 1];
+  if (!s) return;
+  s.currentTime = 0;
+  s.play().catch(()=>{});
 }
 
 // SHOP SCROLL

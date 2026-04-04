@@ -102,7 +102,7 @@
       border-radius: 50px;
       color: var(--white);
       font-family: 'Nunito', sans-serif;
-      font-size: 14px;
+      font-size: 16px; /* 16px prevents iOS auto-zoom on focus */
       font-weight: 800;
       letter-spacing: 5px;
       text-transform: uppercase;
@@ -324,6 +324,7 @@
         fb.textContent = '✦  Access Granted  ✦';
         st.textContent = 'Identity Confirmed';
         requestAnimationFrame(() => fb.classList.add('visible'));
+        setTimeout(() => { window.location.href = 'home.html'; }, 1500);
       } else {
         panel.classList.add('state-denied');
         btn.classList.add('shake');
