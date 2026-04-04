@@ -1,19 +1,62 @@
+// AUDIO
 const music = document.getElementById("bg-music");
+const hover = document.getElementById("hover-sound");
 
-// Unlock audio on first interaction
+// volume levels
+if (music) music.volume = 0.2;
+if (hover) hover.volume = 0.12;
+
+// start music on first interaction
 document.body.addEventListener("click", () => {
-  music.play().catch(() => {});
+  if (music) music.play().catch(()=>{});
 }, { once: true });
 
+// ENTER SITE
 function enterSite() {
-  const password = document.getElementById("password").value;
-
-  if (password === "stars") {
-    document.body.style.opacity = "0";
-    setTimeout(() => {
-      window.location.href = "/home.html"; // future page
-    }, 1000);
-  } else {
-    alert("ACCESS DENIED");
-  }
+  window.location.href = "/home.html";
 }
+
+// HOVER SOUND
+function playHover() {
+  if (!hover) return;
+  hover.currentTime = 0;
+  hover.play().catch(()=>{});
+}
+
+// SHOP SCROLL
+function scrollToShop() {
+  document.getElementById("shop").scrollIntoView({ behavior: "smooth" });
+}
+
+// ARCHIVE ALERT
+function archiveAlert() {
+  const popup = document.getElementById("popup");
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 2000);
+}
+
+// MUSIC LINK
+function goMusic() {
+  window.location.href = "https://too.fm/pussypoppin";
+}
+
+// PRODUCT DENY
+function deny(el) {
+  el.classList.add("clicked");
+
+  setTimeout(() => {
+    el.classList.remove("clicked");
+  }, 500);
+}
+
+// PARALLAX
+window.addEventListener("scroll", () => {
+  const scrollY = window.scrollY;
+  const container = document.querySelector(".container");
+  if (container) {
+    container.style.transform = `translateY(${scrollY * -0.05}px)`;
+  }
+});
