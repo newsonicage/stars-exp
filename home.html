@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stars* Interface</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,58 +14,144 @@
 <audio id="bg-music" loop>
   <source src="assets/music1.mp3" type="audio/mpeg">
 </audio>
-
 <audio id="hover-sound-1"><source src="assets/hover1.mp3" type="audio/mpeg"></audio>
 <audio id="hover-sound-2"><source src="assets/hover2.mp3" type="audio/mpeg"></audio>
 <audio id="hover-sound-3"><source src="assets/hover3.mp3" type="audio/mpeg"></audio>
 
-<!-- POPUP -->
-<div id="popup" class="popup">⚠️ ACCESS REQUESTED</div>
-
-<div class="container">
-
-  <!-- PILLARS -->
-  <div class="pillars">
-
-    <div class="pillar" onclick="scrollToShop()" onmouseenter="playHover(1)">
-      <video src="assets/video1.mp4" autoplay muted loop></video>
-      <div class="label">SHOP</div>
-    </div>
-
-    <div class="pillar" onclick="archiveAlert()" onmouseenter="playHover(2)">
-      <video src="assets/video2.mp4" autoplay muted loop></video>
-      <div class="label">ARCHIVE</div>
-    </div>
-
-    <div class="pillar" onclick="goMusic()" onmouseenter="playHover(3)">
-      <video src="assets/video3.mp4" autoplay muted loop></video>
-      <div class="label">MUSIC</div>
-    </div>
-
+<!-- ARCHIVE POPUP -->
+<div id="archive-popup" class="archive-popup" onclick="closeArchive()">
+  <div class="archive-inner" id="archive-inner">
+    <span class="aframe tl"></span>
+    <span class="aframe tr"></span>
+    <span class="aframe bl"></span>
+    <span class="aframe br"></span>
+    <div class="archive-icon">⚠</div>
+    <div class="archive-title">ACCESS REQUESTED</div>
+    <div class="archive-sub">Clearance Level Insufficient</div>
+    <div class="archive-code">ERR · 403 · RESTRICTED</div>
+    <div class="archive-dismiss">[ TAP TO DISMISS ]</div>
   </div>
-
-  <!-- PRODUCTS -->
-  <div id="shop" class="products">
-
-    <div class="product" onclick="deny(this)">
-      <img src="assets/product1.jpg">
-    </div>
-
-    <div class="product" onclick="deny(this)">
-      <img src="assets/product2.jpg">
-    </div>
-
-    <div class="product" onclick="deny(this)">
-      <img src="assets/product1.jpg">
-    </div>
-
-    <div class="product" onclick="deny(this)">
-      <img src="assets/product2.jpg">
-    </div>
-
-  </div>
-
 </div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="pillars" id="pillars">
+
+    <!-- SHOP -->
+    <div class="pillar" onmouseenter="playHover(1)" onclick="scrollToShop()">
+      <div class="pillar-bg"></div>
+      <div class="pillar-video-wrap">
+        <video src="assets/video1.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="pillar-overlay"></div>
+      <div class="pillar-scanlines"></div>
+      <div class="pillar-border"></div>
+      <div class="pillar-corners">
+        <span class="pc tl"></span><span class="pc tr"></span>
+        <span class="pc bl"></span><span class="pc br"></span>
+      </div>
+      <div class="pillar-label">
+        <span class="pillar-num">01</span>
+        <div class="pillar-title">SHOP</div>
+        <div class="pillar-rule"></div>
+      </div>
+    </div>
+
+    <!-- ARCHIVE -->
+    <div class="pillar" onmouseenter="playHover(2)" onclick="archiveAlert()">
+      <div class="pillar-bg"></div>
+      <div class="pillar-video-wrap">
+        <video src="assets/video2.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="pillar-overlay"></div>
+      <div class="pillar-scanlines"></div>
+      <div class="pillar-border"></div>
+      <div class="pillar-corners">
+        <span class="pc tl"></span><span class="pc tr"></span>
+        <span class="pc bl"></span><span class="pc br"></span>
+      </div>
+      <div class="pillar-label">
+        <span class="pillar-num">02</span>
+        <div class="pillar-title">ARCHIVE</div>
+        <div class="pillar-rule"></div>
+      </div>
+    </div>
+
+    <!-- MUSIC -->
+    <div class="pillar" onmouseenter="playHover(3)" onclick="goMusic()">
+      <div class="pillar-bg"></div>
+      <div class="pillar-video-wrap">
+        <video src="assets/video3.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="pillar-overlay"></div>
+      <div class="pillar-scanlines"></div>
+      <div class="pillar-border"></div>
+      <div class="pillar-corners">
+        <span class="pc tl"></span><span class="pc tr"></span>
+        <span class="pc bl"></span><span class="pc br"></span>
+      </div>
+      <div class="pillar-label">
+        <span class="pillar-num">03</span>
+        <div class="pillar-title">MUSIC</div>
+        <div class="pillar-rule"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="shop" class="products-section">
+
+  <div class="section-header reveal">
+    <span class="section-label">New Releases</span>
+    <span class="section-rule-line"></span>
+  </div>
+
+  <div class="products-grid reveal">
+
+    <!-- Product 1 -->
+    <div class="product-card" onclick="window.open('https://too.fm/pussypoppin','_blank')">
+      <div class="product-img-wrap">
+        <img src="assets/product1.jpg" alt="Pussy Poppin">
+        <div class="product-hover-overlay">
+          <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+          <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+          <div class="phov-content">
+            <div class="phov-title">Pussy Poppin</div>
+            <div class="phov-type">Album · Stars*</div>
+            <div class="phov-cta">Stream Now →</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-meta">
+        <span class="product-name">Pussy Poppin</span>
+        <span class="product-artist">Stars*</span>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product-card" onclick="window.open('https://too.fm/thelustwelove','_blank')">
+      <div class="product-img-wrap">
+        <img src="assets/product2.jpg" alt="The Lust We Love">
+        <div class="product-hover-overlay">
+          <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+          <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+          <div class="phov-content">
+            <div class="phov-title">The Lust We Love</div>
+            <div class="phov-type">Album · Stars*</div>
+            <div class="phov-cta">Stream Now →</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-meta">
+        <span class="product-name">The Lust We Love</span>
+        <span class="product-artist">Stars*</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <script src="script.js"></script>
 </body>
