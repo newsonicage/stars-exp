@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stars* Interface</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- AUDIO -->
+<audio id="bg-music" loop>
+  <source src="assets/music1.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="hover-sound">
+  <source src="assets/hover1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- POPUP -->
+<div id="popup" class="popup">⚠️ ACCESS REQUESTED</div>
+
+<div class="container">
+
+  <!-- PILLARS -->
+  <div class="pillars">
+
+    <div class="pillar" onclick="scrollToShop()" onmouseenter="playHover()">
+      <video src="assets/video1.mp4" autoplay muted loop></video>
+      <div class="label">SHOP</div>
+    </div>
+
+    <div class="pillar" onclick="archiveAlert()" onmouseenter="playHover()">
+      <video src="assets/video2.mp4" autoplay muted loop></video>
+      <div class="label">ARCHIVE</div>
+    </div>
+
+    <div class="pillar" onclick="goMusic()" onmouseenter="playHover()">
+      <video src="assets/video3.mp4" autoplay muted loop></video>
+      <div class="label">MUSIC</div>
+    </div>
+
+  </div>
+
+  <!-- PRODUCTS -->
+  <div id="shop" class="products">
+
+    <div class="product" onclick="deny(this)">
+      <img src="assets/product1.jpg">
+    </div>
+
+    <div class="product" onclick="deny(this)">
+      <img src="assets/product2.jpg">
+    </div>
+
+    <div class="product" onclick="deny(this)">
+      <img src="assets/product1.jpg">
+    </div>
+
+    <div class="product" onclick="deny(this)">
+      <img src="assets/product2.jpg">
+    </div>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
