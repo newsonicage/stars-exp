@@ -28,11 +28,84 @@ function playHover(n) {
 }
 
 /* ════════════════════════════════════════
-   SHOP — scroll to sub-menu
+   THEME MANAGEMENT
+════════════════════════════════════════ */
+function setTheme(theme) {
+  document.body.classList.remove("theme-dark", "theme-light");
+  document.body.classList.add("theme-" + theme);
+}
+
+/* Auto-switch theme based on scroll position */
+(function initThemeScroll() {
+  const shopEl  = document.getElementById("shop");
+  const heroEl  = document.querySelector(".hero");
+  if (!shopEl || !heroEl) return;
+
+  function onScroll() {
+    const shopTop = shopEl.getBoundingClientRect().top;
+    const heroBottom = heroEl.getBoundingClientRect().bottom;
+    // Enter light when shop section crests the middle of the viewport
+    if (shopTop <= window.innerHeight * 0.55) {
+      setTheme("light");
+    } else if (heroBottom > window.innerHeight * 0.25) {
+      setTheme("dark");
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+})();
+
+/* ════════════════════════════════════════
+   SHOP — scroll to sub-menu (offset for fixed header)
 ════════════════════════════════════════ */
 function scrollToShop() {
+  setTheme("light");
   const el = document.getElementById("shop");
-  if (el) el.scrollIntoView({ behavior: "smooth" });
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - 52;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+/* ════════════════════════════════════════
+   EXIT SHOP — return to hero / dark mode
+════════════════════════════════════════ */
+function exitShop() {
+  setTheme("dark");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ════════════════════════════════════════
+   NOTIFY POPUP (Sold / Coming Soon)
+════════════════════════════════════════ */
+function openNotifyPopup(title) {
+  document.getElementById("np-item-title").textContent = title;
+  document.getElementById("np-item-field").value = title;
+  document.getElementById("notify-overlay").classList.add("active");
+  document.getElementById("notify-panel-wrap").classList.add("active");
+}
+
+function closeNotifyPopup() {
+  document.getElementById("notify-overlay").classList.remove("active");
+  document.getElementById("notify-panel-wrap").classList.remove("active");
+  setTimeout(() => {
+    const form = document.getElementById("notify-form");
+    const success = document.getElementById("np-success");
+    if (form) { form.reset(); form.style.display = ""; }
+    if (success) success.classList.remove("visible");
+  }, 400);
+}
+
+document.getElementById("notify-overlay").addEventListener("click", closeNotifyPopup);
+
+const notifyForm = document.getElementById("notify-form");
+if (notifyForm) {
+  notifyForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    await submitNetlifyForm(e.target);
+    e.target.style.display = "none";
+    document.getElementById("np-success").classList.add("visible");
+    setTimeout(closeNotifyPopup, 3200);
+  });
 }
 
 /* ════════════════════════════════════════
@@ -131,6 +204,46 @@ document.getElementById("cart-close-btn").addEventListener("click", closeCart);
 /* ════════════════════════════════════════
    ESCAPE KEY
 ════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   LINKS POPUP
+════════════════════════════════════════ */
+function openLinkPanel() {
+  document.getElementById("link-overlay").classList.add("active");
+  document.getElementById("link-panel-wrap").classList.add("active");
+}
+
+function closeLinkPanel() {
+  document.getElementById("link-overlay").classList.remove("active");
+  document.getElementById("link-panel-wrap").classList.remove("active");
+}
+
+document.getElementById("link-btn").addEventListener("click", openLinkPanel);
+document.getElementById("link-overlay").addEventListener("click", closeLinkPanel);
+
+/* ════════════════════════════════════════
+   COPY TOAST
+════════════════════════════════════════ */
+let toastTimer = null;
+function showCopyToast(msg) {
+  const toast = document.getElementById("copy-toast");
+  toast.textContent = msg || "Copied!";
+  toast.classList.add("visible");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("visible"), 2000);
+}
+
+function copySiteLink() {
+  navigator.clipboard.writeText("https://starsinfern0.com").then(() => {
+    showCopyToast("Link Copied!");
+  });
+}
+
+function copyContactEmail() {
+  navigator.clipboard.writeText("scratchbradley@gmail.com").then(() => {
+    showCopyToast("Email Copied!");
+  });
+}
+
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
   closeArchive();
@@ -138,6 +251,8 @@ document.addEventListener("keydown", e => {
   closeErrorPopup();
   closeContactForm();
   closeCart();
+  closeNotifyPopup();
+  closeLinkPanel();
 });
 
 /* ════════════════════════════════════════

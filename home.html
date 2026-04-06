@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="theme-dark">
 
 <!-- AUDIO -->
 <audio id="bg-music" loop>
@@ -22,16 +22,22 @@
 
 <!-- FIXED HEADER -->
 <header class="site-header">
-  <div class="header-logo">
+  <div class="header-logo" id="home-logo" onclick="exitShop()">
     <span class="header-star">★</span>
     <span class="header-brand">Stars*</span>
   </div>
   <div class="header-actions">
+    <button class="header-btn cog-btn" id="cog-btn" aria-label="Settings">⚙</button>
+    <button class="header-btn link-btn" id="link-btn" aria-label="Share links">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+      </svg>
+    </button>
     <button class="header-btn cart-btn" id="cart-btn" aria-label="Shopping cart">
       🛒
       <span class="cart-badge" id="cart-badge">0</span>
     </button>
-    <button class="header-btn cog-btn" id="cog-btn" aria-label="Settings">⚙</button>
   </div>
 </header>
 
@@ -96,7 +102,7 @@
     </div>
 
     <!-- Netlify form -->
-    <form class="contact-form" id="contact-form" name="contact" data-netlify="true" style="width:100%;display:flex;flex-direction:column;gap:14px;">
+    <form class="contact-form" id="contact-form" name="contact" data-netlify="true" style="width:100%;display:flex;flex-direction:column;gap:20px;">
       <input type="hidden" name="form-name" value="contact">
 
       <div class="form-row">
@@ -127,6 +133,12 @@
 
       <button class="sp-pill-btn" type="submit" style="margin-top:4px;">Send Transmission →</button>
     </form>
+
+    <div class="contact-info-block">
+      <a class="contact-info-item" href="https://instagram.com/starsinfern0" target="_blank" rel="noopener">Scratch Bradley</a>
+      <a class="contact-info-item" href="tel:+14049106583">4049106583</a>
+      <button class="contact-info-item contact-info-email" onclick="copyContactEmail()">scratchbradley@gmail.com</button>
+    </div>
 
     <button class="sp-close" onclick="closeContactForm()">[ Close ]</button>
   </div>
@@ -335,7 +347,7 @@
         </div>
       </div>
 
-      <div class="product-card furniture-product" onmouseenter="playHover(3)">
+      <div class="product-card furniture-product" onmouseenter="playHover(3)" onclick="openNotifyPopup('Power of the P — Ö Table')">
         <div class="product-img-wrap">
           <img src="assets/product7.jpg" alt="Power of the P Ö Table">
           <video class="product-hover-video" src="assets/video7.mp4" muted loop playsinline></video>
@@ -383,11 +395,99 @@
       <span class="section-label">Music</span>
       <span class="section-rule-line"></span>
     </div>
+
+    <!-- Albums -->
+    <div class="music-type-label reveal">Albums</div>
     <div class="products-grid reveal">
 
+      <!-- product11: Endless — COMING SOON -->
+      <div class="product-card music-product"
+           onmouseenter="playHover(2)"
+           onclick="openNotifyPopup('Endless')">
+        <div class="product-img-wrap">
+          <img src="assets/product11.jpg" alt="Endless">
+          <div class="music-overlay">
+            <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+            <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+            <div class="phov-content">
+              <div class="phov-title">Endless</div>
+              <div class="phov-type">Album · Stars*</div>
+              <div class="phov-cta">Stream Now →</div>
+            </div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">Endless</span>
+          <span class="product-artist">Stars*</span>
+        </div>
+        <div class="avail-badge avail-soon">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Coming Soon</span>
+        </div>
+      </div>
+
+      <!-- product9: Heart of the Underworld -->
+      <div class="product-card music-product"
+           onmouseenter="playHover(3)"
+           onclick="openNotifyPopup('Heart of the Underworld')">
+        <div class="product-img-wrap">
+          <img src="assets/product9.jpg" alt="Heart of the Underworld">
+          <div class="music-overlay">
+            <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+            <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+            <div class="phov-content">
+              <div class="phov-title">Heart of the Underworld</div>
+              <div class="phov-type">Album · Stars*</div>
+              <div class="phov-cta">Stream Now →</div>
+            </div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">Heart of the Underworld</span>
+          <span class="product-artist">Stars*</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Singles -->
+    <div class="music-type-label reveal">Singles</div>
+    <div class="products-grid singles-grid reveal">
+
+      <!-- product14: body skin2skin — COMING SOON -->
       <div class="product-card music-product"
            onmouseenter="playHover(1)"
-           onclick="window.open('https://too.fm/pussypoppin','_blank')">
+           onclick="openNotifyPopup('body skin2skin')">
+        <div class="product-img-wrap">
+          <img src="assets/product14.jpg" alt="body skin2skin">
+          <div class="music-overlay">
+            <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+            <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+            <div class="phov-content">
+              <div class="phov-title">body skin2skin</div>
+              <div class="phov-type">Single · Stars*</div>
+              <div class="phov-cta">Stream Now →</div>
+            </div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">body skin2skin</span>
+          <span class="product-artist">Stars*</span>
+        </div>
+        <div class="avail-badge avail-soon">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Coming Soon</span>
+        </div>
+      </div>
+
+      <!-- product1: Pussy Poppin -->
+      <div class="product-card music-product"
+           onmouseenter="playHover(1)"
+           onclick="window.open('https://untitled.stream/buy/project/uSGiPOOatSAYuy0fGThNX','_blank')">
         <div class="product-img-wrap">
           <img src="assets/product1.jpg" alt="Pussy Poppin">
           <div class="music-overlay">
@@ -395,7 +495,7 @@
             <div class="phov-frame bl"></div><div class="phov-frame br"></div>
             <div class="phov-content">
               <div class="phov-title">Pussy Poppin</div>
-              <div class="phov-type">Album · Stars*</div>
+              <div class="phov-type">Single · Stars*</div>
               <div class="phov-cta">Stream Now →</div>
             </div>
           </div>
@@ -410,9 +510,10 @@
         </div>
       </div>
 
+      <!-- product2: The Lust We Love -->
       <div class="product-card music-product"
            onmouseenter="playHover(2)"
-           onclick="window.open('https://too.fm/thelustwelove','_blank')">
+           onclick="window.open('https://untitled.stream/library/project/9huV2PQNFV599EyUYhODA','_blank')">
         <div class="product-img-wrap">
           <img src="assets/product2.jpg" alt="The Lust We Love">
           <div class="music-overlay">
@@ -420,7 +521,7 @@
             <div class="phov-frame bl"></div><div class="phov-frame br"></div>
             <div class="phov-content">
               <div class="phov-title">The Lust We Love</div>
-              <div class="phov-type">Album · Stars*</div>
+              <div class="phov-type">Single · Stars*</div>
               <div class="phov-cta">Stream Now →</div>
             </div>
           </div>
@@ -435,10 +536,175 @@
         </div>
       </div>
 
+      <!-- product10: take it off -->
+      <div class="product-card music-product"
+           onmouseenter="playHover(3)"
+           onclick="window.open('https://untitled.stream/library/project/NZVMM3NKhydA7A3nemNxG','_blank')">
+        <div class="product-img-wrap">
+          <img src="assets/product10.jpg" alt="take it off">
+          <div class="music-overlay">
+            <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+            <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+            <div class="phov-content">
+              <div class="phov-title">take it off</div>
+              <div class="phov-type">Single · Stars*</div>
+              <div class="phov-cta">Stream Now →</div>
+            </div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">take it off</span>
+          <span class="product-artist">Stars*</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+      <!-- product12: Ghost In The City (1995) -->
+      <div class="product-card music-product"
+           onmouseenter="playHover(1)"
+           onclick="window.open('https://untitled.stream/buy/project/JDEPnFXhxhSBSaxNSzElN','_blank')">
+        <div class="product-img-wrap">
+          <img src="assets/product12.jpg" alt="Ghost In The City (1995)">
+          <div class="music-overlay">
+            <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+            <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+            <div class="phov-content">
+              <div class="phov-title">Ghost In The City (1995)</div>
+              <div class="phov-type">Single · Stars*</div>
+              <div class="phov-cta">Stream Now →</div>
+            </div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">Ghost In The City (1995)</span>
+          <span class="product-artist">Stars*</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+      <!-- product13: let it play out!! -->
+      <div class="product-card music-product"
+           onmouseenter="playHover(2)"
+           onclick="window.open('https://untitled.stream/buy/project/75hkHSf53LC6m9MoUdAtA','_blank')">
+        <div class="product-img-wrap">
+          <img src="assets/product13.jpg" alt="let it play out!!">
+          <div class="music-overlay">
+            <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+            <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+            <div class="phov-content">
+              <div class="phov-title">let it play out!!</div>
+              <div class="phov-type">Single · Stars*</div>
+              <div class="phov-cta">Stream Now →</div>
+            </div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">let it play out!!</span>
+          <span class="product-artist">Stars*</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
 </div>
+
+<!-- NOTIFY POPUP (Sold / Coming Soon) -->
+<div class="notify-overlay" id="notify-overlay"></div>
+<div class="notify-panel-wrap" id="notify-panel-wrap">
+  <div class="notify-panel">
+    <span class="sp-frame tl"></span>
+    <span class="sp-frame tr"></span>
+    <span class="sp-frame bl"></span>
+    <span class="sp-frame br"></span>
+
+    <div class="sp-status-row">
+      <span class="sp-status-dot"></span>
+      <span class="sp-status-text" id="np-item-title">Item</span>
+    </div>
+
+    <p class="np-sub">Notify me when available</p>
+
+    <!-- Success state -->
+    <div class="form-success" id="np-success">
+      <div class="success-icon np-success-icon">✦</div>
+      <div class="success-title">Request Received</div>
+      <div class="success-sub">We'll be in touch.</div>
+    </div>
+
+    <!-- Form -->
+    <form class="contact-form" id="notify-form" name="notify" data-netlify="true"
+          style="width:100%;display:flex;flex-direction:column;gap:14px;">
+      <input type="hidden" name="form-name" value="notify">
+      <input type="hidden" id="np-item-field" name="item" value="">
+
+      <div class="form-group">
+        <label class="form-label" for="np-name">Name</label>
+        <input class="form-input" id="np-name" type="text" name="name" placeholder="Your Name" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="np-phone">Phone</label>
+        <input class="form-input" id="np-phone" type="tel" name="phone" placeholder="+1 (555) 000-0000">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="np-email">Email</label>
+        <input class="form-input" id="np-email" type="email" name="email" placeholder="your@email.com" required>
+      </div>
+
+      <button class="sp-pill-btn" type="submit" style="margin-top:4px;">Notify Me →</button>
+    </form>
+
+    <button class="sp-close" onclick="closeNotifyPopup()">[ Close ]</button>
+  </div>
+</div>
+
+<!-- LINKS POPUP -->
+<div class="link-overlay" id="link-overlay"></div>
+<div class="link-panel-wrap" id="link-panel-wrap">
+  <div class="link-panel">
+    <span class="sp-frame tl"></span>
+    <span class="sp-frame tr"></span>
+    <span class="sp-frame bl"></span>
+    <span class="sp-frame br"></span>
+
+    <div class="sp-status-row">
+      <span class="sp-status-dot"></span>
+      <span class="sp-status-text">Stars* Links</span>
+    </div>
+
+    <div class="link-social-row">
+      <a class="link-social-btn" href="https://youtube.com/@starsinfern0" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        <span>YouTube</span>
+      </a>
+      <a class="link-social-btn" href="https://instagram.com/starsinfern0" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        <span>Instagram</span>
+      </a>
+      <a class="link-social-btn" href="https://tiktok.com/@starsinfern0" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z"/></svg>
+        <span>TikTok</span>
+      </a>
+    </div>
+
+    <button class="sp-pill-btn link-copy-btn" onclick="copySiteLink()">⛓ Copy Link</button>
+
+    <button class="sp-close" onclick="closeLinkPanel()">[ Close ]</button>
+  </div>
+</div>
+
+<!-- COPY TOAST -->
+<div class="copy-toast" id="copy-toast">Copied!</div>
 
 <!-- FOOTER -->
 <footer class="site-footer">

@@ -302,26 +302,60 @@
     }
     .help-overlay.active { opacity: 1; pointer-events: all; }
 
+    @keyframes panelFadeUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     .help-panel {
       position: relative;
-      width: 360px;
+      width: 380px;
       max-width: 100%;
+      padding: 44px 36px;
+      background: rgba(4,4,4,0.97);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 3px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 16px;
-      animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) both;
+      animation: panelFadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
     }
 
     /* corner brackets */
     .hframe {
       position: absolute;
-      width: 20px; height: 20px;
+      width: 28px; height: 28px;
     }
-    .hframe.tl { top:-1px; left:-1px;   border-top:  1.5px solid rgba(57,255,110,0.6); border-left: 1.5px solid rgba(57,255,110,0.6); }
-    .hframe.tr { top:-1px; right:-1px;  border-top:  1.5px solid rgba(57,255,110,0.6); border-right:1.5px solid rgba(57,255,110,0.6); }
-    .hframe.bl { bottom:-1px; left:-1px;  border-bottom:1.5px solid rgba(57,255,110,0.6); border-left: 1.5px solid rgba(57,255,110,0.6); }
-    .hframe.br { bottom:-1px; right:-1px; border-bottom:1.5px solid rgba(57,255,110,0.6); border-right:1.5px solid rgba(57,255,110,0.6); }
+    .hframe.tl { top:-1px; left:-1px;   border-top:  1.5px solid rgba(57,255,110,0.65); border-left: 1.5px solid rgba(57,255,110,0.65); box-shadow: -3px -3px 12px rgba(57,255,110,0.25); }
+    .hframe.tr { top:-1px; right:-1px;  border-top:  1.5px solid rgba(57,255,110,0.65); border-right:1.5px solid rgba(57,255,110,0.65); box-shadow:  3px -3px 12px rgba(57,255,110,0.25); }
+    .hframe.bl { bottom:-1px; left:-1px;  border-bottom:1.5px solid rgba(57,255,110,0.65); border-left: 1.5px solid rgba(57,255,110,0.65); box-shadow: -3px  3px 12px rgba(57,255,110,0.25); }
+    .hframe.br { bottom:-1px; right:-1px; border-bottom:1.5px solid rgba(57,255,110,0.65); border-right:1.5px solid rgba(57,255,110,0.65); box-shadow:  3px  3px 12px rgba(57,255,110,0.25); }
+
+    /* AWAITING INPUT status row */
+    .hf-status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      align-self: flex-start;
+      margin-bottom: 2px;
+    }
+    .hf-status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #39ff6e;
+      box-shadow: 0 0 8px rgba(57,255,110,0.7), 0 0 18px rgba(57,255,110,0.3);
+      flex-shrink: 0;
+      animation: greenBlink 1.4s ease-in-out infinite;
+    }
+    .hf-status-text {
+      font-family: 'Nunito', sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
 
     .help-label {
       font-size: 9px;
@@ -480,6 +514,10 @@
       <span class="hframe bl"></span>
       <span class="hframe br"></span>
 
+      <div class="hf-status-row">
+        <span class="hf-status-dot"></span>
+        <span class="hf-status-text">Awaiting Input</span>
+      </div>
       <span class="help-label">Access List</span>
       <p class="help-tagline">Early Access Codes · Exclusive Products · And More</p>
 
