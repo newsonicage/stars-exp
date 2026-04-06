@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stars* Interface</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -12,11 +13,138 @@
 
 <!-- AUDIO -->
 <audio id="bg-music" loop>
+  <source src="assets/music.mp3" type="audio/mpeg">
   <source src="assets/music1.mp3" type="audio/mpeg">
 </audio>
 <audio id="hover-sound-1"><source src="assets/hover1.mp3" type="audio/mpeg"></audio>
 <audio id="hover-sound-2"><source src="assets/hover2.mp3" type="audio/mpeg"></audio>
 <audio id="hover-sound-3"><source src="assets/hover3.mp3" type="audio/mpeg"></audio>
+
+<!-- FIXED HEADER -->
+<header class="site-header">
+  <div class="header-logo">
+    <span class="header-star">★</span>
+    <span class="header-brand">Stars*</span>
+  </div>
+  <div class="header-actions">
+    <button class="header-btn cart-btn" id="cart-btn" aria-label="Shopping cart">
+      🛒
+      <span class="cart-badge" id="cart-badge">0</span>
+    </button>
+    <button class="header-btn cog-btn" id="cog-btn" aria-label="Settings">⚙</button>
+  </div>
+</header>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<aside class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-header">
+    <span class="cart-drawer-title">Cart</span>
+    <button class="cart-close-btn" id="cart-close-btn">✕</button>
+  </div>
+  <div class="cart-drawer-body">
+    <p class="cart-empty-msg">No items in cart.</p>
+  </div>
+</aside>
+
+<!-- SETTINGS OVERLAY + PANEL -->
+<div class="settings-overlay" id="settings-overlay"></div>
+<div class="settings-panel-wrap" id="settings-panel-wrap">
+  <div class="settings-panel">
+    <span class="sp-frame tl"></span>
+    <span class="sp-frame tr"></span>
+    <span class="sp-frame bl"></span>
+    <span class="sp-frame br"></span>
+
+    <div class="sp-status-row">
+      <span class="sp-status-dot"></span>
+      <span class="sp-status-text">System Interface</span>
+    </div>
+
+    <div class="sp-buttons">
+      <button class="sp-pill-btn" onclick="showSettingsError()">Start a Co-Mission</button>
+      <button class="sp-pill-btn" onclick="openContactForm()">Request Communication</button>
+    </div>
+
+    <div class="sp-disclaimer">No Returns. No Exchanges. All Sales Final.</div>
+
+    <button class="sp-close" onclick="closeSettings()">[ Close ]</button>
+  </div>
+</div>
+
+<!-- CONTACT FORM POPUP (Request Communication) -->
+<div class="contact-overlay" id="contact-overlay"></div>
+<div class="contact-panel-wrap" id="contact-panel-wrap">
+  <div class="contact-panel">
+    <span class="sp-frame tl"></span>
+    <span class="sp-frame tr"></span>
+    <span class="sp-frame bl"></span>
+    <span class="sp-frame br"></span>
+
+    <div class="sp-status-row">
+      <span class="sp-status-dot"></span>
+      <span class="sp-status-text">Request Communication</span>
+    </div>
+
+    <p class="form-tagline">Early Access Codes · Exclusive Products · And More</p>
+
+    <!-- Success state -->
+    <div class="form-success" id="contact-success">
+      <div class="success-icon">✦</div>
+      <div class="success-title">Transmission Received</div>
+      <div class="success-sub">We'll be in contact soon.</div>
+    </div>
+
+    <!-- Netlify form -->
+    <form class="contact-form" id="contact-form" name="contact" data-netlify="true" style="width:100%;display:flex;flex-direction:column;gap:14px;">
+      <input type="hidden" name="form-name" value="contact">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="cf-first">First Name</label>
+          <input class="form-input" id="cf-first" type="text" name="first-name" placeholder="First" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cf-last">Last Name</label>
+          <input class="form-input" id="cf-last" type="text" name="last-name" placeholder="Last" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="cf-phone">Phone Number</label>
+        <input class="form-input" id="cf-phone" type="tel" name="phone" placeholder="+1 (555) 000-0000">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="cf-email">Email Address</label>
+        <input class="form-input" id="cf-email" type="email" name="email" placeholder="your@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="cf-msg">Message</label>
+        <textarea class="form-textarea" id="cf-msg" name="message" placeholder="What's on your mind..."></textarea>
+      </div>
+
+      <button class="sp-pill-btn" type="submit" style="margin-top:4px;">Send Transmission →</button>
+    </form>
+
+    <button class="sp-close" onclick="closeContactForm()">[ Close ]</button>
+  </div>
+</div>
+
+<!-- ERROR POPUP (Start a Co-Mission) -->
+<div class="error-popup" id="error-popup">
+  <div class="error-inner">
+    <span class="ep-frame tl"></span>
+    <span class="ep-frame tr"></span>
+    <span class="ep-frame bl"></span>
+    <span class="ep-frame br"></span>
+    <span class="ep-icon">✕</span>
+    <div class="ep-title">Error</div>
+    <div class="ep-msg">Unavailable at this time</div>
+    <div class="ep-dismiss">[ Tap to Dismiss ]</div>
+  </div>
+</div>
 
 <!-- ARCHIVE POPUP -->
 <div id="archive-popup" class="archive-popup" onclick="closeArchive()">
@@ -37,7 +165,6 @@
 <section class="hero">
   <div class="pillars" id="pillars">
 
-    <!-- SHOP -->
     <div class="pillar" onmouseenter="playHover(1)" onclick="scrollToShop()">
       <div class="pillar-bg"></div>
       <div class="pillar-video-wrap">
@@ -57,7 +184,6 @@
       </div>
     </div>
 
-    <!-- ARCHIVE -->
     <div class="pillar" onmouseenter="playHover(2)" onclick="archiveAlert()">
       <div class="pillar-bg"></div>
       <div class="pillar-video-wrap">
@@ -77,7 +203,6 @@
       </div>
     </div>
 
-    <!-- MUSIC -->
     <div class="pillar" onmouseenter="playHover(3)" onclick="goMusic()">
       <div class="pillar-bg"></div>
       <div class="pillar-video-wrap">
@@ -106,34 +231,24 @@
   <div class="sm-block sm-furniture"
        onmouseenter="playHover(3)"
        onclick="document.getElementById('furniture').scrollIntoView({behavior:'smooth'})">
-    <span class="sm-node tl"></span>
-    <span class="sm-node tr"></span>
-    <span class="sm-node bl"></span>
-    <span class="sm-node br"></span>
+    <span class="sm-node tl"></span><span class="sm-node tr"></span>
+    <span class="sm-node bl"></span><span class="sm-node br"></span>
     <span class="sm-num">01</span>
     <div class="sm-title">FURNITURE</div>
     <div class="sm-rule"></div>
   </div>
 
-  <div class="sm-block sm-art"
-       onmouseenter="playHover(1)"
-       onclick="document.getElementById('art').scrollIntoView({behavior:'smooth'})">
-    <span class="sm-node tl"></span>
-    <span class="sm-node tr"></span>
-    <span class="sm-node bl"></span>
-    <span class="sm-node br"></span>
+  <div class="sm-block sm-art" onmouseenter="playHover(1)">
+    <span class="sm-node tl"></span><span class="sm-node tr"></span>
+    <span class="sm-node bl"></span><span class="sm-node br"></span>
     <span class="sm-num">02</span>
     <div class="sm-title">ART</div>
     <div class="sm-rule"></div>
   </div>
 
-  <div class="sm-block sm-merch"
-       onmouseenter="playHover(2)"
-       onclick="document.getElementById('merch').scrollIntoView({behavior:'smooth'})">
-    <span class="sm-node tl"></span>
-    <span class="sm-node tr"></span>
-    <span class="sm-node bl"></span>
-    <span class="sm-node br"></span>
+  <div class="sm-block sm-merch" onmouseenter="playHover(2)">
+    <span class="sm-node tl"></span><span class="sm-node tr"></span>
+    <span class="sm-node bl"></span><span class="sm-node br"></span>
     <span class="sm-num">03</span>
     <div class="sm-title">MERCH</div>
     <div class="sm-rule"></div>
@@ -142,10 +257,8 @@
   <div class="sm-block sm-music-cat"
        onmouseenter="playHover(3)"
        onclick="document.getElementById('music').scrollIntoView({behavior:'smooth'})">
-    <span class="sm-node tl"></span>
-    <span class="sm-node tr"></span>
-    <span class="sm-node bl"></span>
-    <span class="sm-node br"></span>
+    <span class="sm-node tl"></span><span class="sm-node tr"></span>
+    <span class="sm-node bl"></span><span class="sm-node br"></span>
     <span class="sm-num">04</span>
     <div class="sm-title">MUSIC</div>
     <div class="sm-rule"></div>
@@ -158,16 +271,13 @@
 
   <!-- ── FURNITURE ── -->
   <section class="category-section" id="furniture">
-
     <div class="section-header reveal">
       <span class="section-dot"></span>
       <span class="section-label">Furniture</span>
       <span class="section-rule-line"></span>
     </div>
-
     <div class="products-grid furniture-grid reveal">
 
-      <!-- Product 4 -->
       <div class="product-card furniture-product" onmouseenter="playHover(3)">
         <div class="product-img-wrap">
           <img src="assets/product4.jpg" alt="CÖMA Ö Table">
@@ -187,7 +297,6 @@
         </div>
       </div>
 
-      <!-- Product 5 -->
       <div class="product-card furniture-product" onmouseenter="playHover(1)">
         <div class="product-img-wrap">
           <img src="assets/product5.jpg" alt="DUMÖ Effect Ö Table">
@@ -207,7 +316,6 @@
         </div>
       </div>
 
-      <!-- Product 6 -->
       <div class="product-card furniture-product" onmouseenter="playHover(2)">
         <div class="product-img-wrap">
           <img src="assets/product6.jpg" alt="BOOBI BUCLA6 Ö Table">
@@ -227,7 +335,6 @@
         </div>
       </div>
 
-      <!-- Product 7 — SOLD -->
       <div class="product-card furniture-product" onmouseenter="playHover(3)">
         <div class="product-img-wrap">
           <img src="assets/product7.jpg" alt="Power of the P Ö Table">
@@ -247,7 +354,6 @@
         </div>
       </div>
 
-      <!-- Product 8 -->
       <div class="product-card furniture-product" onmouseenter="playHover(1)">
         <div class="product-img-wrap">
           <img src="assets/product8.jpg" alt="Time Expire Ö Table">
@@ -270,38 +376,15 @@
     </div>
   </section>
 
-  <!-- ── ART ── -->
-  <section class="category-section" id="art">
-    <div class="section-header reveal">
-      <span class="section-dot"></span>
-      <span class="section-label">Art</span>
-      <span class="section-rule-line"></span>
-    </div>
-    <p class="coming-soon-text reveal">Coming Soon</p>
-  </section>
-
-  <!-- ── MERCH ── -->
-  <section class="category-section" id="merch">
-    <div class="section-header reveal">
-      <span class="section-dot"></span>
-      <span class="section-label">Merch</span>
-      <span class="section-rule-line"></span>
-    </div>
-    <p class="coming-soon-text reveal">Coming Soon</p>
-  </section>
-
   <!-- ── MUSIC ── -->
   <section class="category-section" id="music">
-
     <div class="section-header reveal">
       <span class="section-dot"></span>
       <span class="section-label">Music</span>
       <span class="section-rule-line"></span>
     </div>
-
     <div class="products-grid reveal">
 
-      <!-- Product 1 -->
       <div class="product-card music-product"
            onmouseenter="playHover(1)"
            onclick="window.open('https://too.fm/pussypoppin','_blank')">
@@ -327,7 +410,6 @@
         </div>
       </div>
 
-      <!-- Product 2 -->
       <div class="product-card music-product"
            onmouseenter="playHover(2)"
            onclick="window.open('https://too.fm/thelustwelove','_blank')">
@@ -357,6 +439,34 @@
   </section>
 
 </div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-trace"></div>
+  <div class="footer-inner">
+    <p class="footer-copy">© 2026 Dreamers Extreme</p>
+    <div class="footer-status">
+      <span class="footer-dot"></span>
+      <span class="footer-online">Online</span>
+    </div>
+
+    <!-- Newsletter form -->
+    <div class="footer-form-wrap reveal">
+      <p class="footer-form-label">Join the List</p>
+      <p class="footer-form-sub">Early Access Codes · Exclusive Products · And More</p>
+      <form class="footer-form" id="footer-form" name="newsletter" data-netlify="true">
+        <input type="hidden" name="form-name" value="newsletter">
+        <div class="footer-form-row">
+          <input class="footer-email-input" type="email" name="email"
+                 placeholder="Enter your email address" required>
+          <button class="footer-email-btn" type="submit">→</button>
+        </div>
+      </form>
+      <p class="footer-form-success" id="footer-success">✦ You're on the list.</p>
+    </div>
+
+  </div>
+</footer>
 
 <script src="script.js"></script>
 </body>
