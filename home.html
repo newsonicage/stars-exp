@@ -100,58 +100,263 @@
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<section id="shop" class="products-section">
+<!-- SUB-MENU -->
+<section id="shop" class="submenu">
 
-  <div class="section-header reveal">
-    <span class="section-label">New Releases</span>
-    <span class="section-rule-line"></span>
+  <div class="sm-block sm-furniture"
+       onmouseenter="playHover(3)"
+       onclick="document.getElementById('furniture').scrollIntoView({behavior:'smooth'})">
+    <span class="sm-node tl"></span>
+    <span class="sm-node tr"></span>
+    <span class="sm-node bl"></span>
+    <span class="sm-node br"></span>
+    <span class="sm-num">01</span>
+    <div class="sm-title">FURNITURE</div>
+    <div class="sm-rule"></div>
   </div>
 
-  <div class="products-grid reveal">
-
-    <!-- Product 1 -->
-    <div class="product-card" onclick="window.open('https://too.fm/pussypoppin','_blank')">
-      <div class="product-img-wrap">
-        <img src="assets/product1.jpg" alt="Pussy Poppin">
-        <div class="product-hover-overlay">
-          <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
-          <div class="phov-frame bl"></div><div class="phov-frame br"></div>
-          <div class="phov-content">
-            <div class="phov-title">Pussy Poppin</div>
-            <div class="phov-type">Album · Stars*</div>
-            <div class="phov-cta">Stream Now →</div>
-          </div>
-        </div>
-      </div>
-      <div class="product-meta">
-        <span class="product-name">Pussy Poppin</span>
-        <span class="product-artist">Stars*</span>
-      </div>
-    </div>
-
-    <!-- Product 2 -->
-    <div class="product-card" onclick="window.open('https://too.fm/thelustwelove','_blank')">
-      <div class="product-img-wrap">
-        <img src="assets/product2.jpg" alt="The Lust We Love">
-        <div class="product-hover-overlay">
-          <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
-          <div class="phov-frame bl"></div><div class="phov-frame br"></div>
-          <div class="phov-content">
-            <div class="phov-title">The Lust We Love</div>
-            <div class="phov-type">Album · Stars*</div>
-            <div class="phov-cta">Stream Now →</div>
-          </div>
-        </div>
-      </div>
-      <div class="product-meta">
-        <span class="product-name">The Lust We Love</span>
-        <span class="product-artist">Stars*</span>
-      </div>
-    </div>
-
+  <div class="sm-block sm-art"
+       onmouseenter="playHover(1)"
+       onclick="document.getElementById('art').scrollIntoView({behavior:'smooth'})">
+    <span class="sm-node tl"></span>
+    <span class="sm-node tr"></span>
+    <span class="sm-node bl"></span>
+    <span class="sm-node br"></span>
+    <span class="sm-num">02</span>
+    <div class="sm-title">ART</div>
+    <div class="sm-rule"></div>
   </div>
+
+  <div class="sm-block sm-merch"
+       onmouseenter="playHover(2)"
+       onclick="document.getElementById('merch').scrollIntoView({behavior:'smooth'})">
+    <span class="sm-node tl"></span>
+    <span class="sm-node tr"></span>
+    <span class="sm-node bl"></span>
+    <span class="sm-node br"></span>
+    <span class="sm-num">03</span>
+    <div class="sm-title">MERCH</div>
+    <div class="sm-rule"></div>
+  </div>
+
+  <div class="sm-block sm-music-cat"
+       onmouseenter="playHover(3)"
+       onclick="document.getElementById('music').scrollIntoView({behavior:'smooth'})">
+    <span class="sm-node tl"></span>
+    <span class="sm-node tr"></span>
+    <span class="sm-node bl"></span>
+    <span class="sm-node br"></span>
+    <span class="sm-num">04</span>
+    <div class="sm-title">MUSIC</div>
+    <div class="sm-rule"></div>
+  </div>
+
 </section>
+
+<!-- PRODUCTS -->
+<div class="products-wrapper">
+
+  <!-- ── FURNITURE ── -->
+  <section class="category-section" id="furniture">
+
+    <div class="section-header reveal">
+      <span class="section-dot"></span>
+      <span class="section-label">Furniture</span>
+      <span class="section-rule-line"></span>
+    </div>
+
+    <div class="products-grid furniture-grid reveal">
+
+      <!-- Product 4 -->
+      <div class="product-card furniture-product" onmouseenter="playHover(3)">
+        <div class="product-img-wrap">
+          <img src="assets/product4.jpg" alt="CÖMA Ö Table">
+          <video class="product-hover-video" src="assets/video4.mp4" muted loop playsinline></video>
+          <div class="furniture-overlay">
+            <div class="fhov-title">CÖMA</div>
+            <div class="fhov-sub">Ö Table</div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">CÖMA</span>
+          <span class="product-artist">Ö Table</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="product-card furniture-product" onmouseenter="playHover(1)">
+        <div class="product-img-wrap">
+          <img src="assets/product5.jpg" alt="DUMÖ Effect Ö Table">
+          <video class="product-hover-video" src="assets/video5.mp4" muted loop playsinline></video>
+          <div class="furniture-overlay">
+            <div class="fhov-title">DUMÖ Effect</div>
+            <div class="fhov-sub">Ö Table</div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">DUMÖ Effect</span>
+          <span class="product-artist">Ö Table</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="product-card furniture-product" onmouseenter="playHover(2)">
+        <div class="product-img-wrap">
+          <img src="assets/product6.jpg" alt="BOOBI BUCLA6 Ö Table">
+          <video class="product-hover-video" src="assets/video6.mp4" muted loop playsinline></video>
+          <div class="furniture-overlay">
+            <div class="fhov-title">BOOBI BUCLA6</div>
+            <div class="fhov-sub">Ö Table</div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">BOOBI BUCLA6</span>
+          <span class="product-artist">Ö Table</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+      <!-- Product 7 — SOLD -->
+      <div class="product-card furniture-product" onmouseenter="playHover(3)">
+        <div class="product-img-wrap">
+          <img src="assets/product7.jpg" alt="Power of the P Ö Table">
+          <video class="product-hover-video" src="assets/video7.mp4" muted loop playsinline></video>
+          <div class="furniture-overlay">
+            <div class="fhov-title">Power of the P</div>
+            <div class="fhov-sub">Ö Table</div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">Power of the P</span>
+          <span class="product-artist">Ö Table</span>
+        </div>
+        <div class="avail-badge avail-off">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Sold</span>
+        </div>
+      </div>
+
+      <!-- Product 8 -->
+      <div class="product-card furniture-product" onmouseenter="playHover(1)">
+        <div class="product-img-wrap">
+          <img src="assets/product8.jpg" alt="Time Expire Ö Table">
+          <video class="product-hover-video" src="assets/video8.mp4" muted loop playsinline></video>
+          <div class="furniture-overlay">
+            <div class="fhov-title">Time Expire</div>
+            <div class="fhov-sub">Ö Table</div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">Time Expire</span>
+          <span class="product-artist">Ö Table</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── ART ── -->
+  <section class="category-section" id="art">
+    <div class="section-header reveal">
+      <span class="section-dot"></span>
+      <span class="section-label">Art</span>
+      <span class="section-rule-line"></span>
+    </div>
+    <p class="coming-soon-text reveal">Coming Soon</p>
+  </section>
+
+  <!-- ── MERCH ── -->
+  <section class="category-section" id="merch">
+    <div class="section-header reveal">
+      <span class="section-dot"></span>
+      <span class="section-label">Merch</span>
+      <span class="section-rule-line"></span>
+    </div>
+    <p class="coming-soon-text reveal">Coming Soon</p>
+  </section>
+
+  <!-- ── MUSIC ── -->
+  <section class="category-section" id="music">
+
+    <div class="section-header reveal">
+      <span class="section-dot"></span>
+      <span class="section-label">Music</span>
+      <span class="section-rule-line"></span>
+    </div>
+
+    <div class="products-grid reveal">
+
+      <!-- Product 1 -->
+      <div class="product-card music-product"
+           onmouseenter="playHover(1)"
+           onclick="window.open('https://too.fm/pussypoppin','_blank')">
+        <div class="product-img-wrap">
+          <img src="assets/product1.jpg" alt="Pussy Poppin">
+          <div class="music-overlay">
+            <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+            <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+            <div class="phov-content">
+              <div class="phov-title">Pussy Poppin</div>
+              <div class="phov-type">Album · Stars*</div>
+              <div class="phov-cta">Stream Now →</div>
+            </div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">Pussy Poppin</span>
+          <span class="product-artist">Stars*</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="product-card music-product"
+           onmouseenter="playHover(2)"
+           onclick="window.open('https://too.fm/thelustwelove','_blank')">
+        <div class="product-img-wrap">
+          <img src="assets/product2.jpg" alt="The Lust We Love">
+          <div class="music-overlay">
+            <div class="phov-frame tl"></div><div class="phov-frame tr"></div>
+            <div class="phov-frame bl"></div><div class="phov-frame br"></div>
+            <div class="phov-content">
+              <div class="phov-title">The Lust We Love</div>
+              <div class="phov-type">Album · Stars*</div>
+              <div class="phov-cta">Stream Now →</div>
+            </div>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="product-name">The Lust We Love</span>
+          <span class="product-artist">Stars*</span>
+        </div>
+        <div class="avail-badge avail-on">
+          <span class="avail-dot"></span>
+          <span class="avail-label">Available</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
 
 <script src="script.js"></script>
 </body>
