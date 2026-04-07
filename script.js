@@ -614,27 +614,32 @@ document.querySelectorAll(".furniture-product").forEach(card => {
 ════════════════════════════════════════ */
 const PRODUCT_DATA = {
   "coma": {
-    key: "coma", name: "CÖMA", sub: "Ö Table", img: "assets/product4.jpg", available: true,
+    key: "coma", name: "CÖMA", sub: "Ö Table",
+    img: "assets/product4.jpg", video: "assets/video4.mp4", available: true,
     description: "A sculptural piece at the intersection of art and function. The CÖMA Ö Table commands space with organic tension and raw material honesty.",
     specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Limited" }],
   },
   "dumo-effect": {
-    key: "dumo-effect", name: "DUMÖ Effect", sub: "Ö Table", img: "assets/product5.jpg", available: true,
+    key: "dumo-effect", name: "DUMÖ Effect", sub: "Ö Table",
+    img: "assets/product5.jpg", video: "assets/video5.mp4", available: true,
     description: "The DUMÖ Effect distorts expectation. Hovering between sculpture and furniture — each piece uniquely finished and unrepeatable.",
     specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Limited" }],
   },
   "boobi-bucla6": {
-    key: "boobi-bucla6", name: "BOOBI BUCLA6", sub: "Ö Table", img: "assets/product6.jpg", available: true,
+    key: "boobi-bucla6", name: "BOOBI BUCLA6", sub: "Ö Table",
+    img: "assets/product6.jpg", video: "assets/video6.mp4", available: true,
     description: "BOOBI BUCLA6 pushes the language of the table into new territory — bold proportions, controlled chaos, singular presence.",
     specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Limited" }],
   },
   "power-of-the-p": {
-    key: "power-of-the-p", name: "Power of the P", sub: "Ö Table", img: "assets/product7.jpg", available: false,
+    key: "power-of-the-p", name: "Power of the P", sub: "Ö Table",
+    img: "assets/product7.jpg", video: "assets/video7.mp4", available: false,
     description: "A sold piece. Power of the P defined its era — bold, confrontational, and gone. Watch for its return.",
     specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Sold Out" }],
   },
   "time-expire": {
-    key: "time-expire", name: "Time Expire", sub: "Ö Table", img: "assets/product8.jpg", available: true,
+    key: "time-expire", name: "Time Expire", sub: "Ö Table",
+    img: "assets/product8.jpg", video: "assets/video8.mp4", available: true,
     description: "Time Expire holds urgency in still form. A piece designed to outlast the moment while marking it permanently.",
     specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Limited" }],
   },
@@ -644,24 +649,47 @@ const PRODUCT_DATA = {
    PRODUCT POPUP
 ════════════════════════════════════════ */
 let currentPopupKey = null;
+let ppMediaMode = "img";
 
 function openProductPopup(key) {
   const data = PRODUCT_DATA[key];
   if (!data) return;
   currentPopupKey = key;
 
-  document.getElementById("pp-img").src           = data.img;
-  document.getElementById("pp-img").alt           = data.name;
+  // Populate content
+  document.getElementById("pp-img").src = data.img;
+  document.getElementById("pp-img").alt = data.name;
   document.getElementById("pp-topbar-path").textContent = `STARS_SHOP // ${data.name}`;
   document.getElementById("pp-name").textContent  = data.name;
   document.getElementById("pp-sub").textContent   = data.sub;
   document.getElementById("pp-desc").textContent  = data.description;
 
-  const dot      = document.getElementById("pp-avail-dot");
-  const label    = document.getElementById("pp-avail-label");
-  const atcBtn   = document.getElementById("pp-atc-btn");
-  const ntfBtn   = document.getElementById("pp-notify-btn");
+  // Set up video
+  const vid = document.getElementById("pp-vid");
+  if (data.video) {
+    vid.src = data.video;
+    vid.style.opacity = "0";
+    document.getElementById("pp-dot-vid").style.display = "";
+    document.getElementById("pp-media-hint").style.display = "";
+  } else {
+    vid.src = "";
+    document.getElementById("pp-dot-vid").style.display = "none";
+    document.getElementById("pp-media-hint").style.display = "none";
+  }
 
+  // Reset to photo view
+  ppMediaMode = "img";
+  document.getElementById("pp-img").style.opacity = "1";
+  vid.pause();
+  vid.style.opacity = "0";
+  document.getElementById("pp-dot-img").classList.add("active");
+  document.getElementById("pp-dot-vid").classList.remove("active");
+
+  // Availability
+  const dot    = document.getElementById("pp-avail-dot");
+  const label  = document.getElementById("pp-avail-label");
+  const atcBtn = document.getElementById("pp-atc-btn");
+  const ntfBtn = document.getElementById("pp-notify-btn");
   if (data.available) {
     dot.className      = "pp-avail-dot pp-avail-on";
     label.textContent  = "Available";
@@ -674,6 +702,7 @@ function openProductPopup(key) {
     ntfBtn.style.display = "";
   }
 
+  // Specs
   document.getElementById("pp-specs").innerHTML = data.specs.map(s =>
     `<li class="pp-spec-row"><span class="pp-spec-label">${s.label}</span><span class="pp-spec-value">${s.value}</span></li>`
   ).join("");
@@ -683,9 +712,33 @@ function openProductPopup(key) {
 }
 
 function closeProductPopup() {
+  const vid = document.getElementById("pp-vid");
+  if (vid) { vid.pause(); vid.src = ""; }
   document.getElementById("pp-overlay").classList.remove("active");
   document.getElementById("pp-wrap").classList.remove("active");
   currentPopupKey = null;
+}
+
+function cycleMedia() {
+  const img = document.getElementById("pp-img");
+  const vid = document.getElementById("pp-vid");
+  if (!vid.src) return;
+
+  if (ppMediaMode === "img") {
+    img.style.opacity = "0";
+    vid.style.opacity = "1";
+    vid.play().catch(() => {});
+    document.getElementById("pp-dot-img").classList.remove("active");
+    document.getElementById("pp-dot-vid").classList.add("active");
+    ppMediaMode = "vid";
+  } else {
+    img.style.opacity = "1";
+    vid.style.opacity = "0";
+    vid.pause();
+    document.getElementById("pp-dot-img").classList.add("active");
+    document.getElementById("pp-dot-vid").classList.remove("active");
+    ppMediaMode = "img";
+  }
 }
 
 function addToCartFromPopup() {
@@ -697,9 +750,8 @@ function addToCartFromPopup() {
 }
 
 function notifyFromPopup() {
-  const name = PRODUCT_DATA[currentPopupKey]?.name || "";
   closeProductPopup();
-  openNotifyPopup(name);
+  openContactForm();
 }
 
 document.getElementById("pp-overlay").addEventListener("click", closeProductPopup);

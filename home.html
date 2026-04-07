@@ -641,8 +641,14 @@
 
     <!-- Body: image + details -->
     <div class="pp-body">
-      <div class="pp-img-col">
+      <div class="pp-img-col" id="pp-img-col" onclick="cycleMedia()">
         <img class="pp-img" id="pp-img" src="" alt="">
+        <video class="pp-vid" id="pp-vid" muted loop playsinline></video>
+        <div class="pp-media-dots">
+          <span class="pp-media-dot active" id="pp-dot-img"></span>
+          <span class="pp-media-dot" id="pp-dot-vid"></span>
+        </div>
+        <span class="pp-media-hint" id="pp-media-hint">TAP TO VIEW</span>
       </div>
       <div class="pp-detail-col">
         <div class="pp-avail-row">
@@ -656,7 +662,7 @@
         <ul class="pp-specs" id="pp-specs"></ul>
         <div class="pp-actions">
           <button class="pp-atc-btn" id="pp-atc-btn" onclick="addToCartFromPopup()">Add to Cart</button>
-          <button class="pp-notify-btn" id="pp-notify-btn" onclick="notifyFromPopup()" style="display:none;">Notify Me When Available</button>
+          <button class="pp-notify-btn" id="pp-notify-btn" onclick="notifyFromPopup()" style="display:none;">Contact Stars*</button>
         </div>
       </div>
     </div>

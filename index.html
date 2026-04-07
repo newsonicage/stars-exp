@@ -592,7 +592,7 @@
         fb.textContent = '✦  Access Granted  ✦';
         st.textContent = 'Identity Confirmed';
         requestAnimationFrame(() => fb.classList.add('visible'));
-        setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+        setTimeout(() => { window.location.href = '/home'; }, 1500);
       } else {
         panel.classList.add('state-denied');
         btn.classList.add('shake');
