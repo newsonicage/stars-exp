@@ -600,13 +600,32 @@ window.addEventListener("scroll", () => {
 }, { passive: true });
 
 /* ════════════════════════════════════════
+   TOUCH DEVICE DETECTION
+   Adds "touch-device" to <html> on first touch
+   so CSS can suppress hover effects on mobile.
+════════════════════════════════════════ */
+window.addEventListener("touchstart", function markTouch() {
+  document.documentElement.classList.add("touch-device");
+  window.removeEventListener("touchstart", markTouch);
+}, { passive: true });
+
+/* ════════════════════════════════════════
    FURNITURE VIDEO HOVER
+   Only fires on real mouse pointer (not touch)
+   to prevent flickering on mobile scroll.
 ════════════════════════════════════════ */
 document.querySelectorAll(".furniture-product").forEach(card => {
   const video = card.querySelector(".product-hover-video");
   if (!video) return;
-  card.addEventListener("mouseenter", () => video.play().catch(() => {}));
-  card.addEventListener("mouseleave", () => { video.pause(); video.currentTime = 0; });
+  card.addEventListener("pointerenter", e => {
+    if (e.pointerType !== "mouse") return;
+    video.play().catch(() => {});
+  });
+  card.addEventListener("pointerleave", e => {
+    if (e.pointerType !== "mouse") return;
+    video.pause();
+    video.currentTime = 0;
+  });
 });
 
 /* ════════════════════════════════════════

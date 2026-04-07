@@ -3047,11 +3047,11 @@ body.theme-light .kb-tip-row span { color: rgba(0,0,0,0.35); }
   transform: scale(1.4);
   box-shadow: 0 0 8px rgba(255,255,255,0.7);
 }
-/* TAP TO VIEW pill — high-contrast dark badge */
+/* TAP TO VIEW pill — high-contrast dark badge, top-left */
 .pp-media-hint {
   position: absolute;
-  bottom: 14px;
-  right: 14px;
+  top: 14px;
+  left: 14px;
   font-family: 'Nunito', sans-serif;
   font-size: 7px;
   font-weight: 900;
@@ -3280,3 +3280,53 @@ body.theme-light .kb-tip-row span { color: rgba(0,0,0,0.35); }
   .products-grid { max-width: 100%; }
   .products-wrapper { overflow-x: hidden; }
 }
+
+/* ═══════════════════════════════════════════
+   TOUCH / HOVER:NONE — suppress hover states
+   on touch screens to prevent scroll flicker.
+   Uses both @media (hover: none) for CSS-level
+   suppression and .touch-device class (set by JS
+   on first touchstart) as a fallback.
+═══════════════════════════════════════════ */
+@media (hover: none), (pointer: coarse) {
+  /* Pillars — no expansion on tap */
+  .pillars:has(.pillar:hover) .pillar:not(:hover) {
+    flex: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  /* Product cards — no lift or glow on tap */
+  .product-card:hover { transform: none !important; }
+  .product-card:hover::after { opacity: 0 !important; }
+  .product-card:hover .product-img-wrap {
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+  .product-card:hover .product-img-wrap img {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Overlays — keep hidden on touch */
+  .furniture-product:hover .furniture-overlay { opacity: 0 !important; }
+  .furniture-product:hover .product-hover-video { opacity: 0 !important; }
+  .product-card:hover .music-overlay { opacity: 0 !important; }
+  .product-card:hover .phov-frame { transform: translate(-6px,-6px) !important; }
+  .product-card:hover .phov-title,
+  .product-card:hover .phov-type,
+  .product-card:hover .phov-cta { transform: translateY(8px) !important; }
+
+  /* Sub-menu blocks — no hover expand */
+  .sm-block:hover { background: transparent !important; }
+}
+
+/* .touch-device fallback for browsers that misreport hover capability */
+.touch-device .pillars:has(.pillar:hover) .pillar:not(:hover) {
+  flex: none !important; opacity: 1 !important; filter: none !important;
+}
+.touch-device .product-card:hover { transform: none !important; }
+.touch-device .product-card:hover::after { opacity: 0 !important; }
+.touch-device .product-card:hover .product-img-wrap img { transform: none !important; filter: none !important; }
+.touch-device .furniture-product:hover .furniture-overlay { opacity: 0 !important; }
+.touch-device .furniture-product:hover .product-hover-video { opacity: 0 !important; }
+.touch-device .product-card:hover .music-overlay { opacity: 0 !important; }

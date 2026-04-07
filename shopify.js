@@ -13,8 +13,8 @@ const SHOPIFY_API_URL = `https://${SHOPIFY_DOMAIN}/api/2024-01/graphql.json`;
 
 /* ── Variant ID Map ──────────────────────
    Maps frontend product keys → Shopify variant GIDs.
-   To add a new product, copy its variant URL from Shopify Admin
-   and extract the numeric ID from the end.
+   To add a new product, extract the numeric ID from
+   the variant URL in Shopify Admin and add it here.
 ─────────────────────────────────────────*/
 const VARIANT_IDS = {
   "time-expire":    "gid://shopify/ProductVariant/47808435945629",
@@ -25,18 +25,19 @@ const VARIANT_IDS = {
 };
 
 /* ── createCheckout ──────────────────────
+   Uses the Shopify Cart API (cartCreate mutation).
    Accepts: [{ key: "product-key", quantity: 1 }]
    Returns: Shopify checkout URL (string)
 ─────────────────────────────────────────*/
 async function createCheckout(cartItems) {
-  const lineItems = cartItems
+  const lines = cartItems
     .filter(item => VARIANT_IDS[item.key])
     .map(item => ({
-      variantId: VARIANT_IDS[item.key],
-      quantity:  item.quantity,
+      merchandiseId: VARIANT_IDS[item.key],
+      quantity:      item.quantity,
     }));
 
-  if (!lineItems.length) throw new Error("No valid items in cart.");
+  if (!lines.length) throw new Error("No valid items in cart.");
 
   const res = await fetch(SHOPIFY_API_URL, {
     method: "POST",
@@ -46,26 +47,29 @@ async function createCheckout(cartItems) {
     },
     body: JSON.stringify({
       query: `
-        mutation checkoutCreate($input: CheckoutCreateInput!) {
-          checkoutCreate(input: $input) {
-            checkout { webUrl }
-            checkoutUserErrors { message field code }
+        mutation cartCreate($input: CartInput!) {
+          cartCreate(input: $input) {
+            cart { checkoutUrl }
+            userErrors { field message code }
           }
         }
       `,
-      variables: { input: { lineItems } },
+      variables: { input: { lines } },
     }),
   });
 
   if (!res.ok) throw new Error(`Shopify API error: ${res.status}`);
 
-  const { data, errors } = await res.json();
+  const json = await res.json();
 
-  if (errors?.length)                                 throw new Error(errors[0].message);
-  if (data?.checkoutCreate?.checkoutUserErrors?.length)
-    throw new Error(data.checkoutCreate.checkoutUserErrors[0].message);
+  if (json.errors?.length)
+    throw new Error(json.errors[0].message);
 
-  const url = data?.checkoutCreate?.checkout?.webUrl;
+  const userErrors = json.data?.cartCreate?.userErrors;
+  if (userErrors?.length)
+    throw new Error(userErrors[0].message);
+
+  const url = json.data?.cartCreate?.cart?.checkoutUrl;
   if (!url) throw new Error("No checkout URL returned.");
 
   return url;
@@ -73,8 +77,8 @@ async function createCheckout(cartItems) {
 
 /* ── redirectToCheckout ──────────────────
    Called by the cart checkout button.
-   Sends the current cart to Shopify and
-   redirects the user to the checkout page.
+   Builds the cart on Shopify and redirects
+   the user to the Shopify-hosted checkout page.
 ─────────────────────────────────────────*/
 async function redirectToCheckout(cartItems) {
   const btn = document.getElementById("cart-checkout-btn");
