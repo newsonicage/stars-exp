@@ -290,7 +290,7 @@
     </div>
     <div class="products-grid furniture-grid reveal">
 
-      <div class="product-card furniture-product" onmouseenter="playHover(3)">
+      <div class="product-card furniture-product" onmouseenter="playHover(3)" onclick="openProductPopup('coma')">
         <div class="product-img-wrap">
           <img src="assets/product4.jpg" alt="CÖMA Ö Table">
           <video class="product-hover-video" src="assets/video4.mp4" muted loop playsinline></video>
@@ -309,7 +309,7 @@
         </div>
       </div>
 
-      <div class="product-card furniture-product" onmouseenter="playHover(1)">
+      <div class="product-card furniture-product" onmouseenter="playHover(1)" onclick="openProductPopup('dumo-effect')">
         <div class="product-img-wrap">
           <img src="assets/product5.jpg" alt="DUMÖ Effect Ö Table">
           <video class="product-hover-video" src="assets/video5.mp4" muted loop playsinline></video>
@@ -328,7 +328,7 @@
         </div>
       </div>
 
-      <div class="product-card furniture-product" onmouseenter="playHover(2)">
+      <div class="product-card furniture-product" onmouseenter="playHover(2)" onclick="openProductPopup('boobi-bucla6')">
         <div class="product-img-wrap">
           <img src="assets/product6.jpg" alt="BOOBI BUCLA6 Ö Table">
           <video class="product-hover-video" src="assets/video6.mp4" muted loop playsinline></video>
@@ -347,7 +347,7 @@
         </div>
       </div>
 
-      <div class="product-card furniture-product" onmouseenter="playHover(3)" onclick="openNotifyPopup('Power of the P — Ö Table')">
+      <div class="product-card furniture-product" onmouseenter="playHover(3)" onclick="openProductPopup('power-of-the-p')">
         <div class="product-img-wrap">
           <img src="assets/product7.jpg" alt="Power of the P Ö Table">
           <video class="product-hover-video" src="assets/video7.mp4" muted loop playsinline></video>
@@ -366,7 +366,7 @@
         </div>
       </div>
 
-      <div class="product-card furniture-product" onmouseenter="playHover(1)">
+      <div class="product-card furniture-product" onmouseenter="playHover(1)" onclick="openProductPopup('time-expire')">
         <div class="product-img-wrap">
           <img src="assets/product8.jpg" alt="Time Expire Ö Table">
           <video class="product-hover-video" src="assets/video8.mp4" muted loop playsinline></video>
@@ -619,6 +619,50 @@
 
 </div>
 
+<!-- PRODUCT POPUP -->
+<div class="pp-overlay" id="pp-overlay"></div>
+<div class="pp-wrap" id="pp-wrap">
+  <div class="pp-modal">
+    <span class="pp-frame tl"></span>
+    <span class="pp-frame tr"></span>
+    <span class="pp-frame bl"></span>
+    <span class="pp-frame br"></span>
+
+    <!-- Terminal top bar -->
+    <div class="pp-topbar">
+      <div class="pp-topbar-dots">
+        <span class="pp-tbdot r"></span>
+        <span class="pp-tbdot y"></span>
+        <span class="pp-tbdot g"></span>
+      </div>
+      <span class="pp-topbar-path" id="pp-topbar-path">STARS_SHOP // —</span>
+      <button class="pp-close-btn" id="pp-close-btn" onclick="closeProductPopup()">✕</button>
+    </div>
+
+    <!-- Body: image + details -->
+    <div class="pp-body">
+      <div class="pp-img-col">
+        <img class="pp-img" id="pp-img" src="" alt="">
+      </div>
+      <div class="pp-detail-col">
+        <div class="pp-avail-row">
+          <span class="pp-avail-dot" id="pp-avail-dot"></span>
+          <span class="pp-avail-label" id="pp-avail-label">Available</span>
+        </div>
+        <div class="pp-name" id="pp-name">—</div>
+        <div class="pp-sub" id="pp-sub">Ö Table</div>
+        <div class="pp-divider"></div>
+        <div class="pp-desc" id="pp-desc"></div>
+        <ul class="pp-specs" id="pp-specs"></ul>
+        <div class="pp-actions">
+          <button class="pp-atc-btn" id="pp-atc-btn" onclick="addToCartFromPopup()">Add to Cart</button>
+          <button class="pp-notify-btn" id="pp-notify-btn" onclick="notifyFromPopup()" style="display:none;">Notify Me When Available</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- NOTIFY POPUP (Sold / Coming Soon) -->
 <div class="notify-overlay" id="notify-overlay"></div>
 <div class="notify-panel-wrap" id="notify-panel-wrap">
@@ -781,6 +825,7 @@
   </div>
 </div>
 
+<script src="shopify.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

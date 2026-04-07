@@ -343,6 +343,7 @@ let kbFocused = null;
 let kbActive  = false;
 
 const POPUP_CONTEXTS = [
+  { id: "pp-wrap",             sel: ".pp-close-btn, .pp-atc-btn, .pp-notify-btn" },
   { id: "settings-panel-wrap", sel: ".sp-pill-btn, .sp-close" },
   { id: "contact-panel-wrap",  sel: ".sp-pill-btn, .sp-close, .contact-info-item" },
   { id: "link-panel-wrap",     sel: ".link-social-btn, .link-copy-btn, .sp-close" },
@@ -467,7 +468,7 @@ document.addEventListener("mousemove", () => {
 ════════════════════════════════════════ */
 function anyOverlayActive() {
   const ids = [
-    "archive-popup","settings-overlay","contact-overlay",
+    "pp-overlay","archive-popup","settings-overlay","contact-overlay",
     "cart-overlay","notify-overlay","link-overlay","secret-overlay"
   ];
   return ids.some(id => document.getElementById(id)?.classList.contains("active"));
@@ -495,6 +496,7 @@ document.addEventListener("keydown", e => {
   /* ── Escape / Home: close popup or scroll to top ── */
   if (e.key === "Escape" || e.key === "Home") {
     const wasOpen = anyOverlayActive();
+    closeProductPopup();
     closeArchive();
     closeSettings();
     closeErrorPopup();
@@ -606,3 +608,172 @@ document.querySelectorAll(".furniture-product").forEach(card => {
   card.addEventListener("mouseenter", () => video.play().catch(() => {}));
   card.addEventListener("mouseleave", () => { video.pause(); video.currentTime = 0; });
 });
+
+/* ════════════════════════════════════════
+   PRODUCT DATA
+════════════════════════════════════════ */
+const PRODUCT_DATA = {
+  "coma": {
+    key: "coma", name: "CÖMA", sub: "Ö Table", img: "assets/product4.jpg", available: true,
+    description: "A sculptural piece at the intersection of art and function. The CÖMA Ö Table commands space with organic tension and raw material honesty.",
+    specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Limited" }],
+  },
+  "dumo-effect": {
+    key: "dumo-effect", name: "DUMÖ Effect", sub: "Ö Table", img: "assets/product5.jpg", available: true,
+    description: "The DUMÖ Effect distorts expectation. Hovering between sculpture and furniture — each piece uniquely finished and unrepeatable.",
+    specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Limited" }],
+  },
+  "boobi-bucla6": {
+    key: "boobi-bucla6", name: "BOOBI BUCLA6", sub: "Ö Table", img: "assets/product6.jpg", available: true,
+    description: "BOOBI BUCLA6 pushes the language of the table into new territory — bold proportions, controlled chaos, singular presence.",
+    specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Limited" }],
+  },
+  "power-of-the-p": {
+    key: "power-of-the-p", name: "Power of the P", sub: "Ö Table", img: "assets/product7.jpg", available: false,
+    description: "A sold piece. Power of the P defined its era — bold, confrontational, and gone. Watch for its return.",
+    specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Sold Out" }],
+  },
+  "time-expire": {
+    key: "time-expire", name: "Time Expire", sub: "Ö Table", img: "assets/product8.jpg", available: true,
+    description: "Time Expire holds urgency in still form. A piece designed to outlast the moment while marking it permanently.",
+    specs: [{ label: "Type", value: "Ö Table" }, { label: "Material", value: "Mixed Media" }, { label: "Edition", value: "Limited" }],
+  },
+};
+
+/* ════════════════════════════════════════
+   PRODUCT POPUP
+════════════════════════════════════════ */
+let currentPopupKey = null;
+
+function openProductPopup(key) {
+  const data = PRODUCT_DATA[key];
+  if (!data) return;
+  currentPopupKey = key;
+
+  document.getElementById("pp-img").src           = data.img;
+  document.getElementById("pp-img").alt           = data.name;
+  document.getElementById("pp-topbar-path").textContent = `STARS_SHOP // ${data.name}`;
+  document.getElementById("pp-name").textContent  = data.name;
+  document.getElementById("pp-sub").textContent   = data.sub;
+  document.getElementById("pp-desc").textContent  = data.description;
+
+  const dot      = document.getElementById("pp-avail-dot");
+  const label    = document.getElementById("pp-avail-label");
+  const atcBtn   = document.getElementById("pp-atc-btn");
+  const ntfBtn   = document.getElementById("pp-notify-btn");
+
+  if (data.available) {
+    dot.className      = "pp-avail-dot pp-avail-on";
+    label.textContent  = "Available";
+    atcBtn.style.display = "";
+    ntfBtn.style.display = "none";
+  } else {
+    dot.className      = "pp-avail-dot pp-avail-off";
+    label.textContent  = "Sold";
+    atcBtn.style.display = "none";
+    ntfBtn.style.display = "";
+  }
+
+  document.getElementById("pp-specs").innerHTML = data.specs.map(s =>
+    `<li class="pp-spec-row"><span class="pp-spec-label">${s.label}</span><span class="pp-spec-value">${s.value}</span></li>`
+  ).join("");
+
+  document.getElementById("pp-overlay").classList.add("active");
+  document.getElementById("pp-wrap").classList.add("active");
+}
+
+function closeProductPopup() {
+  document.getElementById("pp-overlay").classList.remove("active");
+  document.getElementById("pp-wrap").classList.remove("active");
+  currentPopupKey = null;
+}
+
+function addToCartFromPopup() {
+  if (!currentPopupKey) return;
+  const data = PRODUCT_DATA[currentPopupKey];
+  if (!data || !data.available) return;
+  closeProductPopup();
+  addToCart(data.key, data.name);
+}
+
+function notifyFromPopup() {
+  const name = PRODUCT_DATA[currentPopupKey]?.name || "";
+  closeProductPopup();
+  openNotifyPopup(name);
+}
+
+document.getElementById("pp-overlay").addEventListener("click", closeProductPopup);
+document.getElementById("pp-wrap").addEventListener("click", function(e) {
+  if (!e.target.closest(".pp-modal")) closeProductPopup();
+});
+
+/* ════════════════════════════════════════
+   CART STATE
+════════════════════════════════════════ */
+let cartItems = [];
+
+function addToCart(key, name) {
+  const existing = cartItems.find(i => i.key === key);
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cartItems.push({ key, name, quantity: 1 });
+  }
+  renderCart();
+  openCart();
+}
+
+function updateQty(key, delta) {
+  const item = cartItems.find(i => i.key === key);
+  if (!item) return;
+  item.quantity += delta;
+  if (item.quantity <= 0) cartItems = cartItems.filter(i => i.key !== key);
+  renderCart();
+}
+
+function removeFromCart(key) {
+  cartItems = cartItems.filter(i => i.key !== key);
+  renderCart();
+}
+
+function renderCart() {
+  const body  = document.querySelector(".cart-drawer-body");
+  const badge = document.getElementById("cart-badge");
+  if (!body) return;
+
+  const totalQty = cartItems.reduce((sum, i) => sum + i.quantity, 0);
+  if (badge) badge.textContent = totalQty;
+
+  if (!cartItems.length) {
+    body.innerHTML = '<p class="cart-empty-msg">No items in cart.</p>';
+    return;
+  }
+
+  const itemsHTML = cartItems.map(item => {
+    const img = PRODUCT_DATA[item.key]?.img || "";
+    return `
+      <div class="cart-item">
+        ${img ? `<img class="cart-item-thumb" src="${img}" alt="${item.name}">` : ""}
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-qty-row">
+            <button class="cart-qty-btn" onclick="updateQty('${item.key}', -1)">−</button>
+            <span class="cart-item-qty">${item.quantity}</span>
+            <button class="cart-qty-btn" onclick="updateQty('${item.key}', 1)">+</button>
+          </div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart('${item.key}')">✕</button>
+      </div>
+    `;
+  }).join("");
+
+  body.innerHTML = `
+    ${itemsHTML}
+    <div class="cart-footer">
+      <button class="cart-checkout-btn" id="cart-checkout-btn"
+              onclick="redirectToCheckout(cartItems)">
+        Checkout →
+      </button>
+    </div>
+  `;
+}

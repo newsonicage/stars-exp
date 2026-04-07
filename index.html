@@ -444,6 +444,11 @@
     }
     .hf-close:hover { color: rgba(255,255,255,0.5); animation: none; }
 
+    /* Prevent iOS auto-zoom on input focus */
+    @media (max-width: 768px) {
+      .hf-input { font-size: 16px !important; }
+    }
+
     /* success state */
     .hf-success {
       display: none;
