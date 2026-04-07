@@ -102,7 +102,7 @@
     </div>
 
     <!-- Netlify form -->
-    <form class="contact-form" id="contact-form" name="contact" data-netlify="true" style="width:100%;display:flex;flex-direction:column;gap:20px;">
+    <form class="contact-form" id="contact-form" name="contact" data-netlify="true">
       <input type="hidden" name="form-name" value="contact">
 
       <div class="form-row">
@@ -250,7 +250,7 @@
     <div class="sm-rule"></div>
   </div>
 
-  <div class="sm-block sm-art" onmouseenter="playHover(1)">
+  <div class="sm-block sm-art" onmouseenter="playHover(1)" onclick="showSettingsError()">
     <span class="sm-node tl"></span><span class="sm-node tr"></span>
     <span class="sm-node bl"></span><span class="sm-node br"></span>
     <span class="sm-num">02</span>
@@ -258,7 +258,7 @@
     <div class="sm-rule"></div>
   </div>
 
-  <div class="sm-block sm-merch" onmouseenter="playHover(2)">
+  <div class="sm-block sm-merch" onmouseenter="playHover(2)" onclick="showSettingsError()">
     <span class="sm-node tl"></span><span class="sm-node tr"></span>
     <span class="sm-node bl"></span><span class="sm-node br"></span>
     <span class="sm-num">03</span>
@@ -429,7 +429,7 @@
       <!-- product9: Heart of the Underworld -->
       <div class="product-card music-product"
            onmouseenter="playHover(3)"
-           onclick="openNotifyPopup('Heart of the Underworld')">
+           onclick="window.open('https://untitled.stream/library/project/NQrbZCfBX8EdlnnKm7VXx','_blank')">
         <div class="product-img-wrap">
           <img src="assets/product9.jpg" alt="Heart of the Underworld">
           <div class="music-overlay">
@@ -643,8 +643,7 @@
     </div>
 
     <!-- Form -->
-    <form class="contact-form" id="notify-form" name="notify" data-netlify="true"
-          style="width:100%;display:flex;flex-direction:column;gap:14px;">
+    <form class="contact-form" id="notify-form" name="notify" data-netlify="true">
       <input type="hidden" name="form-name" value="notify">
       <input type="hidden" id="np-item-field" name="item" value="">
 
@@ -683,7 +682,7 @@
     </div>
 
     <div class="link-social-row">
-      <a class="link-social-btn" href="https://youtube.com/@starsinfern0" target="_blank" rel="noopener" aria-label="YouTube">
+      <a class="link-social-btn" href="https://youtube.com/@scratchbradley" target="_blank" rel="noopener" aria-label="YouTube">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
         <span>YouTube</span>
       </a>
@@ -700,6 +699,40 @@
     <button class="sp-pill-btn link-copy-btn" onclick="copySiteLink()">⛓ Copy Link</button>
 
     <button class="sp-close" onclick="closeLinkPanel()">[ Close ]</button>
+  </div>
+</div>
+
+<!-- SECRET POPUP (h key) -->
+<div class="secret-overlay" id="secret-overlay"></div>
+<div class="secret-wrap" id="secret-wrap">
+  <div class="secret-terminal" id="secret-terminal">
+    <div class="st-scanlines"></div>
+    <div class="st-vignette"></div>
+    <span class="st-corner tl"></span>
+    <span class="st-corner tr"></span>
+    <span class="st-corner bl"></span>
+    <span class="st-corner br"></span>
+    <div class="st-top-bar">
+      <span class="st-dot st-dot-red"></span>
+      <span class="st-dot st-dot-yellow"></span>
+      <span class="st-dot st-dot-green"></span>
+      <span class="st-path">STARS_OS v4.2 // /restricted/operative/</span>
+    </div>
+    <div class="st-body">
+      <div class="st-lines" id="st-lines"></div>
+      <div class="st-reveal" id="st-reveal" style="display:none">
+        <div class="st-classified">★ ★ ★ &nbsp; classified &nbsp; ★ ★ ★</div>
+        <div class="st-glitch-title" data-text="YOU FOUND IT">YOU FOUND IT</div>
+        <div class="st-operative-text">Stars* Operative &nbsp;·&nbsp; Clearance: ∞</div>
+        <div class="st-unique-code-wrap">
+          <div class="st-code-label">YOUR OPERATIVE CODE</div>
+          <div class="st-unique-code" id="st-unique-code">····-····-····-····</div>
+        </div>
+        <div class="st-screenshot-prompt">⚠ SCREENSHOT THIS · CODE IS UNIQUE · WILL NOT REGENERATE</div>
+        <div class="st-secret-code">// SEC-7734-OMNI · EYES ONLY //</div>
+      </div>
+    </div>
+    <button class="st-dismiss" id="st-dismiss" onclick="closeSecret()">[ TERMINATE SESSION ]</button>
   </div>
 </div>
 
@@ -733,6 +766,20 @@
 
   </div>
 </footer>
+
+<!-- KEYBOARD TIPS -->
+<div class="kb-tips" id="kb-tips">
+  <div class="kb-tips-icon" onclick="this.closest('.kb-tips').classList.toggle('open')" title="Keyboard shortcuts">⌨</div>
+  <div class="kb-tips-panel">
+    <div class="kb-tips-title">Shortcuts</div>
+    <div class="kb-tip-row"><kbd>↑ ↓ ← →</kbd><span>Navigate</span></div>
+    <div class="kb-tip-row"><kbd>↵ · Space</kbd><span>Select</span></div>
+    <div class="kb-tip-row"><kbd>O</kbd><span>Cart</span></div>
+    <div class="kb-tip-row"><kbd>C</kbd><span>Contact</span></div>
+    <div class="kb-tip-row"><kbd>S</kbd><span>Settings</span></div>
+    <div class="kb-tip-row"><kbd>Esc · Home</kbd><span>Top</span></div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
