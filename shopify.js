@@ -6,10 +6,10 @@
 // ── Your Shopify store domain ──
 const SHOPIFY_DOMAIN = "starsinfern0.myshopify.com";
 
-// ── Storefront API access token (from Shopify Admin → Apps → Netlify Storefront) ──
-const SHOPIFY_TOKEN = "85af096903f03a1d94f1d7dbbebca931";
+// ── Storefront API access token (Headless channel → Public access token) ──
+const SHOPIFY_TOKEN = "c9009dad802764ec3cc39e7774375e89";
 
-const SHOPIFY_API_URL = `https://${SHOPIFY_DOMAIN}/api/2024-01/graphql.json`;
+const SHOPIFY_API_URL = `https://${SHOPIFY_DOMAIN}/api/2025-01/graphql.json`;
 
 /* ── Variant ID Map ──────────────────────
    Maps frontend product keys → Shopify variant GIDs.
