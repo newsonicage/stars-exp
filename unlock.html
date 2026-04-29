@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
+  <title>Stars* · Unlock</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green:      #39ff6e;
+      --green-glow: rgba(57,255,110,0.5);
+      --yellow:     #ffe548;
+      --yellow-glow:rgba(255,229,72,0.55);
+      --red:        #ff4060;
+      --white:      #f0f4ff;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── BG Video ── */
+    #bg-video {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.35;
+      filter: grayscale(1);
+    }
+
+    /* ── Overlay ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(ellipse at center,
+        rgba(0,0,0,0.2) 0%,
+        rgba(0,0,0,0.75) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* ── Scanlines ── */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+    }
+
+    /* ── Main layout ── */
+    .unlock-wrap {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+      padding: 40px 20px 60px;
+      animation: fadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Hero text ── */
+    .hero-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green), 0 0 22px rgba(57,255,110,0.45);
+      flex-shrink: 0;
+      animation: greenBlink 1.4s ease-in-out infinite;
+    }
+
+    @keyframes greenBlink {
+      0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--green), 0 0 22px rgba(57,255,110,0.45); }
+      50%       { opacity: 0.1; box-shadow: none; }
+    }
+
+    .status-text {
+      font-family: 'Nunito', sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .hero-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(28px, 6vw, 48px);
+      font-weight: 900;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--white);
+      text-shadow:
+        0 0 30px rgba(255,255,255,0.15),
+        0 0 60px rgba(255,255,255,0.05);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero-sub {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-align: center;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.8;
+      margin-bottom: 48px;
+    }
+
+    /* ── Panel ── */
+    .panel {
+      width: 100%;
+      position: relative;
+      padding: 40px 36px 36px;
+      background: rgba(6,6,6,0.82);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    /* Corner brackets */
+    .pframe {
+      position: absolute;
+      width: 22px; height: 22px;
+    }
+    .pframe.tl { top:-1px; left:-1px;   border-top: 1.5px solid rgba(57,255,110,0.55); border-left: 1.5px solid rgba(57,255,110,0.55); box-shadow: -2px -2px 10px rgba(57,255,110,0.2); }
+    .pframe.tr { top:-1px; right:-1px;  border-top: 1.5px solid rgba(57,255,110,0.55); border-right:1.5px solid rgba(57,255,110,0.55); box-shadow:  2px -2px 10px rgba(57,255,110,0.2); }
+    .pframe.bl { bottom:-1px; left:-1px;  border-bottom:1.5px solid rgba(57,255,110,0.55); border-left: 1.5px solid rgba(57,255,110,0.55); box-shadow: -2px 2px 10px rgba(57,255,110,0.2); }
+    .pframe.br { bottom:-1px; right:-1px; border-bottom:1.5px solid rgba(57,255,110,0.55); border-right:1.5px solid rgba(57,255,110,0.55); box-shadow:  2px 2px 10px rgba(57,255,110,0.2); }
+
+    /* ── Tab switcher ── */
+    .tab-row {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 50px;
+      padding: 4px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 50px;
+      background: transparent;
+      color: rgba(255,255,255,0.35);
+      font-family: 'Nunito', sans-serif;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab-btn.active {
+      background: rgba(57,255,110,0.1);
+      color: var(--green);
+      box-shadow: 0 0 16px rgba(57,255,110,0.15);
+    }
+
+    /* ── Form ── */
+    .form-section { display: none; }
+    .form-section.active { display: flex; flex-direction: column; gap: 16px; }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      padding-left: 4px;
+    }
+
+    .field-wrap {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .field-wrap:hover,
+    .field-wrap:focus-within {
+      transform: scale(1.02);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 50px;
+      color: var(--white);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-input,
+    .form-select {
+      padding: 13px 20px;
+    }
+
+    .form-textarea {
+      border-radius: 16px;
+      padding: 13px 20px;
+      resize: none;
+      height: 80px;
+      line-height: 1.5;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: rgba(57,255,110,0.6);
+      box-shadow: 0 0 0 3px rgba(57,255,110,0.06), 0 0 16px rgba(57,255,110,0.08);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: rgba(255,255,255,0.18);
+      font-size: 12px;
+    }
+
+    .form-select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 18px center;
+      padding-right: 42px;
+    }
+
+    .form-select option {
+      background: #0a0a0a;
+      color: var(--white);
+    }
+
+    /* Required star */
+    .req { color: var(--green); margin-left: 2px; }
+
+    /* ── Submit button ── */
+    .submit-btn {
+      width: 100%;
+      padding: 16px 24px;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      background: transparent;
+      color: var(--white);
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      cursor: pointer;
+      outline: none;
+      overflow: hidden;
+      position: relative;
+      margin-top: 6px;
+      -webkit-tap-highlight-color: transparent;
+      transition:
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        border-color 0.3s,
+        background 0.3s,
+        box-shadow 0.3s,
+        color 0.3s;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: -120%; width: 60%;
+      background: linear-gradient(90deg, transparent, rgba(57,255,110,0.1), transparent);
+      transition: left 0.5s ease;
+      pointer-events: none;
+    }
+
+    .submit-btn:hover {
+      transform: scale(1.04);
+      border-color: var(--green);
+      background: rgba(57,255,110,0.08);
+      color: var(--green);
+      box-shadow: 0 0 20px rgba(57,255,110,0.3), 0 0 50px rgba(57,255,110,0.1);
+      text-shadow: 0 0 12px rgba(57,255,110,0.6);
+    }
+
+    .submit-btn:hover::before { left: 160%; }
+    .submit-btn:active { transform: scale(0.97); transition-duration: 0.08s; }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ── Feedback ── */
+    .feedback {
+      margin-top: 14px;
+      text-align: center;
+      font-family: 'Nunito', sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      min-height: 16px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .feedback.visible { opacity: 1; transform: translateY(0); }
+    .feedback.ok  { color: var(--green); text-shadow: 0 0 10px rgba(57,255,110,0.5); }
+    .feedback.err { color: var(--red);   text-shadow: 0 0 10px rgba(255,64,96,0.5); }
+
+    /* ── Success state ── */
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 24px 0 8px;
+      text-align: center;
+    }
+
+    .success-icon {
+      font-size: 28px;
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(57,255,110,0.9);
+      animation: successPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes successPulse {
+      0%,100% { text-shadow: 0 0 20px rgba(57,255,110,0.9); }
+      50%      { text-shadow: 0 0 40px rgba(57,255,110,1), 0 0 80px rgba(57,255,110,0.4); }
+    }
+
+    .success-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .success-sub {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── Footer note ── */
+    .panel-note {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.18);
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 520px) {
+      .panel { padding: 32px 22px 28px; }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .form-input, .form-select, .form-textarea { font-size: 16px !important; }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title { letter-spacing: 5px; }
+      .panel { padding: 28px 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="assets/bg.mp4" type="video/mp4" />
+  </video>
+
+  <div class="overlay"></div>
+  <div class="scanlines"></div>
+
+  <div class="unlock-wrap">
+
+    <!-- Hero -->
+    <div class="hero-status">
+      <span class="status-dot"></span>
+      <span class="status-text">System Active</span>
+    </div>
+
+    <h1 class="hero-title">Enter the System</h1>
+
+    <p class="hero-sub">
+      gain access to beats · passwords<br>
+      collaborations · and build
+    </p>
+
+    <!-- Panel -->
+    <div class="panel" id="panel">
+      <span class="pframe tl"></span>
+      <span class="pframe tr"></span>
+      <span class="pframe bl"></span>
+      <span class="pframe br"></span>
+
+      <!-- Tab row -->
+      <div class="tab-row">
+        <button class="tab-btn active" id="tab-join" onclick="switchTab('join')">Join</button>
+        <button class="tab-btn" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+      </div>
+
+      <!-- ── JOIN form ── -->
+      <div class="form-section active" id="form-join">
+
+        <!-- Success state -->
+        <div class="success-state" id="join-success">
+          <div class="success-icon">✦</div>
+          <div class="success-title">Access Granted</div>
+          <div class="success-sub">Entering the vault…</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="j-email">Email <span class="req">✦</span></label>
+          <div class="field-wrap">
+            <input class="form-input" id="j-email" type="email" name="email"
+                   placeholder="your@email.com" autocomplete="email" required>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="field-group">
+            <label class="field-label" for="j-first">First Name</label>
+            <div class="field-wrap">
+              <input class="form-input" id="j-first" type="text" name="first_name"
+                     placeholder="First" autocomplete="given-name">
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="j-last">Last Name</label>
+            <div class="field-wrap">
+              <input class="form-input" id="j-last" type="text" name="last_name"
+                     placeholder="Last" autocomplete="family-name">
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="j-artist">Artist / Stage Name</label>
+          <div class="field-wrap">
+            <input class="form-input" id="j-artist" type="text" name="artist_name"
+                   placeholder="Your artist name">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="j-phone">Phone Number</label>
+          <div class="field-wrap">
+            <input class="form-input" id="j-phone" type="tel" name="phone"
+                   placeholder="+1 (555) 000-0000" autocomplete="tel">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="j-role">What best describes you?</label>
+          <div class="field-wrap">
+            <select class="form-select" id="j-role" name="role">
+              <option value="" disabled selected>Select your role</option>
+              <option value="Artist">Artist</option>
+              <option value="Producer">Producer</option>
+              <option value="A&R">A&amp;R</option>
+              <option value="Other">Something Else?</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="j-working">What are you working on right now?</label>
+          <div class="field-wrap">
+            <textarea class="form-textarea" id="j-working" name="what_working_on"
+                      placeholder="Tell us briefly…"></textarea>
+          </div>
+        </div>
+
+        <button class="submit-btn" id="join-btn" onclick="submitJoin()">
+          Join the Vault
+        </button>
+
+        <div class="feedback" id="join-feedback"></div>
+      </div>
+
+      <!-- ── SIGN IN form ── -->
+      <div class="form-section" id="form-signin">
+
+        <!-- Success state -->
+        <div class="success-state" id="signin-success">
+          <div class="success-icon">✦</div>
+          <div class="success-title">Identity Confirmed</div>
+          <div class="success-sub">Entering the vault…</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="s-email">Email <span class="req">✦</span></label>
+          <div class="field-wrap">
+            <input class="form-input" id="s-email" type="email" name="email"
+                   placeholder="your@email.com" autocomplete="email" required>
+          </div>
+        </div>
+
+        <button class="submit-btn" id="signin-btn" onclick="submitSignIn()">
+          Enter
+        </button>
+
+        <div class="feedback" id="signin-feedback"></div>
+
+        <p class="panel-note">Not registered? Switch to Join above.</p>
+      </div>
+
+    </div><!-- /panel -->
+
+  </div><!-- /unlock-wrap -->
+
+  <!-- Supabase JS client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+  <script>
+    /* ── Supabase client ── */
+    const { createClient } = supabase;
+    const sb = createClient(
+      'https://eisjdabargbpdcyxcxyk.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc2pkYWJhcmdicGRjeXhjeHlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzY0NjAsImV4cCI6MjA5MzA1MjQ2MH0.jMaQwvNzi4ZuBWZLbPyUNp8UePysGWs_bzwYFmgmzwg'
+    );
+
+    /* ── Guard: if already have vault access, skip to vault ── */
+    if (localStorage.getItem('vault_access') === 'granted') {
+      window.location.replace('/vault');
+    }
+
+    /* ── Tab switcher ── */
+    function switchTab(tab) {
+      const tabs = ['join', 'signin'];
+      tabs.forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+        document.getElementById('form-' + t).classList.toggle('active', t === tab);
+      });
+    }
+
+    /* ── Feedback helpers ── */
+    function showFeedback(id, msg, type) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.className = 'feedback visible ' + type;
+    }
+    function hideFeedback(id) {
+      document.getElementById(id).className = 'feedback';
+    }
+
+    /* ── Grant access & redirect ── */
+    function grantAccess(email) {
+      localStorage.setItem('vault_access', 'granted');
+      localStorage.setItem('vault_email', email || '');
+      setTimeout(() => { window.location.href = '/vault'; }, 1600);
+    }
+
+    /* ── JOIN submit ── */
+    async function submitJoin() {
+      const btn   = document.getElementById('join-btn');
+      const email = document.getElementById('j-email').value.trim();
+
+      if (!email) {
+        showFeedback('join-feedback', '✕  Email is required  ✕', 'err');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Connecting…';
+      hideFeedback('join-feedback');
+
+      const payload = {
+        email:           email,
+        first_name:      document.getElementById('j-first').value.trim()   || null,
+        last_name:       document.getElementById('j-last').value.trim()    || null,
+        artist_name:     document.getElementById('j-artist').value.trim()  || null,
+        phone:           document.getElementById('j-phone').value.trim()   || null,
+        role:            document.getElementById('j-role').value           || null,
+        what_working_on: document.getElementById('j-working').value.trim() || null,
+      };
+
+      try {
+        const { error } = await sb.from('users').insert([payload]);
+
+        if (error) {
+          /* Duplicate email = already registered, let them in anyway */
+          if (error.code === '23505') {
+            showFeedback('join-feedback', '✦  Already registered  ✦', 'ok');
+            grantAccess(email);
+            return;
+          }
+          throw error;
+        }
+
+        /* Show success */
+        document.getElementById('join-success').style.display = 'flex';
+        document.querySelectorAll('#form-join .field-group, #join-btn').forEach(el => el.style.display = 'none');
+        showFeedback('join-feedback', '✦  Welcome to the vault  ✦', 'ok');
+        grantAccess(email);
+
+      } catch (err) {
+        console.error(err);
+        showFeedback('join-feedback', '✕  Error. Try again.  ✕', 'err');
+        btn.disabled = false;
+        btn.textContent = 'Join the Vault';
+      }
+    }
+
+    /* ── SIGN IN submit ── */
+    async function submitSignIn() {
+      const btn   = document.getElementById('signin-btn');
+      const email = document.getElementById('s-email').value.trim();
+
+      if (!email) {
+        showFeedback('signin-feedback', '✕  Email is required  ✕', 'err');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying…';
+      hideFeedback('signin-feedback');
+
+      try {
+        const { data, error } = await sb
+          .from('users')
+          .select('email')
+          .eq('email', email)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+          showFeedback('signin-feedback', '✕  Email not found · Join first  ✕', 'err');
+          btn.disabled = false;
+          btn.textContent = 'Enter';
+          return;
+        }
+
+        /* Found — grant access */
+        document.getElementById('signin-success').style.display = 'flex';
+        document.querySelectorAll('#form-signin .field-group, #signin-btn').forEach(el => el.style.display = 'none');
+        showFeedback('signin-feedback', '✦  Identity confirmed  ✦', 'ok');
+        grantAccess(email);
+
+      } catch (err) {
+        console.error(err);
+        showFeedback('signin-feedback', '✕  Error. Try again.  ✕', 'err');
+        btn.disabled = false;
+        btn.textContent = 'Enter';
+      }
+    }
+
+    /* ── Enter on last field ── */
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      if (document.getElementById('form-join').classList.contains('active')) {
+        submitJoin();
+      } else {
+        submitSignIn();
+      }
+    });
+  </script>
+</body>
+</html>

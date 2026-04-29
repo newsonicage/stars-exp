@@ -1,4 +1,8 @@
 # Clean URLs — remove .html extensions
-/index.html  /       301
-/home.html   /home   301
-/home        /home.html  200
+/index.html   /        301
+/home.html    /home    301
+/home         /home.html    200
+/unlock.html  /unlock  301
+/vault.html   /vault   301
+/unlock       /unlock.html  200
+/vault        /vault.html   200
