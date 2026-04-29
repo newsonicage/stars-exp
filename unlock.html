@@ -598,6 +598,8 @@ async function submitForm() {
         enterVault();
         return;
       }
+      /* Surface the real error so we can diagnose it */
+      console.error('Supabase error:', error.code, error.message, error.details, error.hint);
       throw error;
     }
 
@@ -605,8 +607,10 @@ async function submitForm() {
     enterVault();
 
   } catch (err) {
-    console.error(err);
-    showFeedback('✕  Something went wrong. Try again.  ✕', 'err');
+    const code = err?.code || err?.status || 'unknown';
+    const msg  = err?.message || JSON.stringify(err);
+    console.error('Supabase insert error:', code, msg);
+    showFeedback('✕  ' + code + ': ' + msg + '  ✕', 'err');
     btn.disabled = false;
     btn.textContent = 'Join the Vault';
   }
