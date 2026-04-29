@@ -409,14 +409,17 @@
     </div>
 
     <!-- Main form -->
-    <div class="form-body" id="state-form">
+    <div id="state-form">
+    <form class="form-body" id="vault-form"
+          onsubmit="submitForm(); return false;"
+          autocomplete="on">
 
       <div class="field-group">
         <label class="field-label" for="f-email">
           Email <span class="req">✦</span>
         </label>
         <div class="field-wrap">
-          <input class="form-input" id="f-email" type="email"
+          <input class="form-input" id="f-email" name="email" type="email"
                  placeholder="your@email.com" autocomplete="email" />
         </div>
       </div>
@@ -425,14 +428,14 @@
         <div class="field-group">
           <label class="field-label" for="f-first">First Name</label>
           <div class="field-wrap">
-            <input class="form-input" id="f-first" type="text"
+            <input class="form-input" id="f-first" name="given-name" type="text"
                    placeholder="First" autocomplete="given-name" />
           </div>
         </div>
         <div class="field-group">
           <label class="field-label" for="f-last">Last Name</label>
           <div class="field-wrap">
-            <input class="form-input" id="f-last" type="text"
+            <input class="form-input" id="f-last" name="family-name" type="text"
                    placeholder="Last" autocomplete="family-name" />
           </div>
         </div>
@@ -441,15 +444,15 @@
       <div class="field-group">
         <label class="field-label" for="f-artist">Artist / Stage Name</label>
         <div class="field-wrap">
-          <input class="form-input" id="f-artist" type="text"
-                 placeholder="Your artist name" />
+          <input class="form-input" id="f-artist" name="artist_name" type="text"
+                 placeholder="Your artist name" autocomplete="nickname" />
         </div>
       </div>
 
       <div class="field-group">
         <label class="field-label" for="f-phone">Phone Number</label>
         <div class="field-wrap">
-          <input class="form-input" id="f-phone" type="tel"
+          <input class="form-input" id="f-phone" name="tel" type="tel"
                  placeholder="+1 (555) 000-0000" autocomplete="tel" />
         </div>
       </div>
@@ -457,7 +460,7 @@
       <div class="field-group">
         <label class="field-label" for="f-role">What best describes you?</label>
         <div class="field-wrap">
-          <select class="form-select" id="f-role">
+          <select class="form-select" id="f-role" name="role">
             <option value="" disabled selected>Select your role</option>
             <option value="Artist">Artist</option>
             <option value="Producer">Producer</option>
@@ -470,17 +473,18 @@
       <div class="field-group">
         <label class="field-label" for="f-working">What are you working on right now?</label>
         <div class="field-wrap">
-          <textarea class="form-textarea" id="f-working"
+          <textarea class="form-textarea" id="f-working" name="what_working_on"
                     placeholder="Tell us briefly…"></textarea>
         </div>
       </div>
 
-      <button class="submit-btn" id="submit-btn" onclick="submitForm()">
+      <button class="submit-btn" id="submit-btn" type="submit">
         Join the Vault
       </button>
 
       <div class="feedback" id="form-feedback"></div>
 
+    </form>
     </div><!-- /state-form -->
 
   </div><!-- /panel -->
