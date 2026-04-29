@@ -1137,14 +1137,61 @@
       .player-controls { gap: 2px; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
 
-<!-- ══ AUTH GUARD ══ -->
+<!-- ══ AUTH LOADING OVERLAY ══ -->
+<div id="auth-loading" style="
+  position:fixed;inset:0;z-index:9999;background:#030308;
+  display:flex;align-items:center;justify-content:center;">
+  <div style="
+    font-family:'Nunito',sans-serif;font-size:9px;font-weight:900;
+    letter-spacing:5px;text-transform:uppercase;color:rgba(57,255,110,0.5);
+    animation:authBlink 1s ease-in-out infinite;">
+    Verifying Access…
+  </div>
+</div>
+<style>
+  @keyframes authBlink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+</style>
+
+<!-- ══ ACCESS GUARD (email + has_access, no Auth) ══ -->
 <script>
-  if (localStorage.getItem('vault_access') !== 'granted') {
-    window.location.replace('/unlock');
-  }
+  const { createClient: _sbCreate } = supabase;
+  const sb = _sbCreate(
+    'https://eisjdabargbpdcyxcxyk.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc2pkYWJhcmdicGRjeXhjeHlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzY0NjAsImV4cCI6MjA5MzA1MjQ2MH0.jMaQwvNzi4ZuBWZLbPyUNp8UePysGWs_bzwYFmgmzwg'
+  );
+
+  (async () => {
+    const email = localStorage.getItem('vault_email');
+
+    /* No email stored → instant redirect, no DB call needed */
+    if (!email) {
+      window.location.replace('/unlock');
+      return;
+    }
+
+    /* Verify email exists in users table with has_access = true */
+    try {
+      const { data } = await sb
+        .from('users')
+        .select('has_access')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (data && data.has_access) {
+        document.getElementById('auth-loading').style.display = 'none';
+      } else {
+        localStorage.removeItem('vault_email');
+        window.location.replace('/unlock');
+      }
+    } catch {
+      /* On network failure, trust localStorage and let them in */
+      document.getElementById('auth-loading').style.display = 'none';
+    }
+  })();
 </script>
 
 <!-- ══ HEADER ══ -->
@@ -1976,7 +2023,6 @@ function proceedToCart(type) {
 
 /* Sign out */
 function signOut() {
-  localStorage.removeItem('vault_access');
   localStorage.removeItem('vault_email');
   window.location.href = '/unlock';
 }
