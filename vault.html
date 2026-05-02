@@ -135,6 +135,7 @@
     }
     .vh-btn:hover    { border-color: var(--red); color: var(--red); }
     .vh-btn.kb-active { border-color: var(--red); color: var(--red); }
+    #vault-contact-btn:hover { border-color: var(--blue); color: var(--blue); }
 
     /* ════════════════════════════
        VAULT INTRO
@@ -1203,6 +1204,259 @@
       .controls-row   { gap: 4px; }
       .player-controls { gap: 3px; }
     }
+
+    /* ════════════════════════════
+       CONTACT MODAL
+    ════════════════════════════ */
+    #modal-contact {
+      z-index: 900;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .contact-panel {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      background: rgba(10,10,10,0.88);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 8px;
+      padding: 44px 38px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      animation: mFadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06),
+        0 0 60px rgba(255,229,0,0.08),
+        0 0 120px rgba(255,200,0,0.06),
+        0 24px 80px rgba(0,0,0,0.6);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      overflow: hidden;
+    }
+
+    .contact-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,229,0,0.03) 0%, transparent 50%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 28px);
+      pointer-events: none;
+      border-radius: 8px;
+    }
+
+    .contact-panel::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,229,0,0.6), rgba(255,200,0,0.4), transparent);
+      animation: scanLine 3s linear infinite;
+    }
+
+    @keyframes scanLine {
+      0%   { opacity: 0.4; }
+      50%  { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
+    .cp-corner {
+      position: absolute;
+      width: 18px; height: 18px;
+    }
+    .cp-corner.tl { top: -1px; left: -1px;
+      border-top: 2px solid rgba(255,229,0,0.7);
+      border-left: 2px solid rgba(255,229,0,0.7);
+    }
+    .cp-corner.tr { top: -1px; right: -1px;
+      border-top: 2px solid rgba(255,229,0,0.7);
+      border-right: 2px solid rgba(255,229,0,0.7);
+    }
+    .cp-corner.bl { bottom: -1px; left: -1px;
+      border-bottom: 2px solid rgba(255,229,0,0.7);
+      border-left: 2px solid rgba(255,229,0,0.7);
+    }
+    .cp-corner.br { bottom: -1px; right: -1px;
+      border-bottom: 2px solid rgba(255,229,0,0.7);
+      border-right: 2px solid rgba(255,229,0,0.7);
+    }
+
+    .cp-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #FFE500;
+      box-shadow: 0 0 8px #FFE500, 0 0 20px rgba(255,229,0,0.5);
+      animation: gBlink 1.6s ease-in-out infinite;
+    }
+
+    .cp-status-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #FFE500;
+    }
+
+    .cp-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(28px, 8vw, 42px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow:
+        0 0 20px rgba(255,229,0,0.35),
+        0 0 60px rgba(255,200,0,0.15);
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-subname {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255,229,0,0.5);
+      margin-top: -2px;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-rule {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255,229,0,0.5), rgba(255,200,0,0.25), transparent);
+      margin: 20px 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-info-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.3px;
+    }
+
+    .cp-info-icon {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #FFE500;
+      opacity: 0.8;
+      width: 32px;
+      flex-shrink: 0;
+    }
+
+    .cp-info-val {
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .cp-social-rule {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-socials {
+      display: flex;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-social-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s, transform 0.18s;
+    }
+    .cp-social-btn:hover {
+      transform: translateY(-2px);
+    }
+    .cp-social-btn.cp-ig:hover  { background: rgba(225,48,108,0.10); border-color: rgba(225,48,108,0.30); }
+    .cp-social-btn.cp-tt:hover  { background: rgba(105,201,208,0.10); border-color: rgba(105,201,208,0.30); }
+    .cp-social-btn.cp-yt:hover  { background: rgba(255,0,0,0.10);     border-color: rgba(255,0,0,0.30); }
+
+    .cp-social-icon {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cp-social-icon svg { width: 20px; height: 20px; fill: rgba(255,255,255,0.6); }
+    .cp-social-btn.cp-ig:hover .cp-social-icon svg { fill: #e1306c; }
+    .cp-social-btn.cp-tt:hover .cp-social-icon svg { fill: #69c9d0; }
+    .cp-social-btn.cp-yt:hover .cp-social-icon svg { fill: #ff2020; }
+
+    .cp-social-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .cp-social-btn.cp-ig:hover .cp-social-label { color: rgba(225,48,108,0.8); }
+    .cp-social-btn.cp-tt:hover .cp-social-label { color: rgba(105,201,208,0.9); }
+    .cp-social-btn.cp-yt:hover .cp-social-label { color: rgba(255,32,32,0.9); }
+
+    .cp-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.25);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      padding: 6px 8px;
+      transition: color 0.2s;
+      z-index: 2;
+    }
+    .cp-close:hover { color: #FFE500; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
@@ -1259,6 +1513,7 @@
     <span class="vh-vault-label">Vault</span>
   </div>
   <div class="vh-actions">
+    <button class="vh-btn" id="vault-contact-btn" onclick="openContact()">Contact</button>
     <button class="vh-btn" id="vault-exit-btn" onclick="signOut()">Exit</button>
   </div>
 </header>
@@ -1422,7 +1677,7 @@
 
     <div class="terms-list">
       <div class="terms-item dl">Personal &amp; creative use only — <strong style="color:var(--text)">no commercial releases or monetization.</strong></div>
-      <div class="terms-item dl">Tag <strong style="color:var(--text)">@Stars*</strong> or send me the finished track — I'd love to hear it.</div>
+      <div class="terms-item dl">Tag <strong style="color:var(--text)">@starsinfern0</strong> or send me the finished track — I'd love to hear it.</div>
       <div class="terms-item dl">Credit: <strong style="color:var(--text)">Prod. Stars*</strong></div>
       <div class="terms-item dl">Format: <strong style="color:var(--text)">MP3 · High Quality</strong></div>
     </div>
@@ -1514,6 +1769,59 @@
   </div>
 </div>
 
+<!-- ══ MODAL: CONTACT ══ -->
+<div class="modal-overlay" id="modal-contact" onclick="closeContact(event)">
+  <div class="contact-panel">
+    <span class="cp-corner tl"></span><span class="cp-corner tr"></span>
+    <span class="cp-corner bl"></span><span class="cp-corner br"></span>
+    <button class="cp-close" onclick="closeContactBtn()">[ ESC ]</button>
+
+    <div class="cp-status">
+      <span class="cp-dot"></span>
+      <span class="cp-status-text">Contact</span>
+    </div>
+
+    <div class="cp-name">Stars*</div>
+    <div class="cp-subname">Heart of the Underworld</div>
+
+    <div class="cp-rule"></div>
+
+    <div class="cp-info-list">
+      <div class="cp-info-item">
+        <span class="cp-info-icon">TEL</span>
+        <span class="cp-info-val">(404) 910-6583</span>
+      </div>
+      <div class="cp-info-item">
+        <span class="cp-info-icon">MAIL</span>
+        <span class="cp-info-val">scratchbradley@gmail.com</span>
+      </div>
+    </div>
+
+    <div class="cp-social-rule"></div>
+
+    <div class="cp-socials">
+      <a class="cp-social-btn cp-ig" href="https://instagram.com/starsinfern0" target="_blank" rel="noopener">
+        <span class="cp-social-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </span>
+        <span class="cp-social-label">Instagram</span>
+      </a>
+      <a class="cp-social-btn cp-tt" href="https://tiktok.com/@starsinfern0" target="_blank" rel="noopener">
+        <span class="cp-social-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.56V6.81a4.85 4.85 0 01-1.07-.12z"/></svg>
+        </span>
+        <span class="cp-social-label">TikTok</span>
+      </a>
+      <a class="cp-social-btn cp-yt" href="https://youtube.com/@scratchbradley" target="_blank" rel="noopener">
+        <span class="cp-social-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+        </span>
+        <span class="cp-social-label">YouTube</span>
+      </a>
+    </div>
+  </div>
+</div>
+
 <!-- ══ SCRIPTS ══ -->
 <script>
 /* ════════════════════════════════════════════
@@ -1547,7 +1855,7 @@ const tracks = [
     mood:      ['Aggressive', 'Hypnotic', 'Menacing', 'Relentless'],
     scene:     ['Underground Clubs', 'Night Drive', 'Chase', 'Gym', 'Gaming'],
     tags:      ['electronic', 'dance', 'trap', '100-130'],
-    url:       'https://eisjdabargbpdcyxcxyk.supabase.co/storage/v1/object/public/beats/mp3/066%20on%20edge%20124BPM%20A%20major_2.mp3',
+    url:       'https://eisjdabargbpdcyxcxyk.supabase.co/storage/v1/object/public/beats/mp3/066%20on%20edge%20124BPM%20A%20major_3.mp3',
     seed:      4219,
   },
 ];
@@ -2208,6 +2516,17 @@ document.addEventListener('keydown', e => {
 ════════════════════════════════════════════ */
 function isModalOpen() {
   return !!document.querySelector('.modal-overlay.active');
+}
+
+function openContact() {
+  document.getElementById('modal-contact').classList.add('active');
+}
+function closeContact(event) {
+  if (event && event.target !== document.getElementById('modal-contact')) return;
+  document.getElementById('modal-contact').classList.remove('active');
+}
+function closeContactBtn() {
+  document.getElementById('modal-contact').classList.remove('active');
 }
 
 function openModal(id) {
