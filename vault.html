@@ -221,7 +221,8 @@
       -webkit-tap-highlight-color: transparent;
     }
     .vsm-block:last-child { border-right: none; }
-    .vsm-block:hover { flex: 1.4; }
+    .vsm-block:hover,
+    .vsm-block.active { flex: 1.4; }
 
     .vsm-all:hover,        .vsm-all.active        { background: #0d0d0d; }
     .vsm-electronic:hover, .vsm-electronic.active  { background: #0044bb; }
@@ -281,6 +282,9 @@
       text-transform: uppercase;
       color: var(--text);
       transform: translateY(10px);
+      text-align: center;
+      width: 100%;
+      padding: 0 10px;
       transition:
         color      0.35s,
         transform  0.5s cubic-bezier(0.16,1,0.3,1),
@@ -1009,6 +1013,7 @@
     }
     .terms-item::before { content: '✦'; font-size: 9px; color: var(--yellow); margin-top: 3px; flex-shrink: 0; }
     .terms-item.own::before { color: var(--red); }
+    .terms-item.dl::before  { color: var(--black); }
 
     .terms-price {
       font-family: 'Orbitron', sans-serif;
@@ -1400,17 +1405,34 @@
 
     <div class="modal-status">
       <span class="modal-dot dark"></span>
-      <span class="modal-status-text">Download</span>
+      <span class="modal-status-text">Free Download</span>
     </div>
 
     <div class="dl-icon">↓</div>
     <div class="modal-title">Download</div>
     <div class="modal-track-name" id="dl-track-name"></div>
 
-    <div class="modal-body">Your download will begin shortly.<br>
-    Format: <strong style="color:var(--text)">MP3 · High Quality</strong></div>
+    <div class="modal-body">
+      Make this beat yours — add vocals, sample it, flip it, remix it.<br>
+      I want to hear what you create. Tag me, send me what you make,<br>
+      or just reach out. Let's connect.
+    </div>
 
-    <button class="modal-btn ghost" onclick="closeModal('modal-download')">[ Close ]</button>
+    <div class="modal-divider"></div>
+
+    <div class="terms-list">
+      <div class="terms-item dl">Personal &amp; creative use only — <strong style="color:var(--text)">no commercial releases or monetization.</strong></div>
+      <div class="terms-item dl">Tag <strong style="color:var(--text)">@Stars*</strong> or send me the finished track — I'd love to hear it.</div>
+      <div class="terms-item dl">Credit: <strong style="color:var(--text)">Prod. Stars*</strong></div>
+      <div class="terms-item dl">Format: <strong style="color:var(--text)">MP3 · High Quality</strong></div>
+    </div>
+
+    <div id="dl-actions">
+      <button class="modal-btn dark" onclick="confirmDownload(event)" style="margin-bottom:10px">
+        Accept &amp; Download
+      </button>
+      <button class="modal-btn ghost" onclick="closeModal('modal-download')">[ Cancel ]</button>
+    </div>
   </div>
 </div>
 
@@ -1550,6 +1572,7 @@ let visRafId       = null;
 const audioEl = new Audio();
 audioEl.crossOrigin = 'anonymous';
 audioEl.preload = 'metadata';
+audioEl.setAttribute('playsinline', '');
 
 let audioCtx   = null;
 let analyser   = null;
@@ -1852,6 +1875,7 @@ function playTrack(index) {
   updateCardStates();
   updatePlayerBar();
   updatePlayPauseIcon();
+  setupMediaSession(track);
 }
 
 function togglePlay() {
@@ -1912,6 +1936,43 @@ audioEl.addEventListener('ended', () => {
 
 audioEl.addEventListener('timeupdate', updateProgress);
 audioEl.addEventListener('loadedmetadata', updateProgress);
+
+audioEl.addEventListener('play', () => {
+  if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
+});
+audioEl.addEventListener('pause', () => {
+  if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
+});
+
+/* ════════════════════════════════════════════
+   MEDIA SESSION (background / lock screen)
+════════════════════════════════════════════ */
+function setupMediaSession(track) {
+  if (!('mediaSession' in navigator)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title:  track.title,
+    artist: track.producer,
+    album:  'Stars* Vault',
+  });
+  navigator.mediaSession.setActionHandler('play', () => {
+    initAudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    audioEl.play().catch(console.error);
+    isPlaying = true;
+    startVisualizer();
+    updatePlayPauseIcon();
+    updateCardStates();
+  });
+  navigator.mediaSession.setActionHandler('pause', () => {
+    audioEl.pause();
+    isPlaying = false;
+    stopVisualizer();
+    updatePlayPauseIcon();
+    updateCardStates();
+  });
+  navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
+  navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
+}
 
 /* ════════════════════════════════════════════
    UI UPDATES
@@ -2162,12 +2223,20 @@ function closeAllModals() {
   document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
 }
 
+let pendingDownloadIndex = -1;
+
 function openDownload(index, e) {
   e.stopPropagation();
+  pendingDownloadIndex = index;
   const t = tracks[index];
   document.getElementById('dl-track-name').textContent = `${t.title} · ${t.bpm} BPM · ${t.key}`;
   openModal('modal-download');
-  setTimeout(() => triggerDownload(t), 800);
+}
+
+function confirmDownload(e) {
+  if (e) e.stopPropagation();
+  closeModal('modal-download');
+  if (pendingDownloadIndex >= 0) triggerDownload(tracks[pendingDownloadIndex]);
 }
 
 function toFilePart(s) {
