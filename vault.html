@@ -6,49 +6,43 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
   <title>Stars* · Vault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Questrial&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --green:      #39ff6e;
-      --green-dim:  rgba(57,255,110,0.18);
-      --green-glow: rgba(57,255,110,0.5);
-      --yellow:     #ffe548;
-      --yellow-glow:rgba(255,229,72,0.55);
-      --cyan:       #00e5ff;
-      --cyan-glow:  rgba(0,229,255,0.45);
-      --red:        #ff4060;
-      --white:      #f0f4ff;
-      --card-bg:    rgba(255,255,255,0.028);
-      --card-border:rgba(255,255,255,0.08);
-      --player-h:   88px;
+      --bg:           #f8f8f6;
+      --bg-card:      #ffffff;
+      --canvas-bg:    #111111;
+      --text:         #0d0d0d;
+      --text-sec:     #5a5a5a;
+      --text-muted:   #9a9a9a;
+      --border:       rgba(0,0,0,0.08);
+      --border-mid:   rgba(0,0,0,0.14);
+      --black:        #0d0d0d;
+      --yellow:       #c48a00;
+      --yellow-bg:    rgba(196,138,0,0.08);
+      --yellow-border:rgba(196,138,0,0.3);
+      --red:          #c8102e;
+      --red-bg:       rgba(200,16,46,0.07);
+      --red-border:   rgba(200,16,46,0.3);
+      --blue:         #0044bb;
+      --blue-bg:      rgba(0,68,187,0.07);
+      --blue-border:  rgba(0,68,187,0.28);
+      --player-h:     108px;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      background: #030308;
-      font-family: 'Space Grotesk', sans-serif;
-      color: var(--white);
+      background: var(--bg);
+      font-family: 'Questrial', sans-serif;
+      color: var(--text);
       overflow-x: hidden;
       min-height: 100vh;
       padding-top: 56px;
-      padding-bottom: calc(var(--player-h) + 20px);
-    }
-
-    /* Subtle neon grid overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(57,255,110,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(57,255,110,0.025) 1px, transparent 1px);
-      background-size: 44px 44px;
-      pointer-events: none;
-      z-index: 0;
+      padding-bottom: calc(var(--player-h) + 24px);
     }
 
     /* ════════════════════════════
@@ -63,78 +57,84 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 28px;
-      background: rgba(3,3,8,0.92);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(57,255,110,0.1);
+      background: rgba(248,248,246,0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-mid);
+    }
+
+    .vault-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%, var(--black) 35%,
+        rgba(255,255,255,0.9) 50%, var(--black) 65%, transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: circuitTrace 3s linear infinite;
+      opacity: 0.18;
+    }
+
+    @keyframes circuitTrace {
+      0%   { background-position: -100% 0; }
+      100% { background-position: 250% 0; }
     }
 
     .vh-logo {
       display: flex;
       align-items: center;
       gap: 10px;
-      text-decoration: none;
       cursor: pointer;
     }
 
-    .vh-star {
-      font-size: 20px;
-      filter: drop-shadow(0 0 6px rgba(255,255,255,0.5));
-    }
+    .vh-star { font-size: 20px; color: var(--black); }
 
     .vh-brand {
-      font-family: 'Nunito', sans-serif;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 5px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
+      color: var(--text);
     }
 
     .vh-sep {
-      width: 1px;
-      height: 18px;
-      background: rgba(255,255,255,0.12);
+      width: 1px; height: 18px;
+      background: var(--border-mid);
       margin: 0 2px;
     }
 
     .vh-vault-label {
-      font-family: 'Nunito', sans-serif;
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 5px;
       text-transform: uppercase;
-      color: var(--green);
-      text-shadow: 0 0 12px rgba(57,255,110,0.6);
+      color: var(--text-muted);
     }
 
-    .vh-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .vh-actions { display: flex; align-items: center; gap: 10px; }
 
     .vh-btn {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid var(--border-mid);
       border-radius: 4px;
-      color: rgba(255,255,255,0.45);
-      font-family: 'Nunito', sans-serif;
+      color: var(--text-sec);
+      font-family: 'Orbitron', sans-serif;
       font-size: 9px;
-      font-weight: 900;
-      letter-spacing: 4px;
+      font-weight: 700;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      padding: 7px 14px;
+      padding: 7px 16px;
       cursor: pointer;
-      transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
+      transition: border-color 0.2s, color 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-
-    .vh-btn:hover {
-      border-color: rgba(255,64,96,0.5);
-      color: #ff4060;
-      box-shadow: 0 0 12px rgba(255,64,96,0.15);
-    }
+    .vh-btn:hover    { border-color: var(--red); color: var(--red); }
+    .vh-btn.kb-active { border-color: var(--red); color: var(--red); }
 
     /* ════════════════════════════
        VAULT INTRO
@@ -142,7 +142,7 @@
     .vault-intro {
       position: relative;
       z-index: 1;
-      padding: 48px 28px 36px;
+      padding: 52px 28px 36px;
       text-align: center;
     }
 
@@ -150,147 +150,201 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .vi-dot {
       width: 7px; height: 7px;
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green), 0 0 18px rgba(57,255,110,0.4);
-      animation: gBlink 1.4s ease-in-out infinite;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e, 0 0 18px rgba(34,197,94,0.5);
+      animation: gBlink 1.6s ease-in-out infinite;
     }
 
     @keyframes gBlink {
-      0%,100% { opacity:1; box-shadow: 0 0 8px var(--green), 0 0 18px rgba(57,255,110,0.4); }
-      50%      { opacity:0.1; box-shadow: none; }
+      0%,100% { opacity: 1; box-shadow: 0 0 8px #22c55e, 0 0 18px rgba(34,197,94,0.5); }
+      50%      { opacity: 0.15; box-shadow: none; }
     }
 
     .vi-status-text {
-      font-family: 'Nunito', sans-serif;
-      font-size: 9px;
-      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
       letter-spacing: 5px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.35);
+      color: #22c55e;
     }
 
     .vi-title {
-      font-family: 'Nunito', sans-serif;
-      font-size: clamp(32px, 6vw, 56px);
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(34px, 6vw, 62px);
       font-weight: 900;
-      letter-spacing: 10px;
+      letter-spacing: 8px;
       text-transform: uppercase;
-      background: linear-gradient(135deg, #ffffff 0%, #ffe548 40%, #39ff6e 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 30px rgba(57,255,110,0.2));
+      color: var(--text);
       margin-bottom: 12px;
     }
 
     .vi-sub {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
     }
 
     /* ════════════════════════════
-       SEARCH + FILTERS
+       SUB-MENU FILTER NAV
     ════════════════════════════ */
-    .controls-bar {
+    .vault-submenu {
+      display: flex;
+      background: var(--bg);
       position: relative;
-      z-index: 1;
-      padding: 0 28px 28px;
+      z-index: 2;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .vsm-block {
+      flex: 1;
+      height: 140px;
+      position: relative;
+      cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+      background: var(--bg-card);
+      transition:
+        flex       0.5s cubic-bezier(0.16,1,0.3,1),
+        background 0.35s,
+        box-shadow 0.35s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .vsm-block:last-child { border-right: none; }
+    .vsm-block:hover { flex: 1.4; }
+
+    .vsm-all:hover,        .vsm-all.active        { background: #0d0d0d; }
+    .vsm-electronic:hover, .vsm-electronic.active  { background: #0044bb; }
+    .vsm-trap:hover,       .vsm-trap.active        { background: #c8102e; }
+    .vsm-rnb:hover,        .vsm-rnb.active         { background: #7700bb; }
+
+    .vsm-node {
+      position: absolute;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(255,255,255,0.8);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .vsm-block:hover .vsm-node,
+    .vsm-block.active .vsm-node { opacity: 1; animation: nodePulse 1.4s ease-in-out infinite; }
+    .vsm-node.tl { top: 10px;    left: 10px; }
+    .vsm-node.tr { top: 10px;    right: 10px; }
+    .vsm-node.bl { bottom: 10px; left: 10px; }
+    .vsm-node.br { bottom: 10px; right: 10px; }
+
+    @keyframes nodePulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.2; transform: scale(0.5); }
+    }
+
+    /* kb-active mirrors :hover for each vsm-block type */
+    .vsm-block.kb-active                       { flex: 1.4; }
+    .vsm-all.kb-active                         { background: #0d0d0d; }
+    .vsm-electronic.kb-active                  { background: #0044bb; }
+    .vsm-trap.kb-active                        { background: #c8102e; }
+    .vsm-rnb.kb-active                         { background: #7700bb; }
+    .vsm-block.kb-active .vsm-node             { opacity: 1; animation: nodePulse 1.4s ease-in-out infinite; }
+    .vsm-block.kb-active .vsm-num              { opacity: 0; transform: translateY(-6px); }
+    .vsm-block.kb-active .vsm-title            { color: #fff; transform: translateY(0) scale(1.04); letter-spacing: 9px; text-shadow: 0 0 18px rgba(255,255,255,0.45); }
+    .vsm-block.kb-active .vsm-rule             { width: 38px; }
+
+    .vsm-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      transition: opacity 0.3s, transform 0.4s;
+    }
+    .vsm-block:hover .vsm-num,
+    .vsm-block.active .vsm-num { opacity: 0; transform: translateY(-6px); }
+
+    .vsm-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(15px, 2vw, 30px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--text);
+      transform: translateY(10px);
+      transition:
+        color      0.35s,
+        transform  0.5s cubic-bezier(0.16,1,0.3,1),
+        letter-spacing 0.4s,
+        text-shadow 0.35s;
+    }
+    .vsm-block:hover .vsm-title,
+    .vsm-block.active .vsm-title {
+      color: #fff;
+      transform: translateY(0) scale(1.04);
+      letter-spacing: 9px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.45);
+    }
+
+    .vsm-rule {
+      width: 0;
+      height: 1.5px;
+      margin-top: 12px;
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 0 8px rgba(255,255,255,0.5);
+      transition: width 0.5s cubic-bezier(0.16,1,0.3,1) 0.05s;
+    }
+    .vsm-block:hover .vsm-rule,
+    .vsm-block.active .vsm-rule { width: 38px; }
+
+    /* ════════════════════════════
+       SEARCH
+    ════════════════════════════ */
+    .vault-search-row {
+      position: relative;
+      z-index: 1;
+      padding: 24px 28px 16px;
       max-width: 1200px;
       margin: 0 auto;
     }
 
-    .search-wrap {
-      position: relative;
-      max-width: 400px;
-    }
+    .search-inner { position: relative; max-width: 400px; }
 
     .search-icon {
       position: absolute;
-      left: 18px; top: 50%;
+      left: 16px; top: 50%;
       transform: translateY(-50%);
-      color: rgba(255,255,255,0.25);
+      color: var(--text-muted);
       pointer-events: none;
-      font-size: 14px;
+      font-size: 16px;
     }
 
-    .search-input {
+    .vault-search {
       width: 100%;
       padding: 12px 20px 12px 44px;
-      background: rgba(255,255,255,0.04);
-      border: 1.5px solid rgba(255,255,255,0.1);
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-mid);
       border-radius: 50px;
-      color: var(--white);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
+      color: var(--text);
+      font-family: 'Questrial', sans-serif;
+      font-size: 15px;
       outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+      transition: border-color 0.25s, box-shadow 0.25s;
     }
-
-    .search-input:focus {
-      border-color: rgba(57,255,110,0.45);
-      background: rgba(57,255,110,0.03);
-      box-shadow: 0 0 0 3px rgba(57,255,110,0.05);
-    }
-
-    .search-input::placeholder { color: rgba(255,255,255,0.2); }
-
-    .filter-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .filter-label {
-      font-family: 'Nunito', sans-serif;
-      font-size: 8px;
-      font-weight: 900;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.2);
-      margin-right: 4px;
-    }
-
-    .filter-pill {
-      padding: 6px 14px;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 50px;
-      background: transparent;
-      color: rgba(255,255,255,0.35);
-      font-family: 'Nunito', sans-serif;
-      font-size: 8px;
-      font-weight: 900;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: border-color 0.25s, color 0.25s, background 0.25s, box-shadow 0.25s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .filter-pill:hover {
-      border-color: rgba(255,255,255,0.25);
-      color: rgba(255,255,255,0.65);
-    }
-
-    .filter-pill.active {
-      border-color: var(--yellow);
-      color: var(--yellow);
-      background: rgba(255,229,72,0.08);
-      box-shadow: 0 0 12px rgba(255,229,72,0.15);
+    .vault-search::placeholder { color: var(--text-muted); }
+    .vault-search:focus,
+    .vault-search.kb-active {
+      border-color: var(--black);
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
     }
 
     /* ════════════════════════════
@@ -300,9 +354,9 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
       gap: 20px;
-      padding: 0 28px;
+      padding: 0 28px 40px;
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -312,56 +366,87 @@
     ════════════════════════════ */
     .track-card {
       position: relative;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 6px;
       overflow: hidden;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
       transition:
         border-color 0.3s,
-        background 0.3s,
-        box-shadow 0.3s,
-        transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        box-shadow 0.35s,
+        transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
       -webkit-tap-highlight-color: transparent;
       outline: none;
     }
 
     .track-card:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.15);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      border-color: rgba(0,0,0,0.55);
+      transform: translateY(-8px) scale(1.012);
+      box-shadow:
+        0 32px 72px rgba(0,0,0,0.22),
+        0 8px 20px rgba(0,0,0,0.12),
+        0 0 0 1px rgba(0,0,0,0.08);
     }
 
-    .track-card.keyboard-focus {
-      border-color: rgba(255,229,72,0.5);
-      box-shadow: 0 0 0 2px rgba(255,229,72,0.12), 0 0 24px rgba(255,229,72,0.08);
+    /* kb-active mirrors :hover for track cards */
+    .track-card.kb-active {
+      border-color: rgba(0,0,0,0.55);
+      transform: translateY(-8px) scale(1.012);
+      box-shadow:
+        0 32px 72px rgba(0,0,0,0.22),
+        0 8px 20px rgba(0,0,0,0.12),
+        0 0 0 1px rgba(0,0,0,0.08);
     }
 
-    /* NOW PLAYING STATE */
+    /* ── Playing card: dark glassmorphic inversion ── */
     .track-card.is-playing {
-      border-color: rgba(57,255,110,0.55);
-      background: rgba(57,255,110,0.04);
+      background: linear-gradient(160deg, #050f1e 0%, #0a1428 100%);
+      border-color: rgba(34,197,94,0.45);
       box-shadow:
-        0 0 0 1px rgba(57,255,110,0.25),
-        0 0 30px rgba(57,255,110,0.12),
-        0 0 60px rgba(57,255,110,0.05);
-      transform: translateY(-2px);
-    }
-
-    .track-card.is-playing:hover {
+        0 0 0 1px rgba(34,197,94,0.22),
+        0 24px 60px rgba(0,0,0,0.32),
+        0 0 50px rgba(34,197,94,0.08);
       transform: translateY(-4px);
+    }
+    .track-card.is-playing:hover,
+    .track-card.is-playing.kb-active {
+      transform: translateY(-8px) scale(1.012);
       box-shadow:
-        0 0 0 1px rgba(57,255,110,0.35),
-        0 0 40px rgba(57,255,110,0.18),
-        0 12px 40px rgba(0,0,0,0.5);
+        0 0 0 1px rgba(34,197,94,0.35),
+        0 32px 70px rgba(0,0,0,0.44),
+        0 0 60px rgba(34,197,94,0.12);
     }
 
-    /* ── Card visual area (waveform) ── */
+    .track-card.is-playing .card-title    { color: #ffffff; }
+    .track-card.is-playing .card-producer { color: rgba(255,255,255,0.4); }
+    .track-card.is-playing .card-info     { border-bottom-color: rgba(255,255,255,0.07); }
+
+    .track-card.is-playing .c-tag.bpm    { border-color: rgba(196,138,0,0.55); color: #e8aa00; background: rgba(196,138,0,0.14); }
+    .track-card.is-playing .c-tag.key    { border-color: rgba(77,166,255,0.55); color: #4da6ff; background: rgba(77,166,255,0.14); }
+    .track-card.is-playing .c-tag.genre              { border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.5); background: transparent; }
+    .track-card.is-playing .c-tag.genre-electronic   { border-color: rgba(77,166,255,0.5); color: #4da6ff; background: rgba(77,166,255,0.13); }
+    .track-card.is-playing .c-tag.style  { border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.38); background: rgba(255,255,255,0.04); }
+
+    .track-card.is-playing .meta-label   { color: rgba(255,255,255,0.3); }
+    .track-card.is-playing .meta-vals    { color: rgba(255,255,255,0.55); }
+
+    .track-card.is-playing .action-btn {
+      background: rgba(255,255,255,0.03);
+      border-top-color: rgba(255,255,255,0.07);
+      border-right-color: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.45);
+    }
+    .track-card.is-playing .download-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .track-card.is-playing .lease-btn:hover    { background: rgba(196,138,0,0.18); color: #e8aa00; }
+    .track-card.is-playing .own-btn:hover      { background: rgba(200,16,46,0.18); color: #ff4464; }
+
+    /* ── Card visual ── */
     .card-visual {
       position: relative;
       height: 130px;
-      background: rgba(0,0,0,0.5);
+      background: var(--canvas-bg);
       overflow: hidden;
     }
 
@@ -375,11 +460,11 @@
     .card-num {
       position: absolute;
       top: 12px; left: 14px;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Orbitron', sans-serif;
       font-size: 10px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 3px;
-      color: rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.28);
     }
 
     .now-playing-badge {
@@ -388,52 +473,45 @@
       display: none;
       align-items: center;
       gap: 6px;
-      background: rgba(57,255,110,0.15);
-      border: 1px solid rgba(57,255,110,0.35);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.32);
       border-radius: 50px;
-      padding: 4px 10px;
+      padding: 5px 12px;
       backdrop-filter: blur(6px);
     }
-
     .is-playing .now-playing-badge { display: flex; }
 
     .np-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 6px var(--green);
+      background: #fff;
+      box-shadow: 0 0 8px #fff;
       animation: npPulse 0.8s ease-in-out infinite alternate;
     }
-
     @keyframes npPulse {
       from { transform: scale(0.8); opacity: 0.7; }
       to   { transform: scale(1.2); opacity: 1; }
     }
 
     .np-label {
-      font-family: 'Nunito', sans-serif;
-      font-size: 7px;
-      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--green);
+      color: #fff;
     }
 
-    /* Scan line sweep on playing card */
     .track-card.is-playing .card-visual::after {
       content: '';
       position: absolute;
       inset: 0;
       background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(57,255,110,0.04) 50%,
-        transparent 100%
+        to bottom, transparent 0%, rgba(255,255,255,0.025) 50%, transparent 100%
       );
       background-size: 100% 200%;
       animation: scanSweep 3s linear infinite;
     }
-
     @keyframes scanSweep {
       0%   { background-position: 0 -100%; }
       100% { background-position: 0 200%; }
@@ -441,118 +519,169 @@
 
     /* ── Card info ── */
     .card-info {
-      padding: 16px 18px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 16px 18px 14px;
+      border-bottom: 1px solid var(--border);
+      flex: 1;
     }
 
     .card-title {
-      font-family: 'Nunito', sans-serif;
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 4px;
-      transition: color 0.3s;
-    }
-
-    .is-playing .card-title {
-      color: var(--green);
-      text-shadow: 0 0 16px rgba(57,255,110,0.5);
+      font-family: 'Questrial', sans-serif;
+      font-size: 22px;
+      color: var(--text);
+      margin-bottom: 3px;
+      letter-spacing: 0.3px;
+      /* No text-transform — preserves "on edge" lowercase */
     }
 
     .card-producer {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      color: rgba(255,255,255,0.35);
-      margin-bottom: 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
     }
 
-    .card-tags {
+    .card-specs {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+      margin-bottom: 8px;
     }
 
     .c-tag {
-      padding: 3px 10px;
+      padding: 4px 11px;
       border-radius: 50px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 7px;
-      font-weight: 900;
-      letter-spacing: 2px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       border: 1px solid;
     }
 
     .c-tag.bpm {
-      border-color: rgba(255,229,72,0.3);
-      color: rgba(255,229,72,0.7);
-      background: rgba(255,229,72,0.06);
+      border-color: var(--yellow-border);
+      color: var(--yellow);
+      background: var(--yellow-bg);
     }
 
     .c-tag.key {
-      border-color: rgba(0,229,255,0.3);
-      color: rgba(0,229,255,0.7);
-      background: rgba(0,229,255,0.06);
+      border-color: var(--border-mid);
+      color: var(--text-sec);
+      background: transparent;
     }
 
+    /* Per-note key colors — chromatic scale */
+    .c-tag.key-c  { border-color:rgba(181,34,0,0.32);   color:#b52200; background:rgba(181,34,0,0.07);   }
+    .c-tag.key-db { border-color:rgba(196,24,96,0.32);  color:#c41860; background:rgba(196,24,96,0.07);  }
+    .c-tag.key-d  { border-color:rgba(200,80,0,0.32);   color:#c85000; background:rgba(200,80,0,0.07);   }
+    .c-tag.key-eb { border-color:rgba(154,101,0,0.32);  color:#9a6500; background:rgba(154,101,0,0.07);  }
+    .c-tag.key-e  { border-color:rgba(61,138,0,0.32);   color:#3d8a00; background:rgba(61,138,0,0.07);   }
+    .c-tag.key-f  { border-color:rgba(0,122,72,0.32);   color:#007a48; background:rgba(0,122,72,0.07);   }
+    .c-tag.key-gb { border-color:rgba(0,112,112,0.32);  color:#007070; background:rgba(0,112,112,0.07);  }
+    .c-tag.key-g  { border-color:rgba(0,95,160,0.32);   color:#005fa0; background:rgba(0,95,160,0.07);   }
+    .c-tag.key-ab { border-color:rgba(16,64,170,0.32);  color:#1040aa; background:rgba(16,64,170,0.07);  }
+    .c-tag.key-a  { border-color:rgba(102,34,204,0.32); color:#6622cc; background:rgba(102,34,204,0.07); }
+    .c-tag.key-bb { border-color:rgba(136,0,160,0.32);  color:#8800a0; background:rgba(136,0,160,0.07);  }
+    .c-tag.key-b  { border-color:rgba(170,0,119,0.32);  color:#aa0077; background:rgba(170,0,119,0.07);  }
+
     .c-tag.genre {
-      border-color: rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.3);
+      border-color: var(--border-mid);
+      color: var(--text-sec);
       background: transparent;
+    }
+
+    .c-tag.genre-electronic {
+      border-color: var(--blue-border);
+      color: var(--blue);
+      background: var(--blue-bg);
+    }
+
+    .c-tag.genre-trap {
+      border-color: var(--red-border);
+      color: var(--red);
+      background: var(--red-bg);
+    }
+
+    .c-tag.genre-rnb {
+      border-color: rgba(119,0,187,0.3);
+      color: #7700bb;
+      background: rgba(119,0,187,0.07);
+    }
+
+    .card-styles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .c-tag.style {
+      font-family: 'Questrial', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.3px;
+      text-transform: none;
+      padding: 4px 10px;
+      border-color: var(--border);
+      color: var(--text-muted);
+      background: var(--bg);
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .meta-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      min-width: 34px;
+    }
+
+    .meta-vals {
+      font-family: 'Questrial', sans-serif;
+      font-size: 11px;
+      color: var(--text-sec);
+      line-height: 1.45;
     }
 
     /* ── Card actions ── */
-    .card-actions {
-      display: flex;
-      gap: 0;
-      padding: 10px 14px 14px;
-    }
+    .card-actions { display: flex; }
 
     .action-btn {
       flex: 1;
-      padding: 9px 6px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: transparent;
-      color: rgba(255,255,255,0.45);
-      font-family: 'Nunito', sans-serif;
-      font-size: 8px;
-      font-weight: 900;
-      letter-spacing: 3px;
+      padding: 13px 8px;
+      border: none;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-sec);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
       text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
+      transition: background 0.2s, color 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
+    .action-btn:last-child { border-right: none; }
 
-    .action-btn:first-child { border-radius: 50px 0 0 50px; }
-    .action-btn:last-child  { border-radius: 0 50px 50px 0; }
-
-    .action-btn.download-btn:hover {
-      background: rgba(57,255,110,0.1);
-      border-color: rgba(57,255,110,0.4);
-      color: var(--green);
-      box-shadow: 0 0 14px rgba(57,255,110,0.12);
-    }
-
-    .action-btn.lease-btn:hover {
-      background: rgba(255,229,72,0.08);
-      border-color: rgba(255,229,72,0.4);
-      color: var(--yellow);
-      box-shadow: 0 0 14px rgba(255,229,72,0.12);
-    }
-
-    .action-btn.own-btn:hover {
-      background: rgba(0,229,255,0.08);
-      border-color: rgba(0,229,255,0.4);
-      color: var(--cyan);
-      box-shadow: 0 0 14px rgba(0,229,255,0.12);
-    }
+    .download-btn:hover { background: var(--black); color: #fff; }
+    .lease-btn:hover    { background: var(--yellow); color: #fff; }
+    .own-btn:hover      { background: var(--red); color: #fff; }
 
     /* ════════════════════════════
-       EMPTY / NO RESULTS
+       NO RESULTS
     ════════════════════════════ */
     .no-results {
       display: none;
@@ -560,57 +689,55 @@
       position: relative;
       text-align: center;
       padding: 60px 28px;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Orbitron', sans-serif;
       font-size: 10px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 5px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.15);
+      color: var(--text-muted);
     }
 
     /* ════════════════════════════
-       FIXED PLAYER BAR
+       PLAYER BAR
     ════════════════════════════ */
     .player-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       height: var(--player-h);
       z-index: 600;
-      background: rgba(3,3,8,0.97);
-      border-top: 1px solid rgba(57,255,110,0.12);
+      background: rgba(248,248,246,0.98);
+      border-top: 1.5px solid var(--border-mid);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
+      box-shadow: 0 -4px 30px rgba(0,0,0,0.07);
     }
 
-    /* Progress bar sits at very top of player */
     .progress-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 0 20px;
+      padding: 0 22px;
       height: 28px;
       flex-shrink: 0;
     }
 
     .time-label {
-      font-family: 'Nunito', sans-serif;
-      font-size: 8px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      color: rgba(255,255,255,0.3);
-      min-width: 34px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      min-width: 36px;
       flex-shrink: 0;
     }
-
     .time-label.right { text-align: right; }
 
     .progress-track {
       flex: 1;
       height: 3px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 3px;
+      background: var(--border-mid);
+      border-radius: 4px;
       cursor: pointer;
       position: relative;
       overflow: visible;
@@ -618,8 +745,8 @@
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--yellow), var(--green));
-      border-radius: 3px;
+      background: linear-gradient(90deg, #22c55e 0%, #0066ff 100%);
+      border-radius: 4px;
       width: 0%;
       transition: width 0.25s linear;
       position: relative;
@@ -629,58 +756,53 @@
       content: '';
       position: absolute;
       right: -5px; top: -4px;
-      width: 10px; height: 10px;
+      width: 11px; height: 11px;
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
+      background: #0066ff;
+      box-shadow: 0 0 6px rgba(0,102,255,0.5);
       opacity: 0;
       transition: opacity 0.2s;
     }
-
     .progress-track:hover .progress-fill::after { opacity: 1; }
 
-    /* Controls row */
     .controls-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 22px;
       flex: 1;
     }
 
-    /* Track info (left) */
     .player-track-info {
       display: flex;
       flex-direction: column;
       gap: 2px;
       min-width: 0;
       flex: 1;
-      max-width: 220px;
+      max-width: 240px;
     }
 
     .pti-name {
-      font-family: 'Nunito', sans-serif;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--white);
+      font-family: 'Questrial', sans-serif;
+      font-size: 17px;
+      color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .pti-detail {
-      font-size: 9px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      color: rgba(255,255,255,0.3);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    /* Center controls */
     .player-controls {
       display: flex;
       align-items: center;
@@ -691,41 +813,46 @@
     .ctrl-btn {
       background: transparent;
       border: none;
-      color: rgba(255,255,255,0.45);
+      color: var(--text-muted);
       cursor: pointer;
-      width: 36px; height: 36px;
+      width: 40px; height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: color 0.25s, background 0.25s, transform 0.2s;
+      transition: color 0.2s, background 0.2s;
       -webkit-tap-highlight-color: transparent;
       flex-shrink: 0;
     }
-
-    .ctrl-btn:hover {
-      color: var(--white);
-      background: rgba(255,255,255,0.06);
-    }
-
+    .ctrl-btn:hover { color: var(--text); background: var(--border); }
     .ctrl-btn svg { pointer-events: none; }
 
     .ctrl-btn.play-pause {
-      width: 44px; height: 44px;
-      border: 1.5px solid rgba(57,255,110,0.4);
-      color: var(--green);
+      width: 50px; height: 50px;
+      border: 1.5px solid var(--border-mid);
+      color: var(--text);
+      transition: color 0.25s, background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.25s;
     }
-
+    .ctrl-btn.play-pause.state-playing {
+      border-color: rgba(34,197,94,0.55);
+      color: #22c55e;
+      background: rgba(34,197,94,0.07);
+      box-shadow: 0 0 16px rgba(34,197,94,0.18);
+    }
+    .ctrl-btn.play-pause.state-paused {
+      border-color: rgba(200,16,46,0.5);
+      color: var(--red);
+      background: var(--red-bg);
+    }
     .ctrl-btn.play-pause:hover {
-      background: rgba(57,255,110,0.1);
-      border-color: var(--green);
-      box-shadow: 0 0 16px rgba(57,255,110,0.25);
-      transform: scale(1.08);
+      background: var(--black) !important;
+      border-color: var(--black) !important;
+      color: #fff !important;
+      box-shadow: none !important;
+      transform: scale(1.06);
     }
-
     .ctrl-btn.play-pause:active { transform: scale(0.95); }
 
-    /* Repeat / shuffle (right) */
     .player-modes {
       display: flex;
       align-items: center;
@@ -739,47 +866,52 @@
       background: transparent;
       border: 1px solid transparent;
       border-radius: 50px;
-      color: rgba(255,255,255,0.3);
-      font-family: 'Nunito', sans-serif;
-      font-size: 7px;
-      font-weight: 900;
+      color: var(--text-muted);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
       cursor: pointer;
-      padding: 5px 10px;
+      padding: 6px 10px;
       display: flex;
       align-items: center;
       gap: 5px;
-      transition: border-color 0.25s, color 0.25s, background 0.25s;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
       -webkit-tap-highlight-color: transparent;
       white-space: nowrap;
       flex-shrink: 0;
     }
-
-    .mode-btn:hover { color: rgba(255,255,255,0.6); }
-
-    .mode-btn.active {
-      border-color: rgba(255,229,72,0.35);
-      color: var(--yellow);
-      background: rgba(255,229,72,0.06);
+    .mode-btn:hover { color: var(--text); }
+    .mode-btn.active-shuffle {
+      border-color: rgba(34,197,94,0.55);
+      color: #22c55e;
+      background: rgba(34,197,94,0.08);
+      box-shadow: 0 0 12px rgba(34,197,94,0.18);
     }
-
+    .mode-btn.active {
+      border-color: rgba(0,170,255,0.55);
+      color: #00aaff;
+      background: rgba(0,170,255,0.08);
+      box-shadow: 0 0 12px rgba(0,170,255,0.18);
+    }
     .mode-btn.active-track {
-      border-color: rgba(57,255,110,0.35);
-      color: var(--green);
-      background: rgba(57,255,110,0.06);
+      border-color: rgba(245,158,11,0.55);
+      color: #f59e0b;
+      background: rgba(245,158,11,0.08);
+      box-shadow: 0 0 12px rgba(245,158,11,0.18);
     }
 
     /* ════════════════════════════
-       MODAL BASE
+       MODAL
     ════════════════════════════ */
     .modal-overlay {
       position: fixed;
       inset: 0;
       z-index: 800;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(240,240,238,0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.35s;
@@ -788,24 +920,21 @@
       justify-content: center;
       padding: 20px;
     }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
 
     .modal-panel {
       position: relative;
       width: 100%;
-      max-width: 420px;
-      background: rgba(4,4,12,0.98);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 4px;
-      padding: 40px 36px 32px;
+      max-width: 440px;
+      background: #fff;
+      border: 1px solid var(--border-mid);
+      border-radius: 6px;
+      padding: 44px 40px 36px;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      animation: mFadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
+      animation: mFadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
     }
 
     @keyframes mFadeUp {
@@ -813,242 +942,175 @@
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* corner brackets */
-    .mframe {
-      position: absolute;
-      width: 20px; height: 20px;
-    }
+    .mframe { position: absolute; width: 20px; height: 20px; }
+    .mframe.tl { top:-1px;    left:-1px;   border-top:2px solid; border-left:2px solid; }
+    .mframe.tr { top:-1px;    right:-1px;  border-top:2px solid; border-right:2px solid; }
+    .mframe.bl { bottom:-1px; left:-1px;   border-bottom:2px solid; border-left:2px solid; }
+    .mframe.br { bottom:-1px; right:-1px;  border-bottom:2px solid; border-right:2px solid; }
 
-    .mframe.tl { top:-1px; left:-1px;   border-top:1.5px solid; border-left:1.5px solid; }
-    .mframe.tr { top:-1px; right:-1px;  border-top:1.5px solid; border-right:1.5px solid; }
-    .mframe.bl { bottom:-1px; left:-1px;  border-bottom:1.5px solid; border-left:1.5px solid; }
-    .mframe.br { bottom:-1px; right:-1px; border-bottom:1.5px solid; border-right:1.5px solid; }
+    .mframe.dark   { border-color: rgba(0,0,0,0.5); }
+    .mframe.yellow { border-color: var(--yellow-border); }
+    .mframe.red    { border-color: var(--red-border); }
 
-    .mframe.green { border-color: rgba(57,255,110,0.5); box-shadow: inset 0 0 8px rgba(57,255,110,0.15); }
-    .mframe.yellow{ border-color: rgba(255,229,72,0.5); box-shadow: inset 0 0 8px rgba(255,229,72,0.15); }
-    .mframe.cyan  { border-color: rgba(0,229,255,0.5);  box-shadow: inset 0 0 8px rgba(0,229,255,0.15); }
-
-    .modal-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .modal-status { display: flex; align-items: center; gap: 8px; }
 
     .modal-dot {
       width: 7px; height: 7px;
       border-radius: 50%;
       flex-shrink: 0;
     }
-
-    .modal-dot.green  { background: var(--green); box-shadow: 0 0 8px var(--green); }
-    .modal-dot.yellow { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
-    .modal-dot.cyan   { background: var(--cyan);  box-shadow: 0 0 8px var(--cyan); }
+    .modal-dot.dark   { background: var(--black); }
+    .modal-dot.yellow { background: var(--yellow); }
+    .modal-dot.red    { background: var(--red); }
 
     .modal-status-text {
-      font-family: 'Nunito', sans-serif;
-      font-size: 8px;
-      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
       letter-spacing: 5px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
+      color: var(--text-muted);
     }
 
     .modal-title {
-      font-family: 'Nunito', sans-serif;
-      font-size: 22px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 26px;
       font-weight: 900;
       letter-spacing: 4px;
       text-transform: uppercase;
-      color: var(--white);
+      color: var(--text);
     }
 
     .modal-track-name {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.4);
+      font-family: 'Questrial', sans-serif;
+      font-size: 14px;
+      color: var(--text-sec);
     }
 
     .modal-body {
-      font-size: 12px;
-      font-weight: 500;
+      font-family: 'Questrial', sans-serif;
+      font-size: 15px;
       line-height: 1.7;
-      color: rgba(255,255,255,0.5);
+      color: var(--text-sec);
     }
 
-    .modal-divider {
-      height: 1px;
-      background: rgba(255,255,255,0.07);
-    }
+    .modal-divider { height: 1px; background: var(--border); }
 
-    .terms-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .terms-list { display: flex; flex-direction: column; gap: 9px; }
 
     .terms-item {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      font-size: 11px;
-      font-weight: 500;
-      line-height: 1.5;
-      color: rgba(255,255,255,0.5);
+      font-family: 'Questrial', sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text-sec);
     }
-
-    .terms-item::before {
-      content: '✦';
-      font-size: 8px;
-      color: var(--yellow);
-      margin-top: 3px;
-      flex-shrink: 0;
-    }
-
-    .terms-item.own::before { color: var(--cyan); }
+    .terms-item::before { content: '✦'; font-size: 9px; color: var(--yellow); margin-top: 3px; flex-shrink: 0; }
+    .terms-item.own::before { color: var(--red); }
 
     .terms-price {
-      font-family: 'Nunito', sans-serif;
-      font-size: 28px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 38px;
       font-weight: 900;
       letter-spacing: 2px;
     }
+    .terms-price.yellow { color: var(--yellow); }
+    .terms-price.red    { color: var(--red); }
 
-    .terms-price.yellow { color: var(--yellow); text-shadow: 0 0 20px rgba(255,229,72,0.4); }
-    .terms-price.cyan   { color: var(--cyan);   text-shadow: 0 0 20px rgba(0,229,255,0.4); }
+    .dl-icon { font-size: 34px; color: var(--black); text-align: center; }
 
     .modal-btn {
       width: 100%;
-      padding: 15px 24px;
+      padding: 15px 28px;
       border-radius: 50px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 4px;
       text-transform: uppercase;
       cursor: pointer;
       outline: none;
-      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, opacity 0.25s;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, background 0.2s, color 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-
     .modal-btn:active { transform: scale(0.97); }
 
-    .modal-btn.green {
-      border: 1.5px solid rgba(57,255,110,0.45);
-      background: rgba(57,255,110,0.08);
-      color: var(--green);
+    .modal-btn.dark {
+      border: 1.5px solid var(--black);
+      background: var(--black);
+      color: #fff;
     }
-
-    .modal-btn.green:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 24px rgba(57,255,110,0.3);
-      border-color: var(--green);
-    }
+    .modal-btn.dark:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
 
     .modal-btn.yellow {
-      border: 1.5px solid rgba(255,229,72,0.45);
-      background: rgba(255,229,72,0.08);
+      border: 1.5px solid var(--yellow-border);
+      background: transparent;
       color: var(--yellow);
     }
+    .modal-btn.yellow:hover { transform: scale(1.02); background: var(--yellow); color: #fff; }
 
-    .modal-btn.yellow:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 24px rgba(255,229,72,0.3);
-      border-color: var(--yellow);
+    .modal-btn.red {
+      border: 1.5px solid var(--red-border);
+      background: transparent;
+      color: var(--red);
     }
-
-    .modal-btn.cyan {
-      border: 1.5px solid rgba(0,229,255,0.45);
-      background: rgba(0,229,255,0.08);
-      color: var(--cyan);
-    }
-
-    .modal-btn.cyan:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 24px rgba(0,229,255,0.3);
-      border-color: var(--cyan);
-    }
+    .modal-btn.red:hover { transform: scale(1.02); background: var(--red); color: #fff; }
 
     .modal-btn.ghost {
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid var(--border-mid);
       background: transparent;
-      color: rgba(255,255,255,0.3);
+      color: var(--text-muted);
     }
-
-    .modal-btn.ghost:hover {
-      border-color: rgba(255,255,255,0.2);
-      color: rgba(255,255,255,0.5);
-    }
+    .modal-btn.ghost:hover { color: var(--text-sec); }
 
     .modal-close {
       text-align: center;
-      font-family: 'Nunito', sans-serif;
-      font-size: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: 5px;
+      letter-spacing: 4px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.15);
+      color: var(--text-muted);
       cursor: pointer;
       border: none;
       background: transparent;
-      transition: color 0.25s;
-      animation: dimBlink 1.3s ease-in-out infinite;
+      transition: color 0.2s;
+      animation: dimBlink 1.5s ease-in-out infinite;
     }
-
-    .modal-close:hover { color: rgba(255,255,255,0.4); animation: none; }
+    .modal-close:hover { color: var(--text); animation: none; }
 
     @keyframes dimBlink {
-      0%,100% { opacity:0.6; }
-      50%      { opacity:0.2; }
+      0%,100% { opacity: 0.5; }
+      50%      { opacity: 0.15; }
     }
 
-    /* Download success icon */
-    .dl-icon {
-      font-size: 32px;
-      color: var(--green);
-      text-shadow: 0 0 20px rgba(57,255,110,0.8);
-      text-align: center;
-    }
-
-    /* Coming soon box */
     .coming-soon-box {
       text-align: center;
-      padding: 24px 0 8px;
+      padding: 22px 0 8px;
       display: none;
       flex-direction: column;
       gap: 10px;
     }
-
-    .cs-icon {
-      font-size: 24px;
-      color: var(--yellow);
-      text-shadow: 0 0 16px rgba(255,229,72,0.8);
-    }
-
+    .cs-icon { font-size: 22px; color: var(--yellow); }
     .cs-title {
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
       font-weight: 900;
-      letter-spacing: 5px;
+      letter-spacing: 4px;
       text-transform: uppercase;
-      color: var(--white);
+      color: var(--text);
     }
-
-    .cs-sub {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.3);
-    }
+    .cs-sub { font-family: 'Questrial', sans-serif; font-size: 13px; color: var(--text-muted); }
 
     /* ════════════════════════════
-       KEYBOARD TIPS
+       KB TIPS
     ════════════════════════════ */
     .kb-tips {
       position: fixed;
-      bottom: calc(var(--player-h) + 12px);
-      right: 18px;
+      bottom: calc(var(--player-h) + 14px);
+      right: 20px;
       z-index: 400;
       display: flex;
       flex-direction: column;
@@ -1057,61 +1119,60 @@
     }
 
     .kb-icon {
-      width: 30px; height: 30px;
+      width: 32px; height: 32px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--bg-card);
+      border: 1px solid var(--border-mid);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
-      color: rgba(255,255,255,0.25);
-      transition: border-color 0.25s, color 0.25s;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
     }
-
-    .kb-icon:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.5); }
+    .kb-icon:hover { border-color: var(--black); color: var(--black); }
 
     .kb-panel {
       display: none;
-      background: rgba(4,4,12,0.96);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: #fff;
+      border: 1px solid var(--border-mid);
       border-radius: 6px;
       padding: 14px 16px;
-      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.09);
     }
-
     .kb-tips.open .kb-panel { display: block; }
 
     .kb-title {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Orbitron', sans-serif;
       font-size: 8px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 4px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
+      color: var(--text-muted);
       margin-bottom: 10px;
     }
 
     .kb-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 7px;
-      font-size: 10px;
-      color: rgba(255,255,255,0.35);
+      font-family: 'Questrial', sans-serif;
+      font-size: 12px;
+      color: var(--text-sec);
     }
 
     .kb-row kbd {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 3px;
-      padding: 2px 7px;
+      background: var(--bg);
+      border: 1px solid var(--border-mid);
+      border-radius: 4px;
+      padding: 3px 8px;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 9px;
+      font-size: 11px;
       min-width: 50px;
       text-align: center;
-      color: rgba(255,255,255,0.5);
+      color: var(--text-sec);
     }
 
     /* ════════════════════════════
@@ -1119,44 +1180,43 @@
     ════════════════════════════ */
     @media (max-width: 640px) {
       .vault-header { padding: 0 16px; }
-      .vault-intro { padding: 32px 16px 24px; }
-      .controls-bar { padding: 0 16px 20px; }
-      .track-grid { padding: 0 16px; gap: 14px;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-      .modal-panel { padding: 32px 22px 26px; }
+      .vault-intro  { padding: 36px 16px 24px; }
+      .vault-search-row { padding: 18px 16px 12px; }
+      .track-grid   { padding: 0 16px 32px; gap: 14px; grid-template-columns: 1fr; }
+      .modal-panel  { padding: 32px 22px 26px; }
       .player-track-info { max-width: 140px; }
       .player-modes { max-width: 100px; gap: 2px; }
-      .mode-btn { font-size: 0; padding: 6px 8px; }
+      .mode-btn     { font-size: 0; padding: 7px 8px; }
       .mode-btn svg { display: block; }
+      .pti-name     { font-size: 15px; }
+      .vsm-block    { height: 90px; }
+      .vsm-title    { font-size: clamp(11px, 1.8vw, 20px); letter-spacing: 3px; }
     }
 
     @media (max-width: 420px) {
-      :root { --player-h: 92px; }
-      .track-grid { grid-template-columns: 1fr; }
-      .controls-row { gap: 8px; }
-      .player-controls { gap: 2px; }
+      :root { --player-h: 112px; }
+      .controls-row   { gap: 4px; }
+      .player-controls { gap: 3px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
 
-<!-- ══ AUTH LOADING OVERLAY ══ -->
+<!-- ══ AUTH LOADING ══ -->
 <div id="auth-loading" style="
-  position:fixed;inset:0;z-index:9999;background:#030308;
+  position:fixed;inset:0;z-index:9999;background:#f8f8f6;
   display:flex;align-items:center;justify-content:center;">
   <div style="
-    font-family:'Nunito',sans-serif;font-size:9px;font-weight:900;
-    letter-spacing:5px;text-transform:uppercase;color:rgba(57,255,110,0.5);
+    font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;
+    letter-spacing:5px;text-transform:uppercase;color:rgba(0,0,0,0.35);
     animation:authBlink 1s ease-in-out infinite;">
     Verifying Access…
   </div>
 </div>
-<style>
-  @keyframes authBlink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-</style>
+<style>@keyframes authBlink { 0%,100%{opacity:1} 50%{opacity:0.2} }</style>
 
-<!-- ══ ACCESS GUARD (email + has_access, no Auth) ══ -->
+<!-- ══ ACCESS GUARD ══ -->
 <script>
   const { createClient: _sbCreate } = supabase;
   const sb = _sbCreate(
@@ -1166,21 +1226,13 @@
 
   (async () => {
     const email = localStorage.getItem('vault_email');
-
-    /* No email stored → instant redirect, no DB call needed */
-    if (!email) {
-      window.location.replace('/unlock');
-      return;
-    }
-
-    /* Verify email exists in users table with has_access = true */
+    if (!email) { window.location.replace('/unlock'); return; }
     try {
       const { data } = await sb
         .from('users')
         .select('has_access')
         .eq('email', email)
         .maybeSingle();
-
       if (data && data.has_access) {
         document.getElementById('auth-loading').style.display = 'none';
       } else {
@@ -1188,7 +1240,6 @@
         window.location.replace('/unlock');
       }
     } catch {
-      /* On network failure, trust localStorage and let them in */
       document.getElementById('auth-loading').style.display = 'none';
     }
   })();
@@ -1203,7 +1254,7 @@
     <span class="vh-vault-label">Vault</span>
   </div>
   <div class="vh-actions">
-    <button class="vh-btn" onclick="signOut()">Exit</button>
+    <button class="vh-btn" id="vault-exit-btn" onclick="signOut()">Exit</button>
   </div>
 </header>
 
@@ -1217,23 +1268,50 @@
   <p class="vi-sub">Exclusive beats · Unreleased catalog · Direct licensing</p>
 </section>
 
-<!-- ══ CONTROLS ══ -->
-<div class="controls-bar">
-  <div class="search-wrap">
-    <span class="search-icon">⌕</span>
-    <input class="search-input" id="search-input"
-           type="text" placeholder="Search tracks…"
-           oninput="filterTracks()">
+<!-- ══ FILTER SUB-MENU ══ -->
+<section class="vault-submenu">
+
+  <div class="vsm-block vsm-all active" onclick="setFilter('all',this)">
+    <span class="vsm-node tl"></span><span class="vsm-node tr"></span>
+    <span class="vsm-node bl"></span><span class="vsm-node br"></span>
+    <span class="vsm-num">01</span>
+    <div class="vsm-title">All</div>
+    <div class="vsm-rule"></div>
   </div>
-  <div class="filter-row">
-    <span class="filter-label">Filter</span>
-    <button class="filter-pill active" data-filter="all" onclick="setFilter('all',this)">All</button>
-    <button class="filter-pill" data-filter="trap"  onclick="setFilter('trap',this)">Trap</button>
-    <button class="filter-pill" data-filter="drill" onclick="setFilter('drill',this)">Drill</button>
-    <button class="filter-pill" data-filter="rnb"   onclick="setFilter('rnb',this)">R&amp;B</button>
-    <button class="filter-pill" data-filter="lt100" onclick="setFilter('lt100',this)">&lt; 100 BPM</button>
-    <button class="filter-pill" data-filter="100-130" onclick="setFilter('100-130',this)">100–130 BPM</button>
-    <button class="filter-pill" data-filter="gt130" onclick="setFilter('gt130',this)">&gt; 130 BPM</button>
+
+  <div class="vsm-block vsm-electronic" onclick="setFilter('electronic',this)">
+    <span class="vsm-node tl"></span><span class="vsm-node tr"></span>
+    <span class="vsm-node bl"></span><span class="vsm-node br"></span>
+    <span class="vsm-num">02</span>
+    <div class="vsm-title">Electronic</div>
+    <div class="vsm-rule"></div>
+  </div>
+
+  <div class="vsm-block vsm-trap" onclick="setFilter('trap',this)">
+    <span class="vsm-node tl"></span><span class="vsm-node tr"></span>
+    <span class="vsm-node bl"></span><span class="vsm-node br"></span>
+    <span class="vsm-num">03</span>
+    <div class="vsm-title">Trap</div>
+    <div class="vsm-rule"></div>
+  </div>
+
+  <div class="vsm-block vsm-rnb" onclick="setFilter('rnb',this)">
+    <span class="vsm-node tl"></span><span class="vsm-node tr"></span>
+    <span class="vsm-node bl"></span><span class="vsm-node br"></span>
+    <span class="vsm-num">04</span>
+    <div class="vsm-title">R&amp;B</div>
+    <div class="vsm-rule"></div>
+  </div>
+
+</section>
+
+<!-- ══ SEARCH ══ -->
+<div class="vault-search-row">
+  <div class="search-inner">
+    <span class="search-icon">⌕</span>
+    <input class="vault-search" id="search-input"
+           type="text" placeholder="Search tracks, keys, styles…"
+           oninput="filterTracks()">
   </div>
 </div>
 
@@ -1253,50 +1331,44 @@
   </div>
 
   <div class="controls-row">
-    <!-- Track info -->
     <div class="player-track-info">
       <div class="pti-name" id="pti-name">—</div>
       <div class="pti-detail" id="pti-detail">Select a track to play</div>
     </div>
 
-    <!-- Controls -->
     <div class="player-controls">
-      <!-- Prev -->
       <button class="ctrl-btn" id="btn-prev" onclick="prevTrack()" title="Previous">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
         </svg>
       </button>
 
-      <!-- Play / Pause -->
       <button class="ctrl-btn play-pause" id="btn-play" onclick="togglePlay()" title="Play / Pause">
-        <svg id="icon-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <svg id="icon-play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
           <path d="M8 5v14l11-7z"/>
         </svg>
-        <svg id="icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <svg id="icon-pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:none">
           <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
       </button>
 
-      <!-- Next -->
       <button class="ctrl-btn" id="btn-next" onclick="nextTrack()" title="Next">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <path d="M6 18l8.5-6L6 6v12zm2.5-6L15 18V6zM16 6h2v12h-2z"/>
         </svg>
       </button>
     </div>
 
-    <!-- Modes -->
     <div class="player-modes">
       <button class="mode-btn" id="btn-shuffle" onclick="toggleShuffle()" title="Shuffle">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
           <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>
         </svg>
         <span>Shuffle</span>
       </button>
 
       <button class="mode-btn" id="btn-repeat" onclick="toggleRepeat()" title="Repeat">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" id="repeat-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" id="repeat-icon">
           <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>
         </svg>
         <span id="repeat-label">Repeat</span>
@@ -1305,11 +1377,11 @@
   </div>
 </div>
 
-<!-- ══ KEYBOARD TIPS ══ -->
+<!-- ══ KB TIPS ══ -->
 <div class="kb-tips" id="kb-tips">
   <div class="kb-panel">
     <div class="kb-title">Shortcuts</div>
-    <div class="kb-row"><kbd>← →</kbd><span>Prev / Next track</span></div>
+    <div class="kb-row"><kbd>← →</kbd><span>Prev / Next</span></div>
     <div class="kb-row"><kbd>↑ ↓</kbd><span>Navigate grid</span></div>
     <div class="kb-row"><kbd>Space</kbd><span>Play / Pause</span></div>
     <div class="kb-row"><kbd>↵ Enter</kbd><span>Play focused</span></div>
@@ -1323,20 +1395,20 @@
 <!-- ══ MODAL: DOWNLOAD ══ -->
 <div class="modal-overlay" id="modal-download" onclick="closeModal('modal-download', event)">
   <div class="modal-panel">
-    <span class="mframe tl green"></span><span class="mframe tr green"></span>
-    <span class="mframe bl green"></span><span class="mframe br green"></span>
+    <span class="mframe tl dark"></span><span class="mframe tr dark"></span>
+    <span class="mframe bl dark"></span><span class="mframe br dark"></span>
 
     <div class="modal-status">
-      <span class="modal-dot green"></span>
+      <span class="modal-dot dark"></span>
       <span class="modal-status-text">Download</span>
     </div>
 
     <div class="dl-icon">↓</div>
     <div class="modal-title">Download</div>
-    <div class="modal-track-name" id="dl-track-name">Marathon Man</div>
+    <div class="modal-track-name" id="dl-track-name"></div>
 
-    <div class="modal-body">Your download will now begin…<br>
-    File format: <strong style="color:var(--white)">MP3 · High Quality</strong></div>
+    <div class="modal-body">Your download will begin shortly.<br>
+    Format: <strong style="color:var(--text)">MP3 · High Quality</strong></div>
 
     <button class="modal-btn ghost" onclick="closeModal('modal-download')">[ Close ]</button>
   </div>
@@ -1354,23 +1426,22 @@
     </div>
 
     <div class="modal-title">Lease</div>
-    <div class="modal-track-name" id="lease-track-name">Marathon Man</div>
+    <div class="modal-track-name" id="lease-track-name"></div>
 
     <div class="modal-divider"></div>
 
-    <div class="terms-list" id="lease-terms-list">
+    <div class="terms-list">
       <div class="terms-item">Non-exclusive license — other artists may lease this beat.</div>
-      <div class="terms-item">Up to <strong style="color:var(--white)">2,500</strong> paid sales or streams.</div>
+      <div class="terms-item">Up to <strong style="color:var(--text)">2,500</strong> paid sales or streams.</div>
       <div class="terms-item">1 music video permitted.</div>
-      <div class="terms-item">Delivered as high-quality <strong style="color:var(--white)">MP3</strong>.</div>
-      <div class="terms-item">Credit required: <strong style="color:var(--white)">Prod. Scratch Bradley</strong></div>
+      <div class="terms-item">Delivered as high-quality <strong style="color:var(--text)">MP3</strong>.</div>
+      <div class="terms-item">Credit required: <strong style="color:var(--text)">Prod. Stars*</strong></div>
     </div>
 
-    <!-- Coming soon box -->
     <div class="coming-soon-box" id="lease-soon">
       <div class="cs-icon">⧗</div>
       <div class="cs-title">Coming Soon</div>
-      <div class="cs-sub">Shopify checkout is being configured.<br>Check back shortly.</div>
+      <div class="cs-sub">Checkout is being configured.<br>Check back shortly.</div>
     </div>
 
     <div id="lease-actions">
@@ -1385,36 +1456,35 @@
 <!-- ══ MODAL: OWN ══ -->
 <div class="modal-overlay" id="modal-own" onclick="closeModal('modal-own', event)">
   <div class="modal-panel">
-    <span class="mframe tl cyan"></span><span class="mframe tr cyan"></span>
-    <span class="mframe bl cyan"></span><span class="mframe br cyan"></span>
+    <span class="mframe tl red"></span><span class="mframe tr red"></span>
+    <span class="mframe bl red"></span><span class="mframe br red"></span>
 
     <div class="modal-status">
-      <span class="modal-dot cyan"></span>
+      <span class="modal-dot red"></span>
       <span class="modal-status-text">Exclusive License</span>
     </div>
 
     <div class="modal-title">Own</div>
-    <div class="modal-track-name" id="own-track-name">Marathon Man</div>
+    <div class="modal-track-name" id="own-track-name"></div>
 
     <div class="modal-divider"></div>
 
-    <div class="terms-list" id="own-terms-list">
-      <div class="terms-item own">Exclusive license — beat will be removed from catalog after purchase.</div>
+    <div class="terms-list">
+      <div class="terms-item own">Exclusive license — beat removed from catalog after purchase.</div>
       <div class="terms-item own">Unlimited copies, sales &amp; streams.</div>
       <div class="terms-item own">Unlimited music videos.</div>
-      <div class="terms-item own">Delivered as <strong style="color:var(--white)">WAV + stems</strong>.</div>
-      <div class="terms-item own">Credit required: <strong style="color:var(--white)">Prod. Scratch Bradley</strong></div>
+      <div class="terms-item own">Delivered as <strong style="color:var(--text)">WAV + stems</strong>.</div>
+      <div class="terms-item own">Credit required: <strong style="color:var(--text)">Prod. Stars*</strong></div>
     </div>
 
-    <!-- Coming soon box -->
     <div class="coming-soon-box" id="own-soon">
       <div class="cs-icon">⧗</div>
       <div class="cs-title">Coming Soon</div>
-      <div class="cs-sub">Shopify checkout is being configured.<br>Check back shortly.</div>
+      <div class="cs-sub">Checkout is being configured.<br>Check back shortly.</div>
     </div>
 
     <div id="own-actions">
-      <button class="modal-btn cyan" onclick="proceedToCart('own')" style="margin-bottom:10px">
+      <button class="modal-btn red" onclick="proceedToCart('own')" style="margin-bottom:10px">
         Accept &amp; Add to Cart
       </button>
       <button class="modal-btn ghost" onclick="closeModal('modal-own')">[ Cancel ]</button>
@@ -1429,29 +1499,50 @@
 ════════════════════════════════════════════ */
 const tracks = [
   {
-    id:       'marathon-man',
-    title:    'Marathon Man',
-    producer: 'Scratch Bradley',
-    bpm:      125,
-    key:      'B Major',
-    genre:    'trap',
-    tags:     ['trap', '100-130'],
-    url:      'https://eisjdabargbpdcyxcxyk.supabase.co/storage/v1/object/public/beats/mp3/057%20Marathon%20Man%20125BPM%20B%20Major_1.mp3',
-    seed:     7331,
-  }
+    id:        'marathon-man',
+    title:     'Marathon Man',
+    producer:  'Stars*',
+    bpm:       125,
+    key:       'B Major',
+    genre:     'Electronic / Dance',
+    subgenres: ['Indietronica', 'Alt Dance', 'Alt Pop', 'Experimental Bass'],
+    vibe:      ['Euphoric', 'Hypnotic', 'Uplifting'],
+    mood:      [],
+    scene:     [],
+    tags:      ['electronic', 'dance', '100-130'],
+    url:       'https://eisjdabargbpdcyxcxyk.supabase.co/storage/v1/object/public/beats/mp3/057%20Marathon%20Man%20125BPM%20B%20Major_1.mp3',
+    seed:      7331,
+  },
+  {
+    id:        'on-edge',
+    title:     'on edge',
+    producer:  'Stars*',
+    bpm:       124,
+    key:       'A Major',
+    genre:     'Electronic / Dance',
+    subgenres: ['Industrial Phonk', 'Trap', 'Psyberpunk', 'Electronica'],
+    vibe:      ['Dystopian', 'High Speed', 'Gritty', 'Now or Never'],
+    mood:      ['Aggressive', 'Hypnotic', 'Menacing', 'Relentless'],
+    scene:     ['Underground Clubs', 'Night Drive', 'Chase', 'Gym', 'Gaming'],
+    tags:      ['electronic', 'dance', 'trap', '100-130'],
+    url:       'https://eisjdabargbpdcyxcxyk.supabase.co/storage/v1/object/public/beats/mp3/066%20on%20edge%20124BPM%20A%20major_2.mp3',
+    seed:      4219,
+  },
 ];
 
 /* ════════════════════════════════════════════
    STATE
 ════════════════════════════════════════════ */
-let currentIndex  = -1;
-let isPlaying     = false;
-let repeatMode    = 0;   // 0=none 1=track 2=playlist
-let shuffleMode   = false;
-let activeFilter  = 'all';
-let searchQuery   = '';
-let focusedIndex  = 0;
-let visRafId      = null;
+let currentIndex   = -1;
+let isPlaying      = false;
+let repeatMode     = 0;
+let shuffleMode    = false;
+let activeFilter   = 'all';
+let searchQuery    = '';
+let focusZone      = null;
+let focusedIndex   = 0;
+let focusedSubmenu = 0;
+let visRafId       = null;
 
 /* ════════════════════════════════════════════
    AUDIO + WEB AUDIO API
@@ -1466,8 +1557,8 @@ let sourceNode = null;
 
 function initAudioCtx() {
   if (audioCtx) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  analyser  = audioCtx.createAnalyser();
+  audioCtx   = new (window.AudioContext || window.webkitAudioContext)();
+  analyser   = audioCtx.createAnalyser();
   analyser.fftSize = 128;
   analyser.smoothingTimeConstant = 0.78;
   sourceNode = audioCtx.createMediaElementSource(audioEl);
@@ -1495,24 +1586,22 @@ function drawStatic(canvas, seed) {
   const mid  = h / 2;
 
   for (let i = 0; i < bars; i++) {
-    const amp = 0.12 + rnd() * 0.72;
-    const bh  = amp * mid;
-    const alpha = 0.15 + amp * 0.18;
+    const amp   = 0.12 + rnd() * 0.72;
+    const bh    = amp * mid;
+    const alpha = 0.18 + amp * 0.22;
 
     const g = ctx.createLinearGradient(0, mid - bh, 0, mid + bh);
-    g.addColorStop(0,   `rgba(255,229,72,0)`);
-    g.addColorStop(0.25,`rgba(255,229,72,${alpha})`);
-    g.addColorStop(0.5, `rgba(255,229,72,${alpha * 1.6})`);
-    g.addColorStop(0.75,`rgba(255,229,72,${alpha})`);
-    g.addColorStop(1,   `rgba(255,229,72,0)`);
+    g.addColorStop(0,    `rgba(180,200,255,0)`);
+    g.addColorStop(0.25, `rgba(180,200,255,${alpha})`);
+    g.addColorStop(0.5,  `rgba(220,235,255,${alpha * 1.5})`);
+    g.addColorStop(0.75, `rgba(180,200,255,${alpha})`);
+    g.addColorStop(1,    `rgba(180,200,255,0)`);
 
     ctx.fillStyle = g;
-    const x = i * bw;
-    ctx.fillRect(x + 0.5, mid - bh, bw - 1, bh * 2);
+    ctx.fillRect(i * bw + 0.5, mid - bh, bw - 1, bh * 2);
   }
 
-  /* center line */
-  ctx.strokeStyle = 'rgba(255,229,72,0.1)';
+  ctx.strokeStyle = 'rgba(180,200,255,0.12)';
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(0, mid);
@@ -1546,19 +1635,18 @@ function drawLive(canvas) {
     const bh  = Math.max(1.5, amp * mid * 0.95);
 
     const g = ctx.createLinearGradient(0, mid - bh, 0, mid + bh);
-    g.addColorStop(0,   `rgba(0,229,255,0)`);
-    g.addColorStop(0.2, `rgba(0,229,255,${amp * 0.7})`);
-    g.addColorStop(0.5, `rgba(57,255,110,${amp * 1.1})`);
-    g.addColorStop(0.8, `rgba(0,229,255,${amp * 0.7})`);
-    g.addColorStop(1,   `rgba(0,229,255,0)`);
+    g.addColorStop(0,   `rgba(255,255,255,0)`);
+    g.addColorStop(0.2, `rgba(160,190,255,${amp * 0.8})`);
+    g.addColorStop(0.5, `rgba(255,255,255,${amp * 1.1})`);
+    g.addColorStop(0.8, `rgba(160,190,255,${amp * 0.8})`);
+    g.addColorStop(1,   `rgba(255,255,255,0)`);
 
     ctx.fillStyle = g;
     ctx.fillRect(i * bw + 0.5, mid - bh, bw - 1, bh * 2);
   }
 
-  /* center glow line */
   const avgAmp = data.reduce((a, b) => a + b, 0) / (data.length * 255);
-  ctx.strokeStyle = `rgba(57,255,110,${0.05 + avgAmp * 0.3})`;
+  ctx.strokeStyle = `rgba(255,255,255,${0.05 + avgAmp * 0.3})`;
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(0, mid);
@@ -1574,18 +1662,13 @@ function startVisualizer() {
   if (!card) return;
   const canvas = card.querySelector('.wave-canvas');
   if (!canvas) return;
-
-  function loop() {
-    drawLive(canvas);
-    visRafId = requestAnimationFrame(loop);
-  }
+  function loop() { drawLive(canvas); visRafId = requestAnimationFrame(loop); }
   loop();
 }
 
 function stopVisualizer() {
   cancelAnimationFrame(visRafId);
   visRafId = null;
-  /* redraw static for the (now stopped) card */
   const card = getPlayingCard();
   if (!card) return;
   const canvas = card.querySelector('.wave-canvas');
@@ -1596,50 +1679,100 @@ function stopVisualizer() {
 /* ════════════════════════════════════════════
    GRID RENDER
 ════════════════════════════════════════════ */
+function getGenreClass(genre) {
+  const g = genre.toLowerCase();
+  if (g.includes('electronic') || g.includes('dance')) return 'genre-electronic';
+  if (g.includes('trap') || g.includes('hip') || g.includes('rap')) return 'genre-trap';
+  if (g.includes('r&b') || g.includes('rnb') || g.includes('soul')) return 'genre-rnb';
+  return '';
+}
+
+function getKeyClass(key) {
+  const k = key.toLowerCase();
+  if (k.startsWith('c#') || k.startsWith('db')) return 'key-db';
+  if (k.startsWith('c'))  return 'key-c';
+  if (k.startsWith('d#') || k.startsWith('eb')) return 'key-eb';
+  if (k.startsWith('d'))  return 'key-d';
+  if (k.startsWith('e'))  return 'key-e';
+  if (k.startsWith('f#') || k.startsWith('gb')) return 'key-gb';
+  if (k.startsWith('f'))  return 'key-f';
+  if (k.startsWith('g#') || k.startsWith('ab')) return 'key-ab';
+  if (k.startsWith('g'))  return 'key-g';
+  if (k.startsWith('a#') || k.startsWith('bb')) return 'key-bb';
+  if (k.startsWith('a'))  return 'key-a';
+  if (k.startsWith('b'))  return 'key-b';
+  return '';
+}
+
+function buildCardHTML(track, globalIndex) {
+  const styleTags = track.subgenres && track.subgenres.length
+    ? `<div class="card-styles">${track.subgenres.map(sg =>
+        `<span class="c-tag style">${sg}</span>`).join('')}</div>`
+    : '';
+
+  const vibeRow = track.vibe && track.vibe.length
+    ? `<div class="meta-row">
+         <span class="meta-label">Vibe</span>
+         <span class="meta-vals">${track.vibe.join(' · ')}</span>
+       </div>` : '';
+
+  const moodRow = track.mood && track.mood.length
+    ? `<div class="meta-row">
+         <span class="meta-label">Mood</span>
+         <span class="meta-vals">${track.mood.join(' · ')}</span>
+       </div>` : '';
+
+  const sceneRow = track.scene && track.scene.length
+    ? `<div class="meta-row">
+         <span class="meta-label">Scene</span>
+         <span class="meta-vals">${track.scene.join(' · ')}</span>
+       </div>` : '';
+
+  return `
+    <div class="card-visual">
+      <canvas class="wave-canvas"></canvas>
+      <div class="card-num">0${globalIndex + 1}</div>
+      <div class="now-playing-badge">
+        <span class="np-dot"></span>
+        <span class="np-label">Now Playing</span>
+      </div>
+    </div>
+    <div class="card-info">
+      <div class="card-title">${track.title}</div>
+      <div class="card-producer">${track.producer}</div>
+      <div class="card-specs">
+        <span class="c-tag bpm">${track.bpm} BPM</span>
+        <span class="c-tag key ${getKeyClass(track.key)}">${track.key}</span>
+        <span class="c-tag genre ${getGenreClass(track.genre)}">${track.genre}</span>
+      </div>
+      ${styleTags}
+      ${vibeRow}
+      ${moodRow}
+      ${sceneRow}
+    </div>
+    <div class="card-actions">
+      <button class="action-btn download-btn" onclick="openDownload(${globalIndex},event)">Download</button>
+      <button class="action-btn lease-btn"    onclick="openLease(${globalIndex},event)">Lease</button>
+      <button class="action-btn own-btn"      onclick="openOwn(${globalIndex},event)">Own</button>
+    </div>`;
+}
+
 function buildGrid() {
-  const grid = document.getElementById('track-grid');
+  const grid     = document.getElementById('track-grid');
   grid.innerHTML = '';
 
   const filtered = getFiltered();
-
   document.getElementById('no-results').style.display =
     filtered.length === 0 ? 'block' : 'none';
 
-  filtered.forEach((track, i) => {
+  filtered.forEach((track) => {
     const globalIndex = tracks.indexOf(track);
-    const card = document.createElement('div');
-    card.className = 'track-card';
-    card.dataset.id    = track.id;
+    const card        = document.createElement('div');
+    card.className    = 'track-card';
+    card.dataset.id   = track.id;
     card.dataset.index = globalIndex;
-    card.tabIndex = 0;
-
-    card.innerHTML = `
-      <div class="card-visual">
-        <canvas class="wave-canvas"></canvas>
-        <div class="card-num">0${globalIndex + 1}</div>
-        <div class="now-playing-badge">
-          <span class="np-dot"></span>
-          <span class="np-label">Now Playing</span>
-        </div>
-      </div>
-      <div class="card-info">
-        <div class="card-title">${track.title}</div>
-        <div class="card-producer">${track.producer}</div>
-        <div class="card-tags">
-          <span class="c-tag bpm">${track.bpm} BPM</span>
-          <span class="c-tag key">${track.key}</span>
-          <span class="c-tag genre">${track.genre.toUpperCase()}</span>
-        </div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn download-btn"
-          onclick="openDownload(${globalIndex},event)">Download</button>
-        <button class="action-btn lease-btn"
-          onclick="openLease(${globalIndex},event)">Lease</button>
-        <button class="action-btn own-btn"
-          onclick="openOwn(${globalIndex},event)">Own</button>
-      </div>
-    `;
+    card.tabIndex     = 0;
+    card.innerHTML    = buildCardHTML(track, globalIndex);
 
     card.addEventListener('click', () => playTrack(globalIndex));
     card.addEventListener('keydown', e => {
@@ -1648,14 +1781,12 @@ function buildGrid() {
 
     grid.appendChild(card);
 
-    /* draw static waveform after layout */
     requestAnimationFrame(() => {
       const canvas = card.querySelector('.wave-canvas');
       drawStatic(canvas, track.seed);
     });
   });
 
-  /* restore is-playing state if a track is playing */
   updateCardStates();
 }
 
@@ -1664,16 +1795,15 @@ function buildGrid() {
 ════════════════════════════════════════════ */
 function getFiltered() {
   return tracks.filter(t => {
-    const matchSearch = !searchQuery ||
-      t.title.toLowerCase().includes(searchQuery) ||
-      t.producer.toLowerCase().includes(searchQuery) ||
-      t.key.toLowerCase().includes(searchQuery);
+    const q = searchQuery;
+    const matchSearch = !q ||
+      t.title.toLowerCase().includes(q) ||
+      t.producer.toLowerCase().includes(q) ||
+      t.key.toLowerCase().includes(q) ||
+      t.genre.toLowerCase().includes(q) ||
+      (t.subgenres && t.subgenres.some(sg => sg.toLowerCase().includes(q)));
 
-    const matchFilter = activeFilter === 'all' ||
-      t.tags.includes(activeFilter) ||
-      (activeFilter === 'lt100'   && t.bpm < 100) ||
-      (activeFilter === '100-130' && t.bpm >= 100 && t.bpm <= 130) ||
-      (activeFilter === 'gt130'   && t.bpm > 130);
+    const matchFilter = activeFilter === 'all' || t.tags.includes(activeFilter);
 
     return matchSearch && matchFilter;
   });
@@ -1686,7 +1816,7 @@ function filterTracks() {
 
 function setFilter(val, btn) {
   activeFilter = val;
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.vsm-block').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   buildGrid();
 }
@@ -1696,8 +1826,7 @@ function setFilter(val, btn) {
 ════════════════════════════════════════════ */
 function playTrack(index) {
   if (index < 0 || index >= tracks.length) return;
-
-  const track   = tracks[index];
+  const track      = tracks[index];
   const wasPlaying = isPlaying && currentIndex === index;
 
   if (currentIndex !== index) {
@@ -1758,12 +1887,8 @@ function nextTrack() {
 
 function prevTrack() {
   if (currentIndex === -1) return;
-  if (audioEl.currentTime > 3) {
-    audioEl.currentTime = 0;
-    return;
-  }
-  const prev = (currentIndex - 1 + tracks.length) % tracks.length;
-  playTrack(prev);
+  if (audioEl.currentTime > 3) { audioEl.currentTime = 0; return; }
+  playTrack((currentIndex - 1 + tracks.length) % tracks.length);
 }
 
 audioEl.addEventListener('ended', () => {
@@ -1812,6 +1937,9 @@ function updatePlayerBar() {
 function updatePlayPauseIcon() {
   document.getElementById('icon-play').style.display  = isPlaying ? 'none' : '';
   document.getElementById('icon-pause').style.display = isPlaying ? ''     : 'none';
+  const btn = document.getElementById('btn-play');
+  btn.classList.toggle('state-playing', isPlaying);
+  btn.classList.toggle('state-paused', !isPlaying && currentIndex !== -1);
 }
 
 function updateProgress() {
@@ -1825,12 +1953,11 @@ function updateProgress() {
 
 function fmt(s) {
   if (!isFinite(s)) return '0:00';
-  const m = Math.floor(s / 60);
+  const m   = Math.floor(s / 60);
   const sec = Math.floor(s % 60);
-  return `${m}:${sec.toString().padStart(2,'0')}`;
+  return `${m}:${sec.toString().padStart(2, '0')}`;
 }
 
-/* Progress bar seek */
 document.getElementById('progress-track').addEventListener('click', e => {
   if (!audioEl.duration) return;
   const rect = e.currentTarget.getBoundingClientRect();
@@ -1848,14 +1975,14 @@ function toggleRepeat() {
   audioEl.loop = false;
 
   if (repeatMode === 0) {
-    btn.className = 'mode-btn';
+    btn.className   = 'mode-btn';
     label.textContent = 'Repeat';
   } else if (repeatMode === 1) {
-    btn.className = 'mode-btn active-track';
+    btn.className   = 'mode-btn active-track';
     label.textContent = 'Track';
-    audioEl.loop = true;
+    audioEl.loop    = true;
   } else {
-    btn.className = 'mode-btn active';
+    btn.className   = 'mode-btn active';
     label.textContent = 'All';
   }
 }
@@ -1863,7 +1990,7 @@ function toggleRepeat() {
 function toggleShuffle() {
   shuffleMode = !shuffleMode;
   document.getElementById('btn-shuffle').className =
-    shuffleMode ? 'mode-btn active' : 'mode-btn';
+    shuffleMode ? 'mode-btn active-shuffle' : 'mode-btn';
 }
 
 /* ════════════════════════════════════════════
@@ -1875,7 +2002,7 @@ function getGridCols() {
   const grid  = document.getElementById('track-grid');
   const cards = grid.querySelectorAll('.track-card');
   if (cards.length < 2) return 1;
-  const firstTop  = cards[0].getBoundingClientRect().top;
+  const firstTop = cards[0].getBoundingClientRect().top;
   let cols = 1;
   for (let i = 1; i < cards.length; i++) {
     if (cards[i].getBoundingClientRect().top === firstTop) cols++;
@@ -1884,65 +2011,136 @@ function getGridCols() {
   return cols;
 }
 
+function clearAllKbActive() {
+  document.querySelectorAll('.kb-active').forEach(el => el.classList.remove('kb-active'));
+}
+
+function activateZone(zone, index) {
+  clearAllKbActive();
+  focusZone = zone;
+  if (zone === 'exit') {
+    document.getElementById('vault-exit-btn')?.classList.add('kb-active');
+  } else if (zone === 'submenu') {
+    if (index !== undefined) focusedSubmenu = index;
+    const blocks = document.querySelectorAll('.vsm-block');
+    blocks[focusedSubmenu]?.classList.add('kb-active');
+    blocks[focusedSubmenu]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } else if (zone === 'search') {
+    document.querySelector('.vault-search')?.classList.add('kb-active');
+  } else if (zone === 'grid') {
+    if (index !== undefined) focusedIndex = index;
+    const cards = document.querySelectorAll('.track-card');
+    const card  = cards[focusedIndex];
+    if (card) {
+      card.classList.add('kb-active');
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+}
+
 document.addEventListener('keydown', e => {
-  /* Don't intercept when typing in search */
-  if (document.activeElement === document.getElementById('search-input')) return;
+  const searchInput = document.getElementById('search-input');
 
-  const cards = document.querySelectorAll('.track-card');
-  if (!cards.length) return;
+  if (document.activeElement === searchInput) {
+    if (e.key === 'Escape') {
+      searchInput.blur();
+      clearAllKbActive();
+      focusZone = null;
+    }
+    return;
+  }
 
+  if (e.key === 'Escape') { closeAllModals(); return; }
+  if (isModalOpen()) return;
+
+  const cards     = document.querySelectorAll('.track-card');
+  const subBlocks = document.querySelectorAll('.vsm-block');
+
+  if (focusZone === 'exit') {
+    switch (e.key) {
+      case 'Enter':     e.preventDefault(); signOut(); return;
+      case 'ArrowDown': e.preventDefault(); activateZone('submenu'); return;
+    }
+  } else if (focusZone === 'submenu') {
+    switch (e.key) {
+      case 'ArrowRight':
+        e.preventDefault();
+        focusedSubmenu = Math.min(focusedSubmenu + 1, subBlocks.length - 1);
+        activateZone('submenu', focusedSubmenu); return;
+      case 'ArrowLeft':
+        e.preventDefault();
+        focusedSubmenu = Math.max(focusedSubmenu - 1, 0);
+        activateZone('submenu', focusedSubmenu); return;
+      case 'ArrowUp':    e.preventDefault(); activateZone('exit'); return;
+      case 'ArrowDown':  e.preventDefault(); activateZone('search'); return;
+      case 'Enter':      e.preventDefault(); subBlocks[focusedSubmenu]?.click(); return;
+    }
+  } else if (focusZone === 'search') {
+    switch (e.key) {
+      case 'ArrowUp':   e.preventDefault(); activateZone('submenu'); return;
+      case 'ArrowDown': e.preventDefault(); activateZone('grid', 0); return;
+      case 'Enter':
+        e.preventDefault();
+        clearAllKbActive();
+        focusZone = null;
+        searchInput.focus();
+        return;
+    }
+  } else {
+    /* focusZone === null or 'grid' */
+    switch (e.key) {
+      case 'ArrowRight':
+        e.preventDefault();
+        if (cards.length) {
+          if (focusZone === null) focusedIndex = 0;
+          else focusedIndex = Math.min(focusedIndex + 1, cards.length - 1);
+          activateZone('grid', focusedIndex);
+        }
+        return;
+      case 'ArrowLeft':
+        e.preventDefault();
+        if (cards.length) {
+          if (focusZone === null) focusedIndex = 0;
+          else focusedIndex = Math.max(focusedIndex - 1, 0);
+          activateZone('grid', focusedIndex);
+        }
+        return;
+      case 'ArrowDown':
+        e.preventDefault();
+        if (cards.length) {
+          gridCols = getGridCols();
+          if (focusZone === null) focusedIndex = 0;
+          else focusedIndex = Math.min(focusedIndex + gridCols, cards.length - 1);
+          activateZone('grid', focusedIndex);
+        }
+        return;
+      case 'ArrowUp':
+        e.preventDefault();
+        gridCols = getGridCols();
+        if (focusZone === null || focusedIndex - gridCols < 0) {
+          activateZone('search');
+        } else {
+          focusedIndex = Math.max(focusedIndex - gridCols, 0);
+          activateZone('grid', focusedIndex);
+        }
+        return;
+      case 'Enter':
+        if (focusZone === 'grid') {
+          e.preventDefault();
+          const c = cards[focusedIndex];
+          if (c) playTrack(parseInt(c.dataset.index));
+        }
+        return;
+    }
+  }
+
+  /* Global shortcuts — work in any zone */
   switch (e.key) {
-    case 'ArrowRight':
-      e.preventDefault();
-      focusedIndex = Math.min(focusedIndex + 1, cards.length - 1);
-      focusCard(cards);
-      break;
-    case 'ArrowLeft':
-      e.preventDefault();
-      focusedIndex = Math.max(focusedIndex - 1, 0);
-      focusCard(cards);
-      break;
-    case 'ArrowDown':
-      e.preventDefault();
-      gridCols = getGridCols();
-      focusedIndex = Math.min(focusedIndex + gridCols, cards.length - 1);
-      focusCard(cards);
-      break;
-    case 'ArrowUp':
-      e.preventDefault();
-      gridCols = getGridCols();
-      focusedIndex = Math.max(focusedIndex - gridCols, 0);
-      focusCard(cards);
-      break;
-    case 'Enter':
-      if (!isModalOpen()) {
-        e.preventDefault();
-        const c = cards[focusedIndex];
-        if (c) playTrack(parseInt(c.dataset.index));
-      }
-      break;
-    case ' ':
-      if (!isModalOpen()) {
-        e.preventDefault();
-        togglePlay();
-      }
-      break;
-    case 's': case 'S':
-      if (!isModalOpen()) toggleShuffle();
-      break;
-    case 'r': case 'R':
-      if (!isModalOpen()) toggleRepeat();
-      break;
-    case 'Escape':
-      closeAllModals();
-      break;
+    case ' ':           e.preventDefault(); togglePlay(); break;
+    case 's': case 'S': toggleShuffle(); break;
+    case 'r': case 'R': toggleRepeat(); break;
   }
 });
-
-function focusCard(cards) {
-  cards.forEach((c, i) => c.classList.toggle('keyboard-focus', i === focusedIndex));
-  cards[focusedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
 
 /* ════════════════════════════════════════════
    MODALS
@@ -1964,14 +2162,16 @@ function closeAllModals() {
   document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
 }
 
-/* Download */
 function openDownload(index, e) {
   e.stopPropagation();
   const t = tracks[index];
   document.getElementById('dl-track-name').textContent = `${t.title} · ${t.bpm} BPM · ${t.key}`;
   openModal('modal-download');
-  /* trigger download after short delay */
   setTimeout(() => triggerDownload(t), 800);
+}
+
+function toFilePart(s) {
+  return s.replace(/[*\/\\:?"<>|]/g, '').replace(/\s+/g, '_');
 }
 
 async function triggerDownload(track) {
@@ -1981,18 +2181,17 @@ async function triggerDownload(track) {
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
-    a.download = `${track.title}.mp3`;
+    const name = `${toFilePart(track.title)}_${toFilePart(track.producer)}_${track.bpm}bpm_${toFilePart(track.key)}.mp3`;
+    a.download = name;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 10000);
   } catch {
-    /* Fallback: open in new tab */
     window.open(track.url, '_blank');
   }
 }
 
-/* Lease */
 function openLease(index, e) {
   e.stopPropagation();
   const t = tracks[index];
@@ -2002,7 +2201,6 @@ function openLease(index, e) {
   openModal('modal-lease');
 }
 
-/* Own */
 function openOwn(index, e) {
   e.stopPropagation();
   const t = tracks[index];
@@ -2012,16 +2210,12 @@ function openOwn(index, e) {
   openModal('modal-own');
 }
 
-/* Cart (coming soon) */
 function proceedToCart(type) {
-  const actionsId = type + '-actions';
-  const soonId    = type + '-soon';
-  document.getElementById(actionsId).style.display = 'none';
-  const soonEl = document.getElementById(soonId);
+  document.getElementById(type + '-actions').style.display = 'none';
+  const soonEl = document.getElementById(type + '-soon');
   soonEl.style.display = 'flex';
 }
 
-/* Sign out */
 function signOut() {
   localStorage.removeItem('vault_email');
   window.location.href = '/unlock';
