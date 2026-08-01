@@ -315,6 +315,9 @@ body::after{
 .plate.in{opacity:1;transform:none}
 .plate::before{content:'';display:block;padding-bottom:74%}
 .plate.tall::before{padding-bottom:128%}
+/* a real plate sizes to the painting rather than a fixed ratio */
+.plate.real::before{display:none}
+.plate.real img{display:block;width:100%;height:auto}
 .plate-ph{position:absolute;inset:0}
 .plate-n{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:8px;letter-spacing:1.6px;color:rgba(255,255,255,.6);text-transform:uppercase}
 .dossier{position:sticky;top:150px;padding:44px 30px 0 0;align-self:start;max-height:calc(100vh - 165px);overflow-y:auto;scrollbar-width:thin}
@@ -501,11 +504,34 @@ const STATUSES = {
 
 const CATALOGUE = [];
 
+/* ── Making Space (Light), 2021 — the one collection with real
+      plates. The folder is authoritative here: 14 of these 21 are
+      not in the Notion export at all. ── */
+const MS_DIR = 'assets/archive/making-space-light/';
+const msTitles = new Set(MAKING_SPACE_LIGHT.map(m=>m.n.toLowerCase()));
+
+MAKING_SPACE_LIGHT.forEach((m,i)=>{
+  CATALOGUE.push({
+    id:'GIP-MSL-'+String(i+1).padStart(3,'0'),
+    title:m.n, series:null,
+    collection:'Making Space (Light)',
+    section:'gallery', group:'collections', medium:'painting',
+    status:m.s?'sold':'unknown',
+    date:'2021',
+    materials:null, dimensions:null, edition:null,
+    location:m.s?'Private Collection':null,
+    contributors:[],
+    thumb:MS_DIR+'thumb/'+m.slug+'.jpg',
+    images:[MS_DIR+'full/'+m.slug+'.jpg'],
+    plates:1
+  });
+});
+
 /* ── The catalogue proper: 304 works from the Notion export.
-      Sold status and release dates are real. Everything not
-      recorded stays UNKNOWN rather than being guessed at.
+      Titles already carried by Making Space (Light) are skipped so
+      the same painting is not listed twice.
       Collector names and prices are deliberately withheld. ── */
-PAINTINGS.forEach((p,i)=>{
+PAINTINGS.filter(p=>!msTitles.has(p.n.toLowerCase())).forEach((p,i)=>{
   CATALOGUE.push({
     id:'GIP-P-'+String(i+1).padStart(3,'0'),
     title:p.n,
@@ -736,10 +762,16 @@ function renderGrid(hostSel){
 function card(w){
   const c=el('article','card');c.dataset.id=w.id;
   const frame=el('div','card-frame');
-  const ph=el('div','card-ph');ph.setAttribute('style',placeholder(w.id,0));
-  frame.appendChild(ph);
+  if(w.thumb){
+    const im=document.createElement('img');
+    im.className='card-img';im.src=w.thumb;im.alt=w.title;im.loading='lazy';
+    frame.appendChild(im);
+  }else{
+    const ph=el('div','card-ph');ph.setAttribute('style',placeholder(w.id,0));
+    frame.appendChild(ph);
+    frame.appendChild(el('div','ph-tag mono','plate pending'));
+  }
   frame.appendChild(el('div','card-cat mono',w.id));
-  frame.appendChild(el('div','ph-tag mono','plate pending'));
   c.appendChild(frame);
   const body=el('div','card-body');
   const dot=el('span','dot '+STATUSES[w.status].cls);dot.title=STATUSES[w.status].label;
@@ -996,12 +1028,23 @@ function appendWork(){
 function workNode(w){
   const sec=el('article','work');sec.dataset.id=w.id;
   const plates=el('div','work-plates');
-  for(let i=0;i<w.plates;i++){
-    const p=el('div','plate'+(i%3===1?' tall':''));
-    const ph=el('div','plate-ph');ph.setAttribute('style',placeholder(w.id,i));
-    p.appendChild(ph);
-    p.appendChild(el('div','plate-n mono',w.id+' · plate '+String(i+1).padStart(2,'0')));
-    plates.appendChild(p);io.observe(p);
+  if(w.images&&w.images.length){
+    w.images.forEach((src,i)=>{
+      const p=el('div','plate real');
+      const im=document.createElement('img');
+      im.src=src;im.alt=w.title;im.loading='lazy';
+      p.appendChild(im);
+      p.appendChild(el('div','plate-n mono',w.id+' · plate '+String(i+1).padStart(2,'0')));
+      plates.appendChild(p);io.observe(p);
+    });
+  }else{
+    for(let i=0;i<w.plates;i++){
+      const p=el('div','plate'+(i%3===1?' tall':''));
+      const ph=el('div','plate-ph');ph.setAttribute('style',placeholder(w.id,i));
+      p.appendChild(ph);
+      p.appendChild(el('div','plate-n mono',w.id+' · plate '+String(i+1).padStart(2,'0')));
+      plates.appendChild(p);io.observe(p);
+    }
   }
   sec.appendChild(plates);
 
