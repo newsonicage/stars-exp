@@ -14,7 +14,6 @@
     :root {
       --green:      #39ff6e;
       --green-glow: rgba(57,255,110,0.5);
-      --red:        #ff4060;
       --white:      #f0f4ff;
     }
 
@@ -29,7 +28,7 @@
       font-family: 'Nunito', sans-serif;
     }
 
-    /* ── BG Video — B&W, no color tint ── */
+    /* ── BG Video — B&W, wakes when the installation goes live ── */
     #bg-video {
       position: fixed;
       inset: 0;
@@ -37,125 +36,144 @@
       height: 100%;
       object-fit: cover;
       z-index: 0;
-      opacity: 0.5;
-      filter: grayscale(1);
+      opacity: 0.34;
+      filter: grayscale(1) brightness(0.62);
+      transition: opacity 2.4s ease, filter 2.4s ease;
+    }
+    body.is-live #bg-video {
+      opacity: 0.8;
+      filter: grayscale(1) brightness(1) contrast(1.06);
     }
 
-    /* ── Subtle dark center vignette only — no color ── */
+    /* ── Vignette — opens up once live ── */
     .overlay {
       position: fixed;
       inset: 0;
       z-index: 1;
       background: radial-gradient(ellipse at center,
         rgba(0,0,0,0.15) 0%,
-        rgba(0,0,0,0.6)  100%
+        rgba(0,0,0,0.72) 100%
       );
       pointer-events: none;
+      transition: background 2.4s ease;
+    }
+    body.is-live .overlay {
+      background: radial-gradient(ellipse at center,
+        rgba(0,0,0,0.08) 0%,
+        rgba(0,0,0,0.58) 100%
+      );
     }
 
-    /* ── Gate — dead center via fixed + transform ── */
-    .gate {
+    /* ── The Bloom — generative loader canvas ── */
+    #viz {
       position: fixed;
-      top: 50%;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    /* ══════════════════════════════════════
+       DORMANT — the invitation
+    ══════════════════════════════════════ */
+    .invite {
+      position: fixed;
+      /* sits where the threshold button will appear — invitation becomes ENTER */
+      top: 80%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 360px;
-      max-width: 90vw;
-      animation: fadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+      gap: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16,1,0.3,1);
+      animation: inviteIn 1.4s cubic-bezier(0.16,1,0.3,1) both;
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); }
+    @keyframes inviteIn {
+      from { opacity: 0; transform: translate(-50%, calc(-50% + 14px)); }
       to   { opacity: 1; transform: translate(-50%, -50%); }
     }
-
-    /* ── ACCESS CODE label ── */
-    .field-label {
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 12px;
-      align-self: flex-start;
-    }
-
-    /* ── Input wrap ── */
-    .input-wrap {
-      width: 100%;
-      margin-bottom: 20px;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      transform-origin: center;
-    }
-    .input-wrap:hover,
-    .input-wrap:focus-within {
-      transform: scale(1.04);
-    }
-
-    #password {
-      width: 100%;
-      padding: 15px 22px;
-      background: transparent;
-      border: 2px solid rgba(255,255,255,0.35);
-      border-radius: 50px;
-      color: var(--white);
-      font-family: 'Nunito', sans-serif;
-      font-size: 16px; /* 16px prevents iOS auto-zoom on focus */
-      font-weight: 800;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s;
-      caret-color: rgba(255,255,255,0.7);
-    }
-    #password::placeholder {
-      color: rgba(255,255,255,0.2);
-      letter-spacing: 3px;
+    .invite-text {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 900;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.82);
+      text-shadow: 0 0 18px rgba(255,255,255,0.55);
+      animation: inviteBreathe 2.6s ease-in-out infinite;
     }
-    #password:focus {
-      border-color: rgba(255,255,255,0.65);
-      box-shadow: 0 0 0 4px rgba(255,255,255,0.05);
+    @keyframes inviteBreathe {
+      0%,100% { opacity: 1;    text-shadow: 0 0 18px rgba(255,255,255,0.55); }
+      50%     { opacity: 0.42; text-shadow: 0 0 6px  rgba(255,255,255,0.18); }
+    }
+    .invite-sub {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.36);
+    }
+    body.is-live .invite {
+      /* kill inviteIn — its `both` fill-mode would out-rank these declarations */
+      animation: none;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, calc(-50% - 18px));
     }
 
-    /* ── Status row ── */
+    /* ══════════════════════════════════════
+       LIVE — status + threshold
+    ══════════════════════════════════════ */
+    .hud {
+      position: fixed;
+      top: 80%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      width: 300px;
+      max-width: 84vw;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.1s ease;
+    }
+    body.is-live .hud { opacity: 1; pointer-events: auto; }
+
     .status-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 24px;
-      align-self: flex-start;
     }
     .status-dot {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 10px var(--green), 0 0 22px rgba(57,255,110,0.45);
+      background: #fff;
+      box-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 22px rgba(255,255,255,0.45);
       flex-shrink: 0;
-      animation: greenBlink 1.4s ease-in-out infinite;
-    }
-    @keyframes greenBlink {
-      0%, 100% { opacity: 1;    box-shadow: 0 0 10px var(--green), 0 0 22px rgba(57,255,110,0.45); }
-      50%       { opacity: 0.08; box-shadow: none; }
+      /* live scale is driven by the audio in JS */
+      transform: scale(1);
     }
     .status-text {
-      font-size: 11px;
+      font-size: 9px;
       font-weight: 900;
-      letter-spacing: 4px;
+      letter-spacing: 5px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.55);
+      white-space: nowrap;
     }
 
-    /* ── Enter Button ── */
+    /* ── Threshold button — holds back until you've experienced it ── */
     #enter-btn {
       width: 100%;
-      padding: 16px 24px;
-      border: 2px solid rgba(255,255,255,0.35);
+      padding: 15px 24px;
+      border: 2px solid rgba(255,255,255,0.32);
       border-radius: 50px;
       background: transparent;
       color: var(--white);
@@ -169,12 +187,21 @@
       overflow: hidden;
       position: relative;
       -webkit-tap-highlight-color: transparent;
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+      pointer-events: none;
       transition:
-        transform     0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-        border-color  0.3s ease,
-        background    0.3s ease,
-        box-shadow    0.3s ease,
-        color         0.3s ease;
+        opacity      0.9s ease,
+        transform    0.9s cubic-bezier(0.16,1,0.3,1),
+        border-color 0.3s ease,
+        background   0.3s ease,
+        box-shadow   0.3s ease,
+        color        0.3s ease;
+    }
+    body.can-enter #enter-btn {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
     }
     #enter-btn::before {
       content: '';
@@ -199,67 +226,19 @@
     #enter-btn:hover::before { left: 160%; }
     #enter-btn:active { transform: scale(0.97); transition-duration: 0.08s; }
 
-    /* ── Feedback ── */
-    #feedback {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      min-height: 18px;
+    /* ── Threshold crossing ── */
+    .flash {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: #000;
       opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+      transition: opacity 0.85s ease-in;
     }
-    #feedback.visible { opacity: 1; transform: translateY(0); }
-
-    /* ── GRANTED ── */
-    .state-granted #password {
-      border-color: var(--green);
-      color: var(--green);
-      caret-color: var(--green);
-      box-shadow: 0 0 0 4px rgba(57,255,110,0.08), 0 0 20px rgba(57,255,110,0.2);
-    }
-    .state-granted #enter-btn {
-      border-color: var(--green);
-      background: rgba(57,255,110,0.1);
-      color: var(--green);
-      animation: grantedPulse 1.8s ease-in-out infinite;
-    }
-    @keyframes grantedPulse {
-      0%,100% { box-shadow: 0 0 18px var(--green-glow); }
-      50%      { box-shadow: 0 0 44px rgba(57,255,110,0.75), 0 0 80px rgba(57,255,110,0.2); }
-    }
-    .state-granted #feedback   { color: var(--green); text-shadow: 0 0 10px rgba(57,255,110,0.5); }
-    .state-granted .status-dot { animation: none; opacity: 1; box-shadow: 0 0 10px var(--green), 0 0 28px rgba(57,255,110,0.6); }
-
-    /* ── DENIED ── */
-    .state-denied #password {
-      border-color: var(--red);
-      color: var(--red);
-      box-shadow: 0 0 0 4px rgba(255,64,96,0.08), 0 0 20px rgba(255,64,96,0.18);
-    }
-    .state-denied #enter-btn {
-      border-color: var(--red);
-      color: var(--red);
-      box-shadow: 0 0 22px rgba(255,64,96,0.4), 0 0 50px rgba(255,64,96,0.12);
-    }
-    .state-denied #feedback   { color: var(--red); text-shadow: 0 0 10px rgba(255,64,96,0.5); }
-    .state-denied .status-dot { background: var(--red); box-shadow: 0 0 8px var(--red); animation: none; opacity: 1; }
-
-    /* ── Shake ── */
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      12%  { transform: translateX(-10px) rotate(-1deg); }
-      24%  { transform: translateX(10px)  rotate(1deg); }
-      36%  { transform: translateX(-7px); }
-      48%  { transform: translateX(7px); }
-      60%  { transform: translateX(-4px); }
-      72%  { transform: translateX(4px); }
-      86%  { transform: translateX(-2px); }
-    }
-    .shake { animation: shake 0.5s cubic-bezier(0.36,0.07,0.19,0.97) both !important; }
+    body.is-exiting .flash    { opacity: 1; }
+    body.is-exiting .hud,
+    body.is-exiting .help-btn { opacity: 0; transition: opacity 0.4s ease; }
 
     /* ── Help button ── */
     .help-btn {
@@ -348,6 +327,10 @@
       flex-shrink: 0;
       animation: greenBlink 1.4s ease-in-out infinite;
     }
+    @keyframes greenBlink {
+      0%, 100% { opacity: 1;    box-shadow: 0 0 8px rgba(57,255,110,0.7), 0 0 18px rgba(57,255,110,0.3); }
+      50%      { opacity: 0.08; box-shadow: none; }
+    }
     .hf-status-text {
       font-family: 'Nunito', sans-serif;
       font-size: 9px;
@@ -375,7 +358,7 @@
       line-height: 1.7;
     }
 
-    /* inputs — match gate style */
+    /* inputs */
     .hf-wrap { width: 100%; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
     .hf-wrap:hover, .hf-wrap:focus-within { transform: scale(1.03); }
 
@@ -404,7 +387,6 @@
       letter-spacing: 2px;
     }
 
-    /* submit button — inherits #enter-btn style */
     .hf-submit {
       width: 100%;
       padding: 15px 24px;
@@ -442,6 +424,7 @@
       transition: color 0.25s;
       animation: dismissBlink 1.3s ease-in-out infinite;
     }
+    @keyframes dismissBlink { 0%,100%{opacity:1} 50%{opacity:0.35} }
     .hf-close:hover { color: rgba(255,255,255,0.5); animation: none; }
 
     /* Prevent iOS auto-zoom on input focus */
@@ -482,7 +465,7 @@
     }
   </style>
 </head>
-<body>
+<body class="is-dormant">
 
   <video autoplay muted loop playsinline id="bg-video">
     <source src="assets/bg.mp4" type="video/mp4" />
@@ -494,18 +477,25 @@
     <source src="assets/music.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="gate" id="hud-panel">
-    <label class="field-label" for="password">Access Code</label>
-    <div class="input-wrap">
-      <input type="password" id="password" placeholder="Enter Password" autocomplete="off" />
-    </div>
-    <div class="status-row">
-      <div class="status-dot"></div>
-      <span class="status-text" id="status-text">Awaiting Input</span>
-    </div>
-    <button id="enter-btn" onclick="enterSite()">Enter</button>
-    <div id="feedback"></div>
+  <!-- THE BLOOM — never-ending generative loader -->
+  <canvas id="viz"></canvas>
+
+  <!-- DORMANT: the invitation -->
+  <div class="invite" id="invite">
+    <span class="invite-text">Touch to Begin</span>
+    <span class="invite-sub">Sound On · Headphones Recommended</span>
   </div>
+
+  <!-- LIVE: status + threshold -->
+  <div class="hud" id="hud">
+    <div class="status-row">
+      <div class="status-dot" id="status-dot"></div>
+      <span class="status-text" id="status-text">Signal Acquired</span>
+    </div>
+    <button id="enter-btn">Enter</button>
+  </div>
+
+  <div class="flash"></div>
 
   <!-- HELP BUTTON -->
   <button class="help-btn" id="help-btn" aria-label="Early access">?</button>
@@ -555,98 +545,408 @@
   </div>
 
   <script>
-    /* Music on first gesture */
-    const music = document.getElementById('bg-music');
-    let musicStarted = false;
-    function startMusic() {
-      if (musicStarted) return;
-      musicStarted = true;
-      music.play().catch(() => {});
+  /* ════════════════════════════════════════
+     THE BLOOM
+     A generative loader that never repeats.
+     Driven by a live FFT of the music, value
+     noise, and irrational rotation speeds —
+     it has no loop point and keeps accreting
+     new orbits the longer you stay.
+  ════════════════════════════════════════ */
+  const TAU   = Math.PI * 2;
+  const body  = document.body;
+  const music = document.getElementById('bg-music');
+  const cvs   = document.getElementById('viz');
+  const ctx   = cvs.getContext('2d');
+  const dotEl = document.getElementById('status-dot');
+  const stEl  = document.getElementById('status-text');
+  const enterBtn = document.getElementById('enter-btn');
+  const helpOverlay = document.getElementById('help-overlay');
+
+  const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let state = 'dormant';   /* dormant → live → exiting */
+
+  /* ── Value noise (deterministic, smooth, non-repeating in practice) ── */
+  function hash(n) { const s = Math.sin(n) * 43758.5453123; return s - Math.floor(s); }
+  function noise(x) {
+    const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f);
+    return hash(i) * (1 - u) + hash(i + 1) * u;
+  }
+
+  /* ── Canvas sizing ── */
+  let W = 0, H = 0, cx = 0, cy = 0, R = 0;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    cvs.width  = Math.round(W * dpr);
+    cvs.height = Math.round(H * dpr);
+    cvs.style.width  = W + 'px';
+    cvs.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cx = W / 2;
+    cy = H * 0.43;
+    /* Clamped so the bloom never grows into the HUD on short or narrow viewports */
+    R  = Math.min(Math.max(Math.min(W, H) * 0.115, 62), H * 0.155);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  /* ── Audio graph (built inside the activating gesture) ── */
+  let audioCtx = null, analyser = null, freq = null, gain = null;
+  function initAudio() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) { music.volume = 0.5; return; }
+      audioCtx = new AC();
+      const src = audioCtx.createMediaElementSource(music);
+      analyser  = audioCtx.createAnalyser();
+      analyser.fftSize = 512;
+      analyser.smoothingTimeConstant = 0.8;
+      gain = audioCtx.createGain();
+      gain.gain.value = 0.0001;
+      src.connect(analyser);
+      analyser.connect(gain);
+      gain.connect(audioCtx.destination);
+      freq = new Uint8Array(analyser.frequencyBinCount);
+      audioCtx.resume();
+      /* slow bloom-in of the sound */
+      gain.gain.exponentialRampToValueAtTime(0.75, audioCtx.currentTime + 2.6);
+    } catch (e) {
+      analyser = null;
+      music.volume = 0.5;
     }
-    ['click','touchstart','keydown','pointerdown'].forEach(e =>
-      document.addEventListener(e, startMusic, { passive: true })
-    );
+  }
 
-    /* Password gate */
-    document.getElementById('password').addEventListener('keydown', e => {
-      if (e.key === 'Enter') enterSite();
-    });
+  /* ── Orbiting particles — the population grows over time ── */
+  const MAX_ORBITS = 64;
+  const orbits = [];
+  function makeOrbit() {
+    return {
+      r:    0.95 + Math.random() * 2.0,               /* radius × R          */
+      sp:   (0.05 + Math.random() * 0.22) * (Math.random() < 0.5 ? -1 : 1),
+      ph:   Math.random() * TAU,
+      sz:   0.6 + Math.random() * 1.6,
+      tilt: 0.3 + Math.random() * 0.7,                /* ellipse squash      */
+      prec: (Math.random() - 0.5) * 0.05,             /* orbital precession  */
+      hist: []
+    };
+  }
+  for (let i = 0; i < 16; i++) orbits.push(makeOrbit());
 
-    let resetTimer = null;
+  /* Forever-evolving: accrete a new orbit, or mutate one once full */
+  setInterval(() => {
+    if (state === 'exiting') return;
+    if (orbits.length < MAX_ORBITS) {
+      orbits.push(makeOrbit());
+    } else {
+      const o = orbits[(Math.random() * orbits.length) | 0];
+      const fresh = makeOrbit();
+      o.r = fresh.r; o.sp = fresh.sp; o.tilt = fresh.tilt; o.prec = fresh.prec;
+      o.hist.length = 0;
+    }
+  }, 18000);
 
-    function enterSite() {
-      const pw    = document.getElementById('password').value;
-      const panel = document.getElementById('hud-panel');
-      const fb    = document.getElementById('feedback');
-      const btn   = document.getElementById('enter-btn');
-      const st    = document.getElementById('status-text');
+  /* ── Ripples, emitted on detected beats ── */
+  const ripples = [];
 
-      clearTimeout(resetTimer);
-      panel.classList.remove('state-granted', 'state-denied');
-      fb.classList.remove('visible');
-      btn.classList.remove('shake');
-      void btn.offsetWidth;
+  /* ── Frame state ── */
+  let last = performance.now();
+  let T = 0;                 /* elapsed seconds                  */
+  let bass = 0, mid = 0, treb = 0, energy = 0;
+  let bassAvg = 0, lastBeat = 0;
+  let sweep = 0, sweep2 = 0, rot = 0;
+  let collapse = 1;          /* 1 → 0 during the exit implosion  */
 
-      if (pw === 'baat8') {
-        panel.classList.add('state-granted');
-        fb.textContent = '✦  Access Granted  ✦';
-        st.textContent = 'Identity Confirmed';
-        requestAnimationFrame(() => fb.classList.add('visible'));
-        setTimeout(() => { window.location.href = '/home'; }, 1500);
+  function readAudio() {
+    if (analyser) {
+      analyser.getByteFrequencyData(freq);
+      const n = freq.length;
+      const bEnd = Math.floor(n * 0.08), mEnd = Math.floor(n * 0.38);
+      let b = 0, m = 0, h = 0;
+      for (let i = 0;    i < bEnd; i++) b += freq[i];
+      for (let i = bEnd; i < mEnd; i++) m += freq[i];
+      for (let i = mEnd; i < n;    i++) h += freq[i];
+      bass = b / (bEnd * 255);
+      mid  = m / ((mEnd - bEnd) * 255);
+      treb = h / ((n - mEnd) * 255);
+    } else {
+      /* Dormant (or no Web Audio): breathe on noise so it still evolves */
+      bass = 0.15 + 0.09 * Math.sin(T * 0.9);
+      mid  = 0.11 + 0.07 * noise(T * 0.35);
+      treb = 0.06 + 0.05 * noise(T * 0.6 + 11);
+    }
+    energy = bass * 0.6 + mid * 0.3 + treb * 0.1;
+  }
+
+  function detectBeat(now) {
+    bassAvg += (bass - bassAvg) * 0.06;
+    if (bass > bassAvg * 1.32 && bass > 0.18 && now - lastBeat > 240) {
+      lastBeat = now;
+      ripples.push({ r: R * 0.9, a: 0.5 });
+    }
+  }
+
+  function frame(now) {
+    const dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    T += dt;
+
+    readAudio();
+    if (state === 'live') detectBeat(now);
+    if (state === 'exiting') collapse = Math.max(0, collapse - dt * 1.5);
+
+    /* Irrational speeds → the arcs never realign */
+    rot    += dt * (0.07 + energy * 0.22);
+    sweep  += dt * (0.34 + energy * 1.5);
+    sweep2 -= dt * (0.21 + energy * 0.9) * Math.SQRT2;
+
+    const Rc = R * collapse;
+    ctx.clearRect(0, 0, W, H);
+
+    /* Soft shadow anchor so the white still reads once the video brightens */
+    const anchor = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(0.001, Rc * 2.1));
+    anchor.addColorStop(0,   'rgba(0,0,0,' + (0.5 * collapse).toFixed(3) + ')');
+    anchor.addColorStop(0.6, 'rgba(0,0,0,' + (0.26 * collapse).toFixed(3) + ')');
+    anchor.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = anchor;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
+
+    /* ── Ripples ── */
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const p = ripples[i];
+      p.r += dt * (140 + energy * 200);
+      p.a -= dt * 0.55;
+      if (p.a <= 0) { ripples.splice(i, 1); continue; }
+      ctx.beginPath();
+      ctx.arc(cx, cy, p.r * collapse, 0, TAU);
+      ctx.strokeStyle = 'rgba(255,255,255,' + p.a.toFixed(3) + ')';
+      ctx.lineWidth = 1;
+      ctx.shadowBlur = 16;
+      ctx.shadowColor = 'rgba(255,255,255,0.7)';
+      ctx.stroke();
+    }
+
+    /* ── Spectrum bloom — mirrored spokes ── */
+    const BINS = 96;
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = 'rgba(255,255,255,0.8)';
+    for (let i = 0; i < BINS; i++) {
+      let f;
+      if (analyser) {
+        const raw = freq[Math.floor((i / BINS) * freq.length * 0.72)] / 255;
+        /* Music energy collapses toward the top of the spectrum — tilt it back
+           up, otherwise most spokes flatline and the bloom goes thin. */
+        f = Math.min(1, Math.pow(raw, 0.75) * (0.7 + 1.7 * (i / BINS)));
       } else {
-        panel.classList.add('state-denied');
-        btn.classList.add('shake');
-        fb.textContent = '✕  Access Denied  ✕';
-        st.textContent = 'Invalid Credentials';
-        requestAnimationFrame(() => fb.classList.add('visible'));
-        resetTimer = setTimeout(() => {
-          panel.classList.remove('state-denied');
-          fb.classList.remove('visible');
-          btn.classList.remove('shake');
-          st.textContent = 'Awaiting Input';
-          document.getElementById('password').value = '';
-        }, 3000);
+        f = 0.10 + 0.42 * noise(i * 0.09 + T * 0.5);
+      }
+      const a   = (i / BINS) * Math.PI;
+      const len = Rc * (0.28 + f * 1.15);
+      const wob = 1 + 0.07 * noise(i * 0.2 + T * 0.7);
+      const alpha = (0.10 + f * 0.55) * collapse;
+      ctx.strokeStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
+      ctx.lineWidth = 1.1 + f * 1.4;
+      for (let s = -1; s <= 1; s += 2) {
+        const ang = s * a - Math.PI / 2 + rot;
+        const ca = Math.cos(ang), sa = Math.sin(ang);
+        ctx.beginPath();
+        ctx.moveTo(cx + ca * Rc * 0.94, cy + sa * Rc * 0.94);
+        ctx.lineTo(cx + ca * (Rc * 0.94 + len * wob), cy + sa * (Rc * 0.94 + len * wob));
+        ctx.stroke();
       }
     }
 
-    /* ── Help / Early Access form ── */
-    function openHelp() {
-      document.getElementById('help-overlay').classList.add('active');
+    /* ── Core ring ── */
+    ctx.beginPath();
+    ctx.arc(cx, cy, Rc * 0.94, 0, TAU);
+    ctx.strokeStyle = 'rgba(255,255,255,' + (0.26 + energy * 0.4) * collapse + ')';
+    ctx.lineWidth = 1.2;
+    ctx.shadowBlur = 18;
+    ctx.stroke();
+
+    /* ── The never-ending sweep — the gap never closes ── */
+    const len1 = (0.16 + noise(T * 0.11) * 0.46) * TAU;
+    const len2 = (0.10 + noise(T * 0.17 + 7) * 0.3) * TAU;
+    ctx.shadowBlur = 26;
+    ctx.beginPath();
+    ctx.arc(cx, cy, Rc * 1.32, sweep * TAU, sweep * TAU + len1);
+    ctx.strokeStyle = 'rgba(255,255,255,' + (0.5 + energy * 0.4) * collapse + ')';
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, Rc * 1.5, sweep2 * TAU, sweep2 * TAU + len2);
+    ctx.strokeStyle = 'rgba(255,255,255,' + (0.24 + energy * 0.3) * collapse + ')';
+    ctx.lineWidth = 1.1;
+    ctx.stroke();
+
+    /* ── Orbiting particles with fading trails ── */
+    for (const o of orbits) {
+      o.ph += dt * o.sp;
+      const ang = o.ph + T * o.prec;
+      const rr  = Rc * o.r * (1 + 0.08 * noise(T * 0.3 + o.r * 9));
+      const x = cx + Math.cos(ang) * rr;
+      const y = cy + Math.sin(ang) * rr * o.tilt;
+      o.hist.push(x, y);
+      if (o.hist.length > 16) o.hist.splice(0, 2);
+
+      ctx.shadowBlur = 0;
+      ctx.lineWidth = o.sz * 0.7;
+      for (let i = 0; i < o.hist.length - 2; i += 2) {
+        const t = i / (o.hist.length - 2);
+        ctx.beginPath();
+        ctx.moveTo(o.hist[i], o.hist[i + 1]);
+        ctx.lineTo(o.hist[i + 2], o.hist[i + 3]);
+        ctx.strokeStyle = 'rgba(255,255,255,' + (t * 0.20 * collapse).toFixed(3) + ')';
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.arc(x, y, o.sz * (0.9 + bass * 0.7), 0, TAU);
+      ctx.fillStyle = 'rgba(255,255,255,' + (0.55 + treb * 0.45) * collapse + ')';
+      ctx.shadowBlur = 14;
+      ctx.shadowColor = 'rgba(255,255,255,0.9)';
+      ctx.fill();
     }
-    function closeHelp() {
-      document.getElementById('help-overlay').classList.remove('active');
-      setTimeout(() => {
-        const f = document.getElementById('help-form');
-        const s = document.getElementById('hf-success');
-        if (f) { f.reset(); f.style.display = ''; }
-        if (s) s.style.display = '';
-      }, 400);
+
+    /* ── Core orb ── */
+    const orbR = Math.max(0.001, Rc * (0.5 + bass * 0.55));
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, orbR);
+    const boost = state === 'exiting' ? (1 - collapse) * 0.9 : 0;
+    g.addColorStop(0,    'rgba(255,255,255,' + Math.min(1, 0.42 + bass * 0.45 + boost) + ')');
+    g.addColorStop(0.35, 'rgba(255,255,255,' + (0.13 + boost * 0.4) + ')');
+    g.addColorStop(1,    'rgba(255,255,255,0)');
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(cx, cy, orbR, 0, TAU);
+    ctx.fillStyle = g;
+    ctx.fill();
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.shadowBlur = 0;
+
+    /* Status dot rides the bass */
+    if (state === 'live') {
+      dotEl.style.transform = 'scale(' + (1 + bass * 0.9).toFixed(3) + ')';
     }
 
-    document.getElementById('help-btn').addEventListener('click', openHelp);
-    document.getElementById('hf-close').addEventListener('click', closeHelp);
-    document.getElementById('help-overlay').addEventListener('click', e => {
-      if (e.target === document.getElementById('help-overlay')) closeHelp();
-    });
+    rafId = requestAnimationFrame(frame);
+  }
 
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeHelp();
-    });
+  let rafId = requestAnimationFrame(frame);
 
-    document.getElementById('help-form').addEventListener('submit', async e => {
-      e.preventDefault();
-      try {
-        await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(new FormData(e.target)).toString(),
-        });
-      } catch(err) { /* proceeds on live Netlify */ }
-      e.target.style.display = 'none';
+  /* Don't burn cycles in a hidden tab */
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      cancelAnimationFrame(rafId);
+    } else {
+      last = performance.now();
+      rafId = requestAnimationFrame(frame);
+    }
+  });
+
+  /* ════════════════════════════════════════
+     ACTIVATION — first gesture wakes it
+  ════════════════════════════════════════ */
+  const SEQUENCE = [
+    [0,    'Signal Acquired'],
+    [1600, 'Rendering Environment'],
+    [3200, 'System Live']
+  ];
+
+  function activate() {
+    if (state !== 'dormant') return;
+    state = 'live';
+    body.classList.remove('is-dormant');
+    body.classList.add('is-live');
+
+    initAudio();
+    music.play().catch(() => {});
+
+    SEQUENCE.forEach(([ms, text]) => setTimeout(() => {
+      if (state === 'live') stEl.textContent = text;
+    }, ms));
+
+    /* Hold the threshold back so the installation is actually experienced */
+    setTimeout(() => body.classList.add('can-enter'), REDUCE ? 600 : 3400);
+  }
+
+  ['pointerdown', 'touchstart', 'keydown'].forEach(evt =>
+    document.addEventListener(evt, activate, { passive: true })
+  );
+
+  /* ════════════════════════════════════════
+     THRESHOLD
+  ════════════════════════════════════════ */
+  function enterSite() {
+    if (state !== 'live' || !body.classList.contains('can-enter')) return;
+    state = 'exiting';
+    body.classList.add('is-exiting');
+
+    /* Hand the music across to /home so it doesn't restart */
+    try { sessionStorage.setItem('stars_audio_t', String(music.currentTime)); } catch (e) {}
+
+    /* One last bloom on the way out */
+    ripples.push({ r: R * 0.5, a: 0.75 });
+    if (gain && audioCtx) {
+      try { gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.85); } catch (e) {}
+    }
+    setTimeout(() => { window.location.href = '/home'; }, 900);
+  }
+
+  enterBtn.addEventListener('click', enterSite);
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    /* Never steal the key from the access-list form */
+    if (helpOverlay.classList.contains('active')) return;
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+    if (body.classList.contains('can-enter')) { e.preventDefault(); enterSite(); }
+  });
+
+  /* ════════════════════════════════════════
+     HELP / EARLY ACCESS
+  ════════════════════════════════════════ */
+  function openHelp()  { helpOverlay.classList.add('active'); }
+  function closeHelp() {
+    helpOverlay.classList.remove('active');
+    /* Release focus — otherwise it stays trapped in the hidden form and the
+       next Enter fires that form's validation instead of the threshold. */
+    if (document.activeElement && helpOverlay.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+    setTimeout(() => {
+      const f = document.getElementById('help-form');
       const s = document.getElementById('hf-success');
-      s.style.display = 'flex';
-      setTimeout(closeHelp, 3200);
-    });
+      if (f) { f.reset(); f.style.display = ''; }
+      if (s) s.style.display = '';
+    }, 400);
+  }
+
+  document.getElementById('help-btn').addEventListener('click', openHelp);
+  document.getElementById('hf-close').addEventListener('click', closeHelp);
+  helpOverlay.addEventListener('click', e => {
+    if (!e.target.closest('.help-panel')) closeHelp();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeHelp();
+  });
+
+  document.getElementById('help-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(e.target)).toString()
+      });
+    } catch (err) { /* proceeds to success state on live Netlify site */ }
+    e.target.style.display = 'none';
+    document.getElementById('hf-success').style.display = 'flex';
+    setTimeout(closeHelp, 3200);
+  });
   </script>
 </body>
 </html>

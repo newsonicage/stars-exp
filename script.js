@@ -13,6 +13,19 @@ if (hoverSounds[0]) hoverSounds[0].volume = 0.15;
 if (hoverSounds[1]) hoverSounds[1].volume = 0.15;
 if (hoverSounds[2]) hoverSounds[2].volume = 0.55; // hover3 boosted
 
+/* Pick the track up where the splash left off */
+if (music) {
+  try {
+    const handoff = parseFloat(sessionStorage.getItem("stars_audio_t"));
+    if (handoff > 0) {
+      const seek = () => { try { music.currentTime = handoff; } catch (e) {} };
+      if (music.readyState > 0) seek();
+      else music.addEventListener("loadedmetadata", seek, { once: true });
+    }
+    sessionStorage.removeItem("stars_audio_t");
+  } catch (e) { /* sessionStorage unavailable — start from the top */ }
+}
+
 document.body.addEventListener("click", () => {
   if (music) music.play().catch(() => {});
 }, { once: true });
