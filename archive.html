@@ -202,6 +202,60 @@ body::after{
 .rel-body{padding-top:11px;display:flex;align-items:flex-start;gap:9px}
 .rel-t{font-size:12.5px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;line-height:1.35;flex:1}
 .rel-s{font-family:var(--mono);font-size:8.5px;letter-spacing:1.3px;color:var(--ink-38);text-transform:uppercase;margin-top:4px}
+/* featured player */
+.feat{margin-top:24px}
+.feat-frame{position:relative;width:100%;background:#000;border:1px solid var(--rule);overflow:hidden}
+.feat-frame::before{content:'';display:block;padding-bottom:56.25%}
+.feat-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.feat-body{display:flex;align-items:flex-end;gap:20px;padding-top:14px;flex-wrap:wrap}
+.feat-t{font-size:clamp(18px,2.2vw,28px);font-weight:900;letter-spacing:1.6px;text-transform:uppercase;line-height:1.1}
+.feat-s{font-family:var(--mono);font-size:9.5px;letter-spacing:2px;color:var(--ink-38);text-transform:uppercase;margin-top:7px}
+.feat-out{text-decoration:none;border:1px solid var(--ink);color:var(--ink);padding:10px 18px;
+  font-size:9.5px;letter-spacing:2.4px;text-transform:uppercase;white-space:nowrap;transition:all .25s}
+.feat-out:hover{background:var(--ink);color:var(--paper)}
+.rel-art.vid::before{padding-bottom:56.25%}
+
+/* ══════════════════════════════════════
+   FILM — video-led
+══════════════════════════════════════ */
+.f-wrap{padding:0 30px 70px;max-width:var(--maxw);margin:0 auto}
+.f-lead{margin-top:44px;cursor:pointer;opacity:0;transform:translateY(18px);
+  transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.f-lead.in{opacity:1;transform:none}
+.f-screen{position:relative;width:100%;overflow:hidden;background:#000;border:1px solid var(--rule)}
+.f-screen::before{content:'';display:block;padding-bottom:46%}
+.f-screen .ph{position:absolute;inset:0;transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+.f-lead:hover .f-screen .ph{transform:scale(1.03)}
+.f-screen::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,transparent 34%,rgba(0,0,0,.72) 100%)}
+.f-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+  width:66px;height:66px;border-radius:50%;border:1px solid rgba(255,255,255,.6);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;
+  backdrop-filter:blur(3px);background:rgba(0,0,0,.22);transition:transform .35s,background .35s}
+.f-lead:hover .f-play{transform:translate(-50%,-50%) scale(1.09);background:rgba(0,0,0,.4)}
+.f-cap{position:absolute;left:26px;right:26px;bottom:22px;z-index:3;display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.f-cap-t{font-size:clamp(20px,2.6vw,34px);font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:#fff;line-height:1.05;text-shadow:0 2px 26px rgba(0,0,0,.6)}
+.f-cap-s{font-family:var(--mono);font-size:9px;letter-spacing:2.2px;color:rgba(255,255,255,.66);text-transform:uppercase;margin-top:8px}
+.f-rows{margin-top:44px;border-top:1px solid var(--ink)}
+.f-row{display:grid;grid-template-columns:230px 1fr auto;gap:22px;align-items:center;
+  padding:16px 0;border-bottom:1px solid var(--rule);cursor:pointer;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1),background .3s}
+.f-row.in{opacity:1;transform:none}
+.f-row:hover{background:rgba(11,11,11,.03)}
+.f-thumb{position:relative;width:100%;overflow:hidden;background:#000;border:1px solid var(--rule)}
+.f-thumb::before{content:'';display:block;padding-bottom:56.25%}
+.f-thumb .ph{position:absolute;inset:0;transition:transform 1s cubic-bezier(.16,1,.3,1)}
+.f-row:hover .f-thumb .ph{transform:scale(1.06)}
+.f-meta-t{font-size:15px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;line-height:1.3}
+.f-meta-s{font-family:var(--mono);font-size:9px;letter-spacing:1.6px;color:var(--ink-38);text-transform:uppercase;margin-top:6px}
+.f-id{font-family:var(--mono);font-size:8.5px;letter-spacing:1.4px;color:var(--ink-20);white-space:nowrap}
+@media(max-width:640px){
+  .f-row{grid-template-columns:120px 1fr;gap:14px}
+  .f-id{display:none}
+  .f-wrap{padding-left:18px;padding-right:18px}
+}
+
 .vid-slot{
   border:1px dashed var(--rule);display:flex;align-items:center;justify-content:center;
   text-align:center;padding:34px 18px;font-family:var(--mono);font-size:9px;
@@ -542,8 +596,21 @@ const RELEASES = {
     {t:'let it play out!!',       art:'assets/product13.jpg', url:'https://untitled.stream/buy/project/75hkHSf53LC6m9MoUdAtA',    status:'Out Now'},
     {t:'body skin2skin',          art:'assets/product14.jpg', url:null, status:'Coming Soon'}
   ],
-  /* Drop YouTube URLs in here and they render as real cards. */
-  videos:[]
+  /* Newest first. Titles pulled from YouTube, not invented.
+     The alias shift Baby Winbreaker → Stars* is real and worth showing. */
+  videos:[
+    {id:'1NRAE_fnEVo', t:'180',                                      artist:'Stars*',          year:null},
+    {id:'PAjhtZWPA7c', t:'that place (where do all us go?)',         artist:'Stars*',          year:null},
+    {id:'ZFxtdbmYbDs', t:'Tell Me You Love Me Before You Drive Away',artist:'Stars*',          year:null},
+    {id:'A932zQ_TVTs', t:'Panther',                                  artist:'Stars*',          year:2024},
+    {id:'blG58G3OlFk', t:"ALLISON'S LOVER BOY",                      artist:'Stars*',          year:2024},
+    {id:'3nM8o8Q3Vuw', t:'BE BY YOU',                                artist:'Stars*',          year:2023},
+    {id:'bzxuWUiyAI4', t:'DEAD OR ALIVE',                            artist:'Baby Winbreaker', year:2022},
+    {id:'9Z8RtQh213k', t:'IMMEDIATELY',                              artist:'Baby Winbreaker', year:2022},
+    {id:'iAamo2EVY48', t:'INSEYED',                                  artist:'Baby Winbreaker', year:2021},
+    {id:'Zu1zqcfx8vM', t:'HEALTHY PLACE',                            artist:'Baby Winbreaker', year:2021},
+    {id:'Ubu6JnqD6tQ', t:'YÜ',                                       artist:'Baby Winbreaker', year:2020}
+  ]
 };
 const YT_CHANNEL = 'https://youtube.com/@scratchbradley';
 
@@ -556,7 +623,6 @@ const DX_LINES = [
   ["Win'd Jeans",'Denim · Aug–Sept 2019'],['0 Blueprints','Design Archive']
 ];
 
-const UNCATALOGUED = 1180;
 
 /* ══════════════════════════════════════════════════════
    DECRYPT ENGINE
@@ -651,7 +717,7 @@ function renderGrid(hostSel){
   killDecrypts();
   const host=$(hostSel);host.innerHTML='';
   const works=visibleWorks();
-  if(!works.length){host.appendChild(el('div','empty','No entries match'));updateCount(0);return}
+  if(!works.length){host.appendChild(el('div','empty','No entries match'));setCount('0 shown');return}
   workQueue=works.map(w=>w.id);
 
   const groups=new Map();
@@ -672,9 +738,14 @@ function renderGrid(hostSel){
   });
 
   const tail=el('div','uncat');
-  tail.innerHTML='+ <b>'+UNCATALOGUED.toLocaleString()+'</b> uncatalogued assets — not published';
+  tail.appendChild(document.createTextNode('+ '));
+  const us=el('span','mono');
+  tail.appendChild(us);
+  tail.appendChild(document.createTextNode(' uncatalogued — not published'));
+  tail._decrypts=[decryptInto(us,null)];
+  watch(tail);
   host.appendChild(tail);
-  updateCount(works.length);
+  setCount(works.length+' shown');
 }
 
 function card(w){
@@ -696,9 +767,17 @@ function card(w){
   watch(c);return c;
 }
 
-function updateCount(shown){
-  const total=CATALOGUE.length+UNCATALOGUED;
-  $('#sn-count').textContent=total.toLocaleString()+' entries · '+CATALOGUE.length+' public · '+shown+' shown';
+/* The size of the archive is never stated. It scrambles and never resolves —
+   not a false number, just a refusal to give one. What is shown is shown. */
+let countDec=null;
+function setCount(label){
+  const host=$('#sn-count');host.innerHTML='';
+  const n=el('span','mono');n.style.color='var(--unknown)';
+  host.appendChild(n);
+  host.appendChild(document.createTextNode(' in archive · '+label));
+  if(countDec)countDec.stop();
+  countDec=new Decrypt(n,'UNKNOWN','eternal');
+  countDec.start();
 }
 
 /* ══════════════════════════════════════════════════════
@@ -741,17 +820,50 @@ function renderMusic(){
   shelf('Albums',RELEASES.albums,'Album');
   shelf('Singles',RELEASES.singles,'Single');
 
-  /* videos */
+  /* ── featured: newest video, muted autoplay ── */
+  const vids=RELEASES.videos;
+  if(vids.length){
+    const f=vids[0];
+    const fh=el('div','m-head');
+    fh.appendChild(el('h2',null,'Latest Video'));
+    fh.appendChild(el('span',null,f.artist+(f.year?' · '+f.year:'')));
+    wrap.appendChild(fh);
+
+    const feat=el('div','feat');
+    const frame=el('div','feat-frame');
+    const ifr=document.createElement('iframe');
+    /* nocookie + muted: muted is the only way browsers allow autoplay at all */
+    ifr.src='https://www.youtube-nocookie.com/embed/'+f.id+
+            '?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&loop=1&playlist='+f.id;
+    ifr.title=f.t;ifr.loading='lazy';ifr.allow='autoplay; encrypted-media; picture-in-picture';
+    ifr.setAttribute('allowfullscreen','');
+    frame.appendChild(ifr);
+    feat.appendChild(frame);
+    const fb=el('div','feat-body');
+    const ft=el('div');ft.style.flex='1';
+    ft.appendChild(el('div','feat-t',f.t));
+    ft.appendChild(el('div','feat-s mono',f.artist+' · Music Video'+(f.year?' · '+f.year:'')));
+    fb.appendChild(ft);
+    const fo=document.createElement('a');
+    fo.className='feat-out mono';fo.href='https://youtu.be/'+f.id;
+    fo.target='_blank';fo.rel='noopener';fo.textContent='Watch with sound →';
+    fb.appendChild(fo);
+    feat.appendChild(fb);
+    wrap.appendChild(feat);
+  }
+
+  /* ── the rest ── */
+  const rest=vids.slice(1);
   const vh=el('div','m-head');
   vh.appendChild(el('h2',null,'Music Videos'));
-  vh.appendChild(el('span',null,RELEASES.videos.length?RELEASES.videos.length+' videos':'awaiting links'));
+  vh.appendChild(el('span',null,vids.length+' videos'));
   wrap.appendChild(vh);
 
   const vg=el('div','m-grid');
-  if(RELEASES.videos.length){
-    RELEASES.videos.forEach(v=>{
+  if(rest.length){
+    rest.forEach(v=>{
       const n=el('article','rel');
-      const art=el('div','rel-art');
+      const art=el('div','rel-art vid');
       const img=document.createElement('img');
       img.src='https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg';img.alt=v.t;img.loading='lazy';
       art.appendChild(img);
@@ -760,7 +872,7 @@ function renderMusic(){
       const body=el('div','rel-body');
       const t=el('div');t.style.flex='1';
       t.appendChild(el('div','rel-t',v.t));
-      t.appendChild(el('div','rel-s mono','Video · YouTube'));
+      t.appendChild(el('div','rel-s mono',v.artist+(v.year?' · '+v.year:'')));
       body.appendChild(t);n.appendChild(body);
       n.addEventListener('click',()=>window.open('https://youtu.be/'+v.id,'_blank','noopener'));
       io.observe(n);vg.appendChild(n);
@@ -776,7 +888,61 @@ function renderMusic(){
   wrap.appendChild(out);
 
   host.appendChild(wrap);
-  $('#sn-count').textContent=(RELEASES.albums.length+RELEASES.singles.length)+' releases · '+RELEASES.videos.length+' videos';
+  setCount((RELEASES.albums.length+RELEASES.singles.length)+' releases · '+RELEASES.videos.length+' videos');
+}
+
+/* ══════════════════════════════════════════════════════
+   FILM — video-led: a screening list, not a grid
+══════════════════════════════════════════════════════ */
+function renderFilm(){
+  killDecrypts();
+  const host=$('#view-film');host.innerHTML='';
+  const works=visibleWorks();
+  if(!works.length){host.appendChild(el('div','empty','No entries match'));setCount('0 shown');return}
+  workQueue=works.map(w=>w.id);
+
+  const wrap=el('div','f-wrap');
+  const [lead,...rest]=works;
+
+  /* lead screening */
+  const ld=el('div','f-lead');
+  const scr=el('div','f-screen');
+  const ph=el('div','ph');ph.setAttribute('style',placeholder(lead.id,0));
+  scr.appendChild(ph);
+  scr.appendChild(el('div','f-play','▶'));
+  const cap=el('div','f-cap');
+  const capT=el('div');capT.style.flex='1';
+  capT.appendChild(el('div','f-cap-t',lead.title));
+  const capS=el('div','f-cap-s mono');capT.appendChild(capS);
+  cap.appendChild(capT);
+  scr.appendChild(cap);
+  ld.appendChild(scr);
+  ld.addEventListener('click',()=>openWork(lead.id));
+  ld._decrypts=[decryptInto(capS,lead.date)];
+  watch(ld);
+  wrap.appendChild(ld);
+
+  /* the rest as a screening list */
+  const rows=el('div','f-rows');
+  rest.forEach(w=>{
+    const r=el('div','f-row');
+    const th=el('div','f-thumb');
+    const tph=el('div','ph');tph.setAttribute('style',placeholder(w.id,0));
+    th.appendChild(tph);
+    r.appendChild(th);
+    const meta=el('div');
+    meta.appendChild(el('div','f-meta-t',w.title));
+    const ms=el('div','f-meta-s mono');meta.appendChild(ms);
+    r.appendChild(meta);
+    r.appendChild(el('div','f-id mono',w.id));
+    r.addEventListener('click',()=>openWork(w.id));
+    r._decrypts=[decryptInto(ms,w.date)];
+    watch(r);
+    rows.appendChild(r);
+  });
+  wrap.appendChild(rows);
+  host.appendChild(wrap);
+  setCount(works.length+' screenings');
 }
 
 /* ══════════════════════════════════════════════════════
@@ -818,13 +984,14 @@ function renderVenture(){
   foot.appendChild(cta);
   host.appendChild(foot);
 
-  $('#sn-count').textContent=DX_LINES.length+' lines';
+  setCount(DX_LINES.length+' lines');
 }
 
 /* ══════════════════════════════════════════════════════
    WORK VIEW — endless scroll
 ══════════════════════════════════════════════════════ */
 function openWork(id){
+  stopMusic();
   const i=workQueue.indexOf(id);workCursor=i<0?0:i;
   document.body.classList.add('in-work');
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
@@ -994,11 +1161,15 @@ function buildSubnav(){
   });
 }
 
+/* Hiding the view does not stop an iframe — it keeps playing. Tear it out. */
+function stopMusic(){ $('#view-music').innerHTML=''; }
+
 function showSection(id){
+  if(id!=='music')stopMusic();
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
   $('#view-'+id).classList.add('on');
   if(id==='gallery')renderGrid('#view-gallery');
-  else if(id==='film')renderGrid('#view-film');
+  else if(id==='film')renderFilm();
   else if(id==='music')renderMusic();
   else if(id==='venture')renderVenture();
 }
