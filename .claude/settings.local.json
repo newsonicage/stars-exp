@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:untitled.stream)"
+      "WebFetch(domain:untitled.stream)",
+      "PowerShell(git fetch *)",
+      "WebFetch(domain:api.github.com)"
     ]
   }
 }
