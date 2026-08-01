@@ -469,6 +469,7 @@ body.in-work .backbar{transform:none}
   </div>
 </div>
 
+<script src="archive-data.js"></script>
 <script>
 /* ══════════════════════════════════════════════════════
    STARS* ARCHIVE
@@ -498,27 +499,29 @@ const STATUSES = {
   sealed:{label:'Sealed',cls:'s-sealed'}, unknown:{label:'Unknown',cls:'s-unknown'}
 };
 
-/* ── O TABLES — pilot collection, 19 works ── */
-const O_TABLES = [
-  ['BOOBIE BUCLA6','available'],['Change In Communication','unknown'],
-  ['Channeling Frequencies','unknown'],['CÖMA','available'],
-  ['Dreamers Extreme','unknown'],['DUMÖ Effect','available'],
-  ['Earth Burst','unknown'],['Eternal Spin','unknown'],
-  ['Hellish Hues','unknown'],['Iceheart Sparks','unknown'],
-  ['Meet Your Maker','unknown'],['Mirrored','unknown'],
-  ['Mynd Games','unknown'],['Parra Oquatics','unknown'],
-  ['Power of the P','sold'],['Prototype','unknown'],
-  ['Shae Cosmic','unknown'],['Soul Plexus','unknown'],['Time Expire','available']
-];
-
 const CATALOGUE = [];
-O_TABLES.forEach((r,i)=>{
+
+/* ── The catalogue proper: 304 works from the Notion export.
+      Sold status and release dates are real. Everything not
+      recorded stays UNKNOWN rather than being guessed at.
+      Collector names and prices are deliberately withheld. ── */
+PAINTINGS.forEach((p,i)=>{
   CATALOGUE.push({
-    id:'GIP-OT-'+String(i+1).padStart(3,'0'), title:r[0], series:'Ö Table',
-    collection:'O Tables', section:'gallery', group:'furniture', medium:'furniture',
-    status:r[1], date:null, materials:'Mixed Media', dimensions:null,
-    edition:r[0]==='Prototype'?'Prototype · 1 of 1':null, location:null,
-    contributors:[], plates:3+(i%3)
+    id:'GIP-P-'+String(i+1).padStart(3,'0'),
+    title:p.n,
+    series:null,
+    collection:p.c,
+    section:'gallery',
+    group:p.g,
+    medium:p.g==='furniture'?'furniture':'painting',
+    /* "not sold" is not the same as "available" — we only know it hasn't sold */
+    status:p.s?'sold':'unknown',
+    date:p.d,
+    materials:null, dimensions:null, edition:null,
+    /* sold works sit with private owners; the owner is never named */
+    location:p.s?'Private Collection':null,
+    contributors:[],
+    plates:2+(i%4)
   });
 });
 
@@ -533,25 +536,7 @@ const SKELETON = [
   ['Pillows',             'furniture','Furniture & Home',null],
   ['S.O. Taeric Heros',   'furniture','Furniture & Home',null],
   ['Tortured Pieces',     'furniture','Furniture & Home',null],
-  /* COLLECTIONS */
-  ['2019-Breathe Breath',            'collections','Collections',2019],
-  ['2019-Everything Is Awesome',     'collections','Collections',2019],
-  ['2019-Falling Jupiter',           'collections','Collections',2019],
-  ['2019-Huge Disconnect',           'collections','Collections',2019],
-  ['2019-You',                       'collections','Collections',2019],
-  ['2020-COVID',                     'collections','Collections',2020],
-  ['2020-Hott Steam',                'collections','Collections',2020],
-  ['2020-Nothing & Everything',      'collections','Collections',2020],
-  ['2020-Perfect Pop',               'collections','Collections',2020],
-  ['2020-Re(me)m(be)r 2B',           'collections','Collections',2020],
-  ['2020-Whatever You Want It To Be','collections','Collections',2020],
-  ['2021-At The Core',               'collections','Collections',2021],
-  ['2021-Making Space',              'collections','Collections',2021],
-  ['Vicious Cycle',                  'collections','Collections',null],
-  ['Collage Walls',                  'collections','Collections',null],
-  ['Commissions',                    'collections','Commissions',null],
-  ['Stances',                        'collections','Stances',null],
-  /* MURAL */
+  /* MURAL — not covered by the painting catalogue */
   ['XV Selects Mural',    'mural','Murals & Graffiti',null],
   ['12-4-2019',           'mural','Murals & Graffiti',2019],
   ['Murals & Graffiti',   'mural','Murals & Graffiti',null]
