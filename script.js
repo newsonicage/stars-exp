@@ -141,6 +141,10 @@ function closeArchive() {
   document.getElementById("archive-popup").classList.remove("active");
 }
 
+function goArchive() {
+  window.location.href = "/archive";
+}
+
 /* ════════════════════════════════════════
    MUSIC LINK
 ════════════════════════════════════════ */

@@ -8,6 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    /* script.js loads at the end of the document, so a pointer that reaches a
+       pillar before it executes would fire an undefined inline handler. These
+       stubs absorb that; script.js overwrites them with the real functions. */
+    function playHover() {}
+    function goArchive() { window.location.href = '/archive'; }
+  </script>
 </head>
 <body class="theme-dark">
 
@@ -196,7 +203,7 @@
       </div>
     </div>
 
-    <div class="pillar" onmouseenter="playHover(2)" onclick="archiveAlert()">
+    <div class="pillar" onmouseenter="playHover(2)" onclick="goArchive()">
       <div class="pillar-bg"></div>
       <div class="pillar-video-wrap">
         <video src="assets/video2.mp4" autoplay muted loop playsinline></video>
