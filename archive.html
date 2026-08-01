@@ -562,42 +562,63 @@ const STATUSES = {
 
 const CATALOGUE = [];
 
-/* ── Making Space, 2021 — the collections with real plates.
-      The folders are authoritative: many of these are not in the
-      Notion export at all. Each work carries its true dimensions
-      so nothing gets cropped, plus any glow-in-the-dark plates. ── */
+/* ── Plated works: photographed and published. The folders are
+      authoritative here — many are not in the Notion export at all.
+      Each carries true dimensions so nothing is cropped, extra
+      plates where a work was shot more than once, and glow plates
+      where the piece was painted in glow pigment. ── */
 const A = 'assets/archive/';
-const GLOW_DIR = A+'making-space-dark-glow/';
-const msTitles = new Set(MAKING_SPACE.map(m=>m.n.toLowerCase()));
+const platedTitles = PLATED.map(m=>m.n.toLowerCase().trim());
 
-MAKING_SPACE.forEach((m,i)=>{
-  const dir = A+m.d+'/';
-  const isDark = m.d.indexOf('dark')>-1;
+/* Two records describe the same painting only when one title is the other
+   plus a subtitle — "A Covid Revolution" / "A Covid Revolution / We Should
+   All Be Dead Already!". A trailing numeral or numeral-word is NOT a match:
+   "Path of Phury" and "Path of Phury II" are different paintings, and
+   collapsing them would erase real works from the catalogue. */
+const SUBTITLE_SEPS = [' - ',' / ',' : ',' & ',' — '];
+function sameWork(a,b){
+  const x=a.toLowerCase().trim(), y=b.toLowerCase().trim();
+  if(x===y) return true;
+  const s = x.length<y.length ? x : y;
+  const l = x.length<y.length ? y : x;
+  if(!l.startsWith(s)) return false;
+  return SUBTITLE_SEPS.some(sep=>l.slice(s.length).startsWith(sep));
+}
+
+/* PowerShell unwraps single-element arrays, so a work with exactly one
+   plate or one glow capture arrives as a bare object. Normalise both. */
+const arr = v => v==null ? [] : (Array.isArray(v)?v:[v]);
+
+PLATED.forEach((m,i)=>{
+  const dir = A+m.dir+'/';
+  const gdir = A+m.dir+'-glow/';
+  const plates = arr(m.p);
+  const glows  = arr(m.g);
   CATALOGUE.push({
-    id:'GIP-MS'+(isDark?'D':'L')+'-'+String(i+1).padStart(3,'0'),
+    id:'GIP-PL-'+String(i+1).padStart(3,'0'),
     title:m.n, series:null,
-    collection:'Making Space ('+(isDark?'Dark':'Light')+')',
+    collection:m.c,
     section:'gallery', group:'collections', medium:'painting',
     status:m.s?'sold':'unknown',
-    date:'2021',
+    date:m.y?String(m.y):null,
     materials:null, dimensions:null, edition:null,
     location:m.s?'Private Collection':null,
     contributors:[],
-    thumb:dir+'thumb/'+m.slug+'.jpg',
-    images:[dir+'full/'+m.slug+'.jpg'],
-    w:m.w, h:m.h,
+    thumb: plates.length ? dir+'thumb/'+plates[0].s+'.jpg' : null,
+    images: plates.map(p=>dir+'full/'+p.s+'.jpg'),
+    w: plates.length?plates[0].w:null, h: plates.length?plates[0].h:null,
     /* the same painting photographed in the dark */
-    glowThumb: m.g&&m.g.length ? GLOW_DIR+'thumb/'+m.g[0].s+'.jpg' : null,
-    glow: m.g&&m.g.length ? m.g.map(x=>GLOW_DIR+'full/'+x.s+'.jpg') : null,
-    plates:1
+    glowThumb: glows.length ? gdir+'thumb/'+glows[0].s+'.jpg' : null,
+    glow: glows.length ? glows.map(x=>gdir+'full/'+x.s+'.jpg') : null,
+    plates: plates.length||1
   });
 });
 
 /* ── The catalogue proper: 304 works from the Notion export.
-      Titles already carried by Making Space (Light) are skipped so
+      Titles already carried by a plated collection are skipped so
       the same painting is not listed twice.
       Collector names and prices are deliberately withheld. ── */
-PAINTINGS.filter(p=>!msTitles.has(p.n.toLowerCase())).forEach((p,i)=>{
+PAINTINGS.filter(p=>!platedTitles.some(t=>sameWork(t,p.n))).forEach((p,i)=>{
   CATALOGUE.push({
     id:'GIP-P-'+String(i+1).padStart(3,'0'),
     title:p.n,
