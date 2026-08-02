@@ -548,10 +548,12 @@
   /* ════════════════════════════════════════
      THE BLOOM
      A generative loader that never repeats.
-     Driven by a live FFT of the music, value
-     noise, and irrational rotation speeds —
-     it has no loop point and keeps accreting
-     new orbits the longer you stay.
+     One contour, one sweep, one core — the
+     contour is a live FFT of the music. It
+     rests almost bare, then breaks into a
+     movement every ten seconds or so, and
+     the irrational speeds mean it has no
+     loop point to arrive back at.
   ════════════════════════════════════════ */
   const TAU   = Math.PI * 2;
   const body  = document.body;
@@ -618,45 +620,76 @@
     }
   }
 
-  /* ── Orbiting particles — the population grows over time ── */
-  const MAX_ORBITS = 64;
-  const orbits = [];
-  function makeOrbit() {
-    return {
-      r:    0.95 + Math.random() * 2.0,               /* radius × R          */
-      sp:   (0.05 + Math.random() * 0.22) * (Math.random() < 0.5 ? -1 : 1),
-      ph:   Math.random() * TAU,
-      sz:   0.6 + Math.random() * 1.6,
-      tilt: 0.3 + Math.random() * 0.7,                /* ellipse squash      */
-      prec: (Math.random() - 0.5) * 0.05,             /* orbital precession  */
-      hist: []
-    };
-  }
-  for (let i = 0; i < 16; i++) orbits.push(makeOrbit());
+  /* ── The contour — one closed ring, deformed by the spectrum.
+        Mirrored across the vertical axis so it reads as a shape,
+        not as a crowd of bars. ── */
+  const WPTS = 168;
+  const wave = new Float32Array(WPTS);
 
-  /* Forever-evolving: accrete a new orbit, or mutate one once full */
-  setInterval(() => {
-    if (state === 'exiting') return;
-    if (orbits.length < MAX_ORBITS) {
-      orbits.push(makeOrbit());
-    } else {
-      const o = orbits[(Math.random() * orbits.length) | 0];
-      const fresh = makeOrbit();
-      o.r = fresh.r; o.sp = fresh.sp; o.tilt = fresh.tilt; o.prec = fresh.prec;
-      o.hist.length = 0;
-    }
-  }, 18000);
-
-  /* ── Ripples, emitted on detected beats ── */
+  /* ── Ripples — capped, so a busy passage can't stack them up ── */
   const ripples = [];
+  const MAX_RIPPLES = 3;
+  function ripple(r, a) {
+    if (ripples.length >= MAX_RIPPLES) ripples.shift();
+    ripples.push({ r: r, a: a });
+  }
 
   /* ── Frame state ── */
   let last = performance.now();
   let T = 0;                 /* elapsed seconds                  */
   let bass = 0, mid = 0, treb = 0, energy = 0;
   let bassAvg = 0, lastBeat = 0;
-  let sweep = 0, sweep2 = 0, rot = 0;
+  let sweep = 0, rot = 0;
   let collapse = 1;          /* 1 → 0 during the exit implosion  */
+  let climax  = 0;           /* short white bloom after a movement */
+
+  /* ════════════════════════════════════════
+     MOVEMENTS
+     The loader rests, then does one thing —
+     never two at once, never the same twice
+     in a row. All the drama lives here, so
+     the resting state can stay bare.
+  ════════════════════════════════════════ */
+  const ACTS = ['surge', 'inhale', 'spokes', 'eclipse'];
+  let act = null;            /* { name, dur } while a movement runs */
+  let actP = 0;              /* linear   0 → 1  */
+  let actEnv = 0;            /* smooth   0 → 1 → 0 */
+  let nextActAt = 7;
+  let lastActName = '';
+
+  function pickAct() {
+    let n;
+    do { n = ACTS[(Math.random() * ACTS.length) | 0]; } while (n === lastActName);
+    lastActName = n;
+    return n;
+  }
+
+  function updateActs(dt) {
+    climax = Math.max(0, climax - dt * 1.7);
+    if (state === 'exiting') { act = null; actEnv = 0; return; }
+
+    if (!act) {
+      actEnv = 0; actP = 0;
+      if (T >= nextActAt) {
+        act = { name: pickAct(), t0: T, dur: 3.2 + Math.random() * 1.9 };
+        if (act.name === 'surge') ripple(R * 0.85, 0.45);
+      }
+      return;
+    }
+
+    actP = (T - act.t0) / act.dur;
+    if (actP >= 1) {
+      /* the movements that hold something back release it here */
+      if (act.name === 'inhale' || act.name === 'eclipse') {
+        ripple(R * 0.5, 0.75);
+        climax = 1;
+      }
+      act = null; actP = 0; actEnv = 0;
+      nextActAt = T + 9 + Math.random() * 9;
+      return;
+    }
+    actEnv = Math.sin(Math.PI * actP) * (REDUCE ? 0.3 : 1);
+  }
 
   function readAudio() {
     if (analyser) {
@@ -679,11 +712,31 @@
     energy = bass * 0.6 + mid * 0.3 + treb * 0.1;
   }
 
+  /* Spectrum → contour. Smoothed hard in time so the ring breathes
+     with the music instead of flickering with every frame. */
+  function readWave() {
+    const half = WPTS / 2;
+    for (let i = 0; i < WPTS; i++) {
+      const m = Math.abs(i - half) / half;    /* 0 at the seam … 1 opposite */
+      let target;
+      if (analyser) {
+        const raw = freq[Math.floor(m * (freq.length - 1) * 0.62)] / 255;
+        /* the top of the spectrum is always quieter — tilt it back up */
+        target = Math.min(1, Math.pow(raw, 0.8) * (0.8 + 1.4 * m));
+      } else {
+        /* dormant: breathe on noise so the shape still lives */
+        target = 0.14 + 0.26 * noise(m * 4.5 + T * 0.5);
+      }
+      wave[i] += (target - wave[i]) * 0.2;
+    }
+  }
+
   function detectBeat(now) {
     bassAvg += (bass - bassAvg) * 0.06;
-    if (bass > bassAvg * 1.32 && bass > 0.18 && now - lastBeat > 240) {
+    /* a higher bar than before — ripples are now an event, not a texture */
+    if (bass > bassAvg * 1.45 && bass > 0.22 && now - lastBeat > 520) {
       lastBeat = now;
-      ripples.push({ r: R * 0.9, a: 0.5 });
+      ripple(R * 0.95, 0.4);
     }
   }
 
@@ -693,13 +746,42 @@
     T += dt;
 
     readAudio();
+    readWave();
+    updateActs(dt);
     if (state === 'live') detectBeat(now);
     if (state === 'exiting') collapse = Math.max(0, collapse - dt * 1.5);
 
-    /* Irrational speeds → the arcs never realign */
-    rot    += dt * (0.07 + energy * 0.22);
-    sweep  += dt * (0.34 + energy * 1.5);
-    sweep2 -= dt * (0.21 + energy * 0.9) * Math.SQRT2;
+    /* ── What the current movement does to the resting state ── */
+    let ampMul = 1, ringScale = 1, ringAlpha = 1, coreMul = 1, glow = 1, spokes = 0, spin = 0;
+    if (act) {
+      const e = actEnv;
+      if (act.name === 'surge') {
+        /* the contour swells and burns brighter */
+        ampMul = 1 + e * 1.7; glow = 1 + e * 1.8; coreMul = 1 + e * 0.45;
+      } else if (act.name === 'inhale') {
+        /* drawn in tight, then sprung back out */
+        const inP  = Math.min(1, actP / 0.62);
+        const outP = Math.max(0, (actP - 0.62) / 0.38);
+        const inE  = inP  * inP  * (3 - 2 * inP);
+        const outE = outP * outP * (3 - 2 * outP);
+        ringScale = 1 - 0.44 * inE * (1 - outE) + 0.13 * Math.sin(Math.PI * outP);
+        ampMul  = 1 - e * 0.5;
+        coreMul = 1 + e * 0.9;
+      } else if (act.name === 'spokes') {
+        /* the only moment the spectrum is allowed to fan out */
+        spokes = e;
+      } else if (act.name === 'eclipse') {
+        /* everything drains and spins up — the release lands after */
+        ringAlpha = 1 - e * 0.78;
+        coreMul   = 1 - e * 0.85;
+        glow      = 1 - e * 0.6;
+        spin      = e * 1.5;
+      }
+    }
+
+    /* Irrational speeds → nothing ever realigns */
+    rot   += dt * (0.06 + energy * 0.18 + spin);
+    sweep += dt * (0.16 + energy * 0.7) * Math.SQRT2;
 
     const Rc = R * collapse;
     ctx.clearRect(0, 0, W, H);
@@ -730,93 +812,81 @@
       ctx.stroke();
     }
 
-    /* ── Spectrum bloom — mirrored spokes ── */
-    const BINS = 96;
-    ctx.shadowBlur = 12;
+    /* ── The waveform contour — one line, the whole spectrum ── */
+    const ringR = Math.max(0.001, Rc * ringScale);
+    const amp   = 0.4 * ampMul;
     ctx.shadowColor = 'rgba(255,255,255,0.8)';
-    for (let i = 0; i < BINS; i++) {
-      let f;
-      if (analyser) {
-        const raw = freq[Math.floor((i / BINS) * freq.length * 0.72)] / 255;
-        /* Music energy collapses toward the top of the spectrum — tilt it back
-           up, otherwise most spokes flatline and the bloom goes thin. */
-        f = Math.min(1, Math.pow(raw, 0.75) * (0.7 + 1.7 * (i / BINS)));
-      } else {
-        f = 0.10 + 0.42 * noise(i * 0.09 + T * 0.5);
-      }
-      const a   = (i / BINS) * Math.PI;
-      const len = Rc * (0.28 + f * 1.15);
-      const wob = 1 + 0.07 * noise(i * 0.2 + T * 0.7);
-      const alpha = (0.10 + f * 0.55) * collapse;
-      ctx.strokeStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
-      ctx.lineWidth = 1.1 + f * 1.4;
-      for (let s = -1; s <= 1; s += 2) {
-        const ang = s * a - Math.PI / 2 + rot;
-        const ca = Math.cos(ang), sa = Math.sin(ang);
-        ctx.beginPath();
-        ctx.moveTo(cx + ca * Rc * 0.94, cy + sa * Rc * 0.94);
-        ctx.lineTo(cx + ca * (Rc * 0.94 + len * wob), cy + sa * (Rc * 0.94 + len * wob));
-        ctx.stroke();
+    ctx.shadowBlur  = 14 * glow;
+    ctx.strokeStyle = 'rgba(255,255,255,' +
+      ((0.5 + energy * 0.38 + climax * 0.4) * ringAlpha * collapse).toFixed(3) + ')';
+    ctx.lineWidth = 1.3 + energy * 1.1 + climax * 0.8;
+    ctx.beginPath();
+    for (let i = 0; i <= WPTS; i++) {
+      const k   = i % WPTS;
+      const ang = (k / WPTS) * TAU - Math.PI / 2 + rot;
+      const rr  = ringR * (1 + amp * wave[k]);
+      const x = cx + Math.cos(ang) * rr, y = cy + Math.sin(ang) * rr;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+
+    /* ── Fan-out — only ever during a 'spokes' movement ── */
+    if (spokes > 0.01) {
+      const N = 30;
+      ctx.shadowBlur = 10 * glow;
+      for (let i = 0; i < N; i++) {
+        const m = i / (N - 1);
+        const f = analyser
+          ? Math.min(1, Math.pow(freq[Math.floor(m * (freq.length - 1) * 0.62)] / 255, 0.8) * (0.8 + 1.4 * m))
+          : 0.14 + 0.3 * noise(m * 4.5 + T * 0.5);
+        const len = Rc * (0.16 + f * 1.05) * spokes;
+        ctx.strokeStyle = 'rgba(255,255,255,' + ((0.16 + f * 0.5) * spokes * collapse).toFixed(3) + ')';
+        ctx.lineWidth = 1.1 + f * 1.3;
+        /* the contour carries this same band at this same angle — start each
+           spoke just off the crest, so the fan reads as the ring throwing
+           the spectrum off itself */
+        const k  = Math.floor((WPTS / 2) * (1 - m));
+        const r0 = ringR * (1.05 + amp * wave[k]);
+        for (let s = -1; s <= 1; s += 2) {
+          const ang = s * (1 - m) * Math.PI - Math.PI / 2 + rot;
+          const ca = Math.cos(ang), sa = Math.sin(ang);
+          ctx.beginPath();
+          ctx.moveTo(cx + ca * r0, cy + sa * r0);
+          ctx.lineTo(cx + ca * (r0 + len), cy + sa * (r0 + len));
+          ctx.stroke();
+        }
       }
     }
 
-    /* ── Core ring ── */
+    /* ── The one sweep — a single arc, and the point that leads it.
+          Its gap never closes, so the loader never resolves. ── */
+    const sweepR = Rc * 1.62;
+    const arcLen = (0.12 + noise(T * 0.11) * 0.34) * TAU;
+    const sweepA = sweep * TAU;
+    ctx.shadowBlur = 22 * glow;
     ctx.beginPath();
-    ctx.arc(cx, cy, Rc * 0.94, 0, TAU);
-    ctx.strokeStyle = 'rgba(255,255,255,' + (0.26 + energy * 0.4) * collapse + ')';
-    ctx.lineWidth = 1.2;
-    ctx.shadowBlur = 18;
+    ctx.arc(cx, cy, sweepR, sweepA, sweepA + arcLen);
+    ctx.strokeStyle = 'rgba(255,255,255,' +
+      ((0.34 + energy * 0.3) * ringAlpha * collapse).toFixed(3) + ')';
+    ctx.lineWidth = 1.6;
     ctx.stroke();
 
-    /* ── The never-ending sweep — the gap never closes ── */
-    const len1 = (0.16 + noise(T * 0.11) * 0.46) * TAU;
-    const len2 = (0.10 + noise(T * 0.17 + 7) * 0.3) * TAU;
-    ctx.shadowBlur = 26;
+    const lx = cx + Math.cos(sweepA + arcLen) * sweepR;
+    const ly = cy + Math.sin(sweepA + arcLen) * sweepR;
     ctx.beginPath();
-    ctx.arc(cx, cy, Rc * 1.32, sweep * TAU, sweep * TAU + len1);
-    ctx.strokeStyle = 'rgba(255,255,255,' + (0.5 + energy * 0.4) * collapse + ')';
-    ctx.lineWidth = 2.2;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(cx, cy, Rc * 1.5, sweep2 * TAU, sweep2 * TAU + len2);
-    ctx.strokeStyle = 'rgba(255,255,255,' + (0.24 + energy * 0.3) * collapse + ')';
-    ctx.lineWidth = 1.1;
-    ctx.stroke();
-
-    /* ── Orbiting particles with fading trails ── */
-    for (const o of orbits) {
-      o.ph += dt * o.sp;
-      const ang = o.ph + T * o.prec;
-      const rr  = Rc * o.r * (1 + 0.08 * noise(T * 0.3 + o.r * 9));
-      const x = cx + Math.cos(ang) * rr;
-      const y = cy + Math.sin(ang) * rr * o.tilt;
-      o.hist.push(x, y);
-      if (o.hist.length > 16) o.hist.splice(0, 2);
-
-      ctx.shadowBlur = 0;
-      ctx.lineWidth = o.sz * 0.7;
-      for (let i = 0; i < o.hist.length - 2; i += 2) {
-        const t = i / (o.hist.length - 2);
-        ctx.beginPath();
-        ctx.moveTo(o.hist[i], o.hist[i + 1]);
-        ctx.lineTo(o.hist[i + 2], o.hist[i + 3]);
-        ctx.strokeStyle = 'rgba(255,255,255,' + (t * 0.20 * collapse).toFixed(3) + ')';
-        ctx.stroke();
-      }
-      ctx.beginPath();
-      ctx.arc(x, y, o.sz * (0.9 + bass * 0.7), 0, TAU);
-      ctx.fillStyle = 'rgba(255,255,255,' + (0.55 + treb * 0.45) * collapse + ')';
-      ctx.shadowBlur = 14;
-      ctx.shadowColor = 'rgba(255,255,255,0.9)';
-      ctx.fill();
-    }
+    ctx.arc(lx, ly, 1.6 + bass * 1.7, 0, TAU);
+    ctx.fillStyle = 'rgba(255,255,255,' + ((0.6 + treb * 0.4) * ringAlpha * collapse).toFixed(3) + ')';
+    ctx.shadowBlur = 14;
+    ctx.fill();
 
     /* ── Core orb ── */
-    const orbR = Math.max(0.001, Rc * (0.5 + bass * 0.55));
+    const orbR = Math.max(0.001, Rc * (0.46 + bass * 0.5) * ringScale);
     const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, orbR);
-    const boost = state === 'exiting' ? (1 - collapse) * 0.9 : 0;
-    g.addColorStop(0,    'rgba(255,255,255,' + Math.min(1, 0.42 + bass * 0.45 + boost) + ')');
-    g.addColorStop(0.35, 'rgba(255,255,255,' + (0.13 + boost * 0.4) + ')');
+    const boost = (state === 'exiting' ? (1 - collapse) * 0.9 : 0) + climax * 0.45;
+    const core  = Math.max(0, coreMul);
+    g.addColorStop(0,    'rgba(255,255,255,' + Math.min(1, (0.4 + bass * 0.42) * core + boost).toFixed(3) + ')');
+    g.addColorStop(0.35, 'rgba(255,255,255,' + (0.12 * core + boost * 0.4).toFixed(3) + ')');
     g.addColorStop(1,    'rgba(255,255,255,0)');
     ctx.shadowBlur = 0;
     ctx.beginPath();
@@ -889,7 +959,8 @@
     try { sessionStorage.setItem('stars_audio_t', String(music.currentTime)); } catch (e) {}
 
     /* One last bloom on the way out */
-    ripples.push({ r: R * 0.5, a: 0.75 });
+    ripple(R * 0.5, 0.75);
+    climax = 1;
     if (gain && audioCtx) {
       try { gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.85); } catch (e) {}
     }
