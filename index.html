@@ -6,7 +6,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
   <title>Stars*</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,6 +15,8 @@
       --green:      #39ff6e;
       --green-glow: rgba(57,255,110,0.5);
       --white:      #f0f4ff;
+      /* same stack the archive sets — the scrambling reads as one hand */
+      --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
     html, body {
@@ -64,112 +66,175 @@
       );
     }
 
-    /* ── The Bloom — generative loader canvas ── */
-    #viz {
-      position: fixed;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      will-change: transform;
-    }
-
     /* ══════════════════════════════════════
-       DORMANT — the invitation
+       THE TERMINAL — one column, centred.
+       Everything the splash says, it says in
+       glyphs that resolve out of noise.
     ══════════════════════════════════════ */
-    .invite {
+    .term {
       position: fixed;
-      /* sits where the threshold button will appear — invitation becomes ENTER */
-      top: 80%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 10;
+      width: 460px;
+      max-width: 88vw;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      font-family: var(--mono);
+      font-variant-ligatures: none;
+      animation: termIn 1.2s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes termIn {
+      from { opacity: 0; transform: translate(-50%, calc(-50% + 12px)); }
+      to   { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    /* ── Wordmark — scrambles until you touch it, then locks ── */
+    .term-mark {
+      font-family: 'Nunito', sans-serif;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 16px;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--white);
+      text-shadow: 0 0 26px rgba(255,255,255,0.35);
+      white-space: nowrap;
+      /* the glyphs are wider than the mark — hold the box steady */
+      min-height: 42px;
+      margin-bottom: 22px;
+    }
+    .term-mark.is-noise { color: rgba(255,255,255,0.5); font-size: 22px; letter-spacing: 10px; }
+
+    .term-rule {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22) 18%, rgba(255,255,255,0.22) 82%, transparent);
+    }
+
+    /* ── The log — one row per system, dot-leaders between.
+          Sealed shut until the first gesture, then it opens. ── */
+    .term-log {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      padding: 0 2px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 1.1s cubic-bezier(0.16,1,0.3,1), padding 1.1s cubic-bezier(0.16,1,0.3,1);
+    }
+    body.is-live .term-log { max-height: 200px; padding: 18px 2px; }
+    .row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 9.5px;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .row.in { opacity: 1; }
+    .row-k { color: rgba(255,255,255,0.42); white-space: nowrap; }
+    .row-dots {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      color: rgba(255,255,255,0.12);
+      letter-spacing: 3px;
+      transform: translateY(-2px);
+    }
+    .row-v {
+      color: var(--green);
+      text-shadow: 0 0 12px rgba(57,255,110,0.45);
+      white-space: nowrap;
+      min-width: 62px;
+      text-align: right;
+    }
+    .row-v.is-pending { color: rgba(255,255,255,0.45); text-shadow: none; }
+    /* the signal row carries the music instead of a word */
+    .row-v.is-meter {
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 0 14px rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+      min-width: 120px;
+      font-size: 11px;
+    }
+
+    .term-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-top: 14px;
+      font-size: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      min-height: 20px;
+    }
+    .term-foot .caret { color: var(--green); animation: caretBlink 1.15s steps(1) infinite; }
+    @keyframes caretBlink { 0%,55% { opacity: 1; } 56%,100% { opacity: 0; } }
+    .node-id { color: rgba(255,255,255,0.45); letter-spacing: 1.6px; }
+    /* the caret takes the beat */
+    #foot-l { transition: color 0.18s ease; }
+    #foot-l.hit { color: rgba(255,255,255,0.72); }
+    #foot-l.hit .caret { color: #fff; text-shadow: 0 0 14px rgba(255,255,255,0.9); animation: none; opacity: 1; }
+
+    /* ── DORMANT: the invitation, sat where ENTER will land ── */
+    .invite {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-align: center;
       cursor: pointer;
-      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16,1,0.3,1);
-      animation: inviteIn 1.4s cubic-bezier(0.16,1,0.3,1) both;
-    }
-    @keyframes inviteIn {
-      from { opacity: 0; transform: translate(-50%, calc(-50% + 14px)); }
-      to   { opacity: 1; transform: translate(-50%, -50%); }
+      padding-top: 20px;
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
     }
     .invite-text {
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 7px;
       text-transform: uppercase;
       color: rgba(255,255,255,0.82);
-      text-shadow: 0 0 18px rgba(255,255,255,0.55);
+      text-shadow: 0 0 18px rgba(255,255,255,0.5);
       animation: inviteBreathe 2.6s ease-in-out infinite;
     }
     @keyframes inviteBreathe {
-      0%,100% { opacity: 1;    text-shadow: 0 0 18px rgba(255,255,255,0.55); }
+      0%,100% { opacity: 1;    text-shadow: 0 0 18px rgba(255,255,255,0.5); }
       50%     { opacity: 0.42; text-shadow: 0 0 6px  rgba(255,255,255,0.18); }
     }
     .invite-sub {
       font-size: 8px;
-      font-weight: 700;
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.36);
+      color: rgba(255,255,255,0.32);
     }
     body.is-live .invite {
-      /* kill inviteIn — its `both` fill-mode would out-rank these declarations */
       animation: none;
       opacity: 0;
       pointer-events: none;
-      transform: translate(-50%, calc(-50% - 18px));
+      height: 0;
+      padding: 0;
+      overflow: hidden;
+      transform: translateY(-10px);
     }
 
-    /* ══════════════════════════════════════
-       LIVE — status + threshold
-    ══════════════════════════════════════ */
+    /* ── LIVE: the threshold ── */
     .hud {
-      position: fixed;
-      top: 80%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 22px;
-      width: 300px;
-      max-width: 84vw;
+      padding-top: 20px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 1.1s ease;
     }
     body.is-live .hud { opacity: 1; pointer-events: auto; }
 
-    .status-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 22px rgba(255,255,255,0.45);
-      flex-shrink: 0;
-      /* live scale is driven by the audio in JS */
-      transform: scale(1);
-    }
-    .status-text {
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-      white-space: nowrap;
-    }
-
-    /* ── Threshold button — holds back until you've experienced it ── */
+    /* ── Threshold button — holds back until the boot has run ── */
     #enter-btn {
       width: 100%;
       padding: 15px 24px;
@@ -177,9 +242,9 @@
       border-radius: 50px;
       background: transparent;
       color: var(--white);
-      font-family: 'Nunito', sans-serif;
-      font-size: 13px;
-      font-weight: 900;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
       letter-spacing: 7px;
       text-transform: uppercase;
       cursor: pointer;
@@ -477,22 +542,29 @@
     <source src="assets/music.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- THE BLOOM — never-ending generative loader -->
-  <canvas id="viz"></canvas>
+  <!-- THE TERMINAL — the startup sequence, written in glyphs -->
+  <div class="term" id="term">
+    <div class="term-mark is-noise" id="term-mark">STARS*</div>
 
-  <!-- DORMANT: the invitation -->
-  <div class="invite" id="invite">
-    <span class="invite-text">Touch to Begin</span>
-    <span class="invite-sub">Sound On · Headphones Recommended</span>
-  </div>
+    <div class="term-rule"></div>
+    <div class="term-log" id="term-log"></div>
+    <div class="term-rule"></div>
 
-  <!-- LIVE: status + threshold -->
-  <div class="hud" id="hud">
-    <div class="status-row">
-      <div class="status-dot" id="status-dot"></div>
-      <span class="status-text" id="status-text">Signal Acquired</span>
+    <div class="term-foot">
+      <span id="foot-l"></span>
+      <span id="foot-r"></span>
     </div>
-    <button id="enter-btn">Enter</button>
+
+    <!-- DORMANT: the invitation -->
+    <div class="invite" id="invite">
+      <span class="invite-text">Touch to Begin</span>
+      <span class="invite-sub">Sound On · Headphones Recommended</span>
+    </div>
+
+    <!-- LIVE: the threshold -->
+    <div class="hud" id="hud">
+      <button id="enter-btn">Enter</button>
+    </div>
   </div>
 
   <div class="flash"></div>
@@ -544,24 +616,23 @@
     </div>
   </div>
 
+  <script src="scramble.js"></script>
   <script>
   /* ════════════════════════════════════════
-     THE BLOOM
-     A generative loader that never repeats.
-     One contour, one sweep, one core — the
-     contour is a live FFT of the music. It
-     rests almost bare, then breaks into a
-     movement every ten seconds or so, and
-     the irrational speeds mean it has no
-     loop point to arrive back at.
+     STARTUP
+     Nothing here is drawn — it is typed.
+     Every value arrives as noise and decrypts
+     into itself, on the same engine the
+     archive runs (scramble.js). The music
+     drives how hard the glyphs churn, and the
+     signal row is the spectrum, in characters.
   ════════════════════════════════════════ */
-  const TAU   = Math.PI * 2;
-  const body  = document.body;
-  const music = document.getElementById('bg-music');
-  const cvs   = document.getElementById('viz');
-  const ctx   = cvs.getContext('2d');
-  const dotEl = document.getElementById('status-dot');
-  const stEl  = document.getElementById('status-text');
+  const body   = document.body;
+  const music  = document.getElementById('bg-music');
+  const markEl = document.getElementById('term-mark');
+  const logEl  = document.getElementById('term-log');
+  const footL  = document.getElementById('foot-l');
+  const footR  = document.getElementById('foot-r');
   const enterBtn = document.getElementById('enter-btn');
   const helpOverlay = document.getElementById('help-overlay');
 
@@ -569,30 +640,12 @@
 
   let state = 'dormant';   /* dormant → live → exiting */
 
-  /* ── Value noise (deterministic, smooth, non-repeating in practice) ── */
+  /* ── Value noise — keeps the meter alive when there's no Web Audio ── */
   function hash(n) { const s = Math.sin(n) * 43758.5453123; return s - Math.floor(s); }
   function noise(x) {
     const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f);
     return hash(i) * (1 - u) + hash(i + 1) * u;
   }
-
-  /* ── Canvas sizing ── */
-  let W = 0, H = 0, cx = 0, cy = 0, R = 0;
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth; H = window.innerHeight;
-    cvs.width  = Math.round(W * dpr);
-    cvs.height = Math.round(H * dpr);
-    cvs.style.width  = W + 'px';
-    cvs.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cx = W / 2;
-    cy = H * 0.43;
-    /* Clamped so the bloom never grows into the HUD on short or narrow viewports */
-    R  = Math.min(Math.max(Math.min(W, H) * 0.115, 62), H * 0.155);
-  }
-  resize();
-  window.addEventListener('resize', resize);
 
   /* ── Audio graph (built inside the activating gesture) ── */
   let audioCtx = null, analyser = null, freq = null, gain = null;
@@ -620,312 +673,124 @@
     }
   }
 
-  /* ── The contour — one closed ring, deformed by the spectrum.
-        Mirrored across the vertical axis so it reads as a shape,
-        not as a crowd of bars. ── */
-  const WPTS = 168;
-  const wave = new Float32Array(WPTS);
-
-  /* ── Ripples — capped, so a busy passage can't stack them up ── */
-  const ripples = [];
-  const MAX_RIPPLES = 3;
-  function ripple(r, a) {
-    if (ripples.length >= MAX_RIPPLES) ripples.shift();
-    ripples.push({ r: r, a: a });
-  }
-
-  /* ── Frame state ── */
-  let last = performance.now();
-  let T = 0;                 /* elapsed seconds                  */
-  let bass = 0, mid = 0, treb = 0, energy = 0;
-  let bassAvg = 0, lastBeat = 0;
-  let sweep = 0, rot = 0;
-  let collapse = 1;          /* 1 → 0 during the exit implosion  */
-  let climax  = 0;           /* short white bloom after a movement */
-
   /* ════════════════════════════════════════
-     MOVEMENTS
-     The loader rests, then does one thing —
-     never two at once, never the same twice
-     in a row. All the drama lives here, so
-     the resting state can stay bare.
+     THE LOG
+     Five systems. Four of them answer; the
+     fifth is the music and never settles.
   ════════════════════════════════════════ */
-  const ACTS = ['surge', 'inhale', 'spokes', 'eclipse'];
-  let act = null;            /* { name, dur } while a movement runs */
-  let actP = 0;              /* linear   0 → 1  */
-  let actEnv = 0;            /* smooth   0 → 1 → 0 */
-  let nextActAt = 7;
-  let lastActName = '';
+  const ROWS = [
+    { k: 'Boot',         v: 'OK'       },
+    { k: 'Audio',        v: 'LIVE'     },
+    { k: 'Environment',  v: 'RENDERED' },
+    { k: 'Archive Link', v: 'OPEN'     },
+    { k: 'Signal',       v: null, meter: true }
+  ];
 
-  function pickAct() {
-    let n;
-    do { n = ACTS[(Math.random() * ACTS.length) | 0]; } while (n === lastActName);
-    lastActName = n;
-    return n;
-  }
+  ROWS.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const k = document.createElement('span'); k.className = 'row-k';
+    const d = document.createElement('span'); d.className = 'row-dots';
+    d.textContent = '·'.repeat(80);
+    const v = document.createElement('span');
+    v.className = 'row-v' + (r.meter ? ' is-meter' : ' is-pending');
+    row.append(k, d, v);
+    logEl.appendChild(row);
+    r.el = row; r.kEl = k; r.vEl = v;
+  });
 
-  function updateActs(dt) {
-    climax = Math.max(0, climax - dt * 1.7);
-    if (state === 'exiting') { act = null; actEnv = 0; return; }
+  /* ── The spectrum, drawn in blocks ── */
+  const BLOCKS  = '▁▂▃▄▅▆▇█';
+  const METER_N = 16;
+  const level   = new Float32Array(METER_N);
+  const meterEl = ROWS[ROWS.length - 1].vEl;
 
-    if (!act) {
-      actEnv = 0; actP = 0;
-      if (T >= nextActAt) {
-        act = { name: pickAct(), t0: T, dur: 3.2 + Math.random() * 1.9 };
-        if (act.name === 'surge') ripple(R * 0.85, 0.45);
-      }
-      return;
-    }
-
-    actP = (T - act.t0) / act.dur;
-    if (actP >= 1) {
-      /* the movements that hold something back release it here */
-      if (act.name === 'inhale' || act.name === 'eclipse') {
-        ripple(R * 0.5, 0.75);
-        climax = 1;
-      }
-      act = null; actP = 0; actEnv = 0;
-      nextActAt = T + 9 + Math.random() * 9;
-      return;
-    }
-    actEnv = Math.sin(Math.PI * actP) * (REDUCE ? 0.3 : 1);
-  }
+  let energy = 0, bass = 0, bassAvg = 0, lastBeat = 0, T = 0, lastT = performance.now();
 
   function readAudio() {
     if (analyser) {
       analyser.getByteFrequencyData(freq);
       const n = freq.length;
-      const bEnd = Math.floor(n * 0.08), mEnd = Math.floor(n * 0.38);
-      let b = 0, m = 0, h = 0;
-      for (let i = 0;    i < bEnd; i++) b += freq[i];
-      for (let i = bEnd; i < mEnd; i++) m += freq[i];
-      for (let i = mEnd; i < n;    i++) h += freq[i];
-      bass = b / (bEnd * 255);
-      mid  = m / ((mEnd - bEnd) * 255);
-      treb = h / ((n - mEnd) * 255);
+      const bEnd = Math.floor(n * 0.08);
+      let b = 0, all = 0;
+      for (let i = 0; i < bEnd; i++) b += freq[i];
+      for (let i = 0; i < n;    i++) all += freq[i];
+      bass   = b / (bEnd * 255);
+      energy = all / (n * 255);
     } else {
-      /* Dormant (or no Web Audio): breathe on noise so it still evolves */
-      bass = 0.15 + 0.09 * Math.sin(T * 0.9);
-      mid  = 0.11 + 0.07 * noise(T * 0.35);
-      treb = 0.06 + 0.05 * noise(T * 0.6 + 11);
+      bass   = 0.14 + 0.10 * Math.sin(T * 2.6);
+      energy = 0.12 + 0.08 * noise(T * 0.7);
     }
-    energy = bass * 0.6 + mid * 0.3 + treb * 0.1;
   }
 
-  /* Spectrum → contour. Smoothed hard in time so the ring breathes
-     with the music instead of flickering with every frame. */
-  function readWave() {
-    const half = WPTS / 2;
-    for (let i = 0; i < WPTS; i++) {
-      const m = Math.abs(i - half) / half;    /* 0 at the seam … 1 opposite */
-      let target;
+  function drawMeter() {
+    let out = '';
+    for (let i = 0; i < METER_N; i++) {
+      const m = i / (METER_N - 1);
+      let f;
       if (analyser) {
-        const raw = freq[Math.floor(m * (freq.length - 1) * 0.62)] / 255;
         /* the top of the spectrum is always quieter — tilt it back up */
-        target = Math.min(1, Math.pow(raw, 0.8) * (0.8 + 1.4 * m));
+        const raw = freq[Math.floor(m * (freq.length - 1) * 0.62)] / 255;
+        f = Math.min(1, Math.pow(raw, 0.8) * (0.85 + 1.3 * m));
       } else {
-        /* dormant: breathe on noise so the shape still lives */
-        target = 0.14 + 0.26 * noise(m * 4.5 + T * 0.5);
+        f = 0.18 + 0.42 * noise(m * 4.5 + T * 1.6);
       }
-      wave[i] += (target - wave[i]) * 0.2;
+      level[i] += (f - level[i]) * 0.3;
+      out += BLOCKS[Math.min(BLOCKS.length - 1, Math.round(level[i] * (BLOCKS.length - 1)))];
     }
+    meterEl.textContent = out;
   }
 
-  function detectBeat(now) {
-    bassAvg += (bass - bassAvg) * 0.06;
-    /* a higher bar than before — ripples are now an event, not a texture */
-    if (bass > bassAvg * 1.45 && bass > 0.22 && now - lastBeat > 520) {
-      lastBeat = now;
-      ripple(R * 0.95, 0.4);
-    }
-  }
+  function tick(now) {
+    const dt = Math.min((now - lastT) / 1000, 0.05);
+    lastT = now; T += dt;
 
-  function frame(now) {
-    const dt = Math.min((now - last) / 1000, 0.05);
-    last = now;
-    T += dt;
-
-    readAudio();
-    readWave();
-    updateActs(dt);
-    if (state === 'live') detectBeat(now);
-    if (state === 'exiting') collapse = Math.max(0, collapse - dt * 1.5);
-
-    /* ── What the current movement does to the resting state ── */
-    let ampMul = 1, ringScale = 1, ringAlpha = 1, coreMul = 1, glow = 1, spokes = 0, spin = 0;
-    if (act) {
-      const e = actEnv;
-      if (act.name === 'surge') {
-        /* the contour swells and burns brighter */
-        ampMul = 1 + e * 1.7; glow = 1 + e * 1.8; coreMul = 1 + e * 0.45;
-      } else if (act.name === 'inhale') {
-        /* drawn in tight, then sprung back out */
-        const inP  = Math.min(1, actP / 0.62);
-        const outP = Math.max(0, (actP - 0.62) / 0.38);
-        const inE  = inP  * inP  * (3 - 2 * inP);
-        const outE = outP * outP * (3 - 2 * outP);
-        ringScale = 1 - 0.44 * inE * (1 - outE) + 0.13 * Math.sin(Math.PI * outP);
-        ampMul  = 1 - e * 0.5;
-        coreMul = 1 + e * 0.9;
-      } else if (act.name === 'spokes') {
-        /* the only moment the spectrum is allowed to fan out */
-        spokes = e;
-      } else if (act.name === 'eclipse') {
-        /* everything drains and spins up — the release lands after */
-        ringAlpha = 1 - e * 0.78;
-        coreMul   = 1 - e * 0.85;
-        glow      = 1 - e * 0.6;
-        spin      = e * 1.5;
-      }
-    }
-
-    /* Irrational speeds → nothing ever realigns */
-    rot   += dt * (0.06 + energy * 0.18 + spin);
-    sweep += dt * (0.16 + energy * 0.7) * Math.SQRT2;
-
-    const Rc = R * collapse;
-    ctx.clearRect(0, 0, W, H);
-
-    /* Soft shadow anchor so the white still reads once the video brightens */
-    const anchor = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(0.001, Rc * 2.1));
-    anchor.addColorStop(0,   'rgba(0,0,0,' + (0.5 * collapse).toFixed(3) + ')');
-    anchor.addColorStop(0.6, 'rgba(0,0,0,' + (0.26 * collapse).toFixed(3) + ')');
-    anchor.addColorStop(1,   'rgba(0,0,0,0)');
-    ctx.fillStyle = anchor;
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.globalCompositeOperation = 'lighter';
-    ctx.lineCap = 'round';
-
-    /* ── Ripples ── */
-    for (let i = ripples.length - 1; i >= 0; i--) {
-      const p = ripples[i];
-      p.r += dt * (140 + energy * 200);
-      p.a -= dt * 0.55;
-      if (p.a <= 0) { ripples.splice(i, 1); continue; }
-      ctx.beginPath();
-      ctx.arc(cx, cy, p.r * collapse, 0, TAU);
-      ctx.strokeStyle = 'rgba(255,255,255,' + p.a.toFixed(3) + ')';
-      ctx.lineWidth = 1;
-      ctx.shadowBlur = 16;
-      ctx.shadowColor = 'rgba(255,255,255,0.7)';
-      ctx.stroke();
-    }
-
-    /* ── The waveform contour — one line, the whole spectrum ── */
-    const ringR = Math.max(0.001, Rc * ringScale);
-    const amp   = 0.4 * ampMul;
-    ctx.shadowColor = 'rgba(255,255,255,0.8)';
-    ctx.shadowBlur  = 14 * glow;
-    ctx.strokeStyle = 'rgba(255,255,255,' +
-      ((0.5 + energy * 0.38 + climax * 0.4) * ringAlpha * collapse).toFixed(3) + ')';
-    ctx.lineWidth = 1.3 + energy * 1.1 + climax * 0.8;
-    ctx.beginPath();
-    for (let i = 0; i <= WPTS; i++) {
-      const k   = i % WPTS;
-      const ang = (k / WPTS) * TAU - Math.PI / 2 + rot;
-      const rr  = ringR * (1 + amp * wave[k]);
-      const x = cx + Math.cos(ang) * rr, y = cy + Math.sin(ang) * rr;
-      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-    ctx.stroke();
-
-    /* ── Fan-out — only ever during a 'spokes' movement ── */
-    if (spokes > 0.01) {
-      const N = 30;
-      ctx.shadowBlur = 10 * glow;
-      for (let i = 0; i < N; i++) {
-        const m = i / (N - 1);
-        const f = analyser
-          ? Math.min(1, Math.pow(freq[Math.floor(m * (freq.length - 1) * 0.62)] / 255, 0.8) * (0.8 + 1.4 * m))
-          : 0.14 + 0.3 * noise(m * 4.5 + T * 0.5);
-        const len = Rc * (0.16 + f * 1.05) * spokes;
-        ctx.strokeStyle = 'rgba(255,255,255,' + ((0.16 + f * 0.5) * spokes * collapse).toFixed(3) + ')';
-        ctx.lineWidth = 1.1 + f * 1.3;
-        /* the contour carries this same band at this same angle — start each
-           spoke just off the crest, so the fan reads as the ring throwing
-           the spectrum off itself */
-        const k  = Math.floor((WPTS / 2) * (1 - m));
-        const r0 = ringR * (1.05 + amp * wave[k]);
-        for (let s = -1; s <= 1; s += 2) {
-          const ang = s * (1 - m) * Math.PI - Math.PI / 2 + rot;
-          const ca = Math.cos(ang), sa = Math.sin(ang);
-          ctx.beginPath();
-          ctx.moveTo(cx + ca * r0, cy + sa * r0);
-          ctx.lineTo(cx + ca * (r0 + len), cy + sa * (r0 + len));
-          ctx.stroke();
-        }
-      }
-    }
-
-    /* ── The one sweep — a single arc, and the point that leads it.
-          Its gap never closes, so the loader never resolves. ── */
-    const sweepR = Rc * 1.62;
-    const arcLen = (0.12 + noise(T * 0.11) * 0.34) * TAU;
-    const sweepA = sweep * TAU;
-    ctx.shadowBlur = 22 * glow;
-    ctx.beginPath();
-    ctx.arc(cx, cy, sweepR, sweepA, sweepA + arcLen);
-    ctx.strokeStyle = 'rgba(255,255,255,' +
-      ((0.34 + energy * 0.3) * ringAlpha * collapse).toFixed(3) + ')';
-    ctx.lineWidth = 1.6;
-    ctx.stroke();
-
-    const lx = cx + Math.cos(sweepA + arcLen) * sweepR;
-    const ly = cy + Math.sin(sweepA + arcLen) * sweepR;
-    ctx.beginPath();
-    ctx.arc(lx, ly, 1.6 + bass * 1.7, 0, TAU);
-    ctx.fillStyle = 'rgba(255,255,255,' + ((0.6 + treb * 0.4) * ringAlpha * collapse).toFixed(3) + ')';
-    ctx.shadowBlur = 14;
-    ctx.fill();
-
-    /* ── Core orb ── */
-    const orbR = Math.max(0.001, Rc * (0.46 + bass * 0.5) * ringScale);
-    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, orbR);
-    const boost = (state === 'exiting' ? (1 - collapse) * 0.9 : 0) + climax * 0.45;
-    const core  = Math.max(0, coreMul);
-    g.addColorStop(0,    'rgba(255,255,255,' + Math.min(1, (0.4 + bass * 0.42) * core + boost).toFixed(3) + ')');
-    g.addColorStop(0.35, 'rgba(255,255,255,' + (0.12 * core + boost * 0.4).toFixed(3) + ')');
-    g.addColorStop(1,    'rgba(255,255,255,0)');
-    ctx.shadowBlur = 0;
-    ctx.beginPath();
-    ctx.arc(cx, cy, orbR, 0, TAU);
-    ctx.fillStyle = g;
-    ctx.fill();
-
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.shadowBlur = 0;
-
-    /* Status dot rides the bass */
     if (state === 'live') {
-      dotEl.style.transform = 'scale(' + (1 + bass * 0.9).toFixed(3) + ')';
+      readAudio();
+      /* the whole site's scrambling churns harder on the loud passages */
+      Scramble.energy = Math.min(1, energy * 1.6);
+      drawMeter();
+
+      /* a beat pushes the caret */
+      bassAvg += (bass - bassAvg) * 0.06;
+      if (bass > bassAvg * 1.4 && bass > 0.2 && now - lastBeat > 420) {
+        lastBeat = now;
+        footL.classList.add('hit');
+        setTimeout(() => footL.classList.remove('hit'), 130);
+      }
     }
-
-    rafId = requestAnimationFrame(frame);
+    raf = requestAnimationFrame(tick);
   }
-
-  let rafId = requestAnimationFrame(frame);
+  let raf = requestAnimationFrame(tick);
 
   /* Don't burn cycles in a hidden tab */
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      cancelAnimationFrame(rafId);
+      cancelAnimationFrame(raf);
     } else {
-      last = performance.now();
-      rafId = requestAnimationFrame(frame);
+      lastT = performance.now();
+      raf = requestAnimationFrame(tick);
     }
   });
 
   /* ════════════════════════════════════════
-     ACTIVATION — first gesture wakes it
+     DORMANT — the mark is still encrypted
   ════════════════════════════════════════ */
-  const SEQUENCE = [
-    [0,    'Signal Acquired'],
-    [1600, 'Rendering Environment'],
-    [3200, 'System Live']
-  ];
+  const markNoise = new Decrypt(markEl, 'STARS*', 'eternal');
+  markNoise.start();
 
+  footL.innerHTML = '<span class="caret">▮</span> Dormant';
+  /* Which node you're on is never stated. It scrambles and never resolves —
+     the archive refuses to give its size the same way. */
+  footR.textContent = 'Node ';
+  const nodeEl = document.createElement('span');
+  nodeEl.className = 'node-id';
+  footR.appendChild(nodeEl);
+  new Decrypt(nodeEl, '########', 'eternal').start();
+
+  /* ════════════════════════════════════════
+     ACTIVATION — the first gesture boots it
+  ════════════════════════════════════════ */
   function activate() {
     if (state !== 'dormant') return;
     state = 'live';
@@ -935,12 +800,54 @@
     initAudio();
     music.play().catch(() => {});
 
-    SEQUENCE.forEach(([ms, text]) => setTimeout(() => {
-      if (state === 'live') stEl.textContent = text;
-    }, ms));
+    /* the mark stops churning and resolves into itself */
+    markNoise.stop();
+    markEl.classList.remove('is-noise');
+    scrambleTo(markEl, 'STARS*');
 
-    /* Hold the threshold back so the installation is actually experienced */
+    const step = REDUCE ? 90 : 520;
+    ROWS.forEach((r, i) => setTimeout(() => {
+      if (state === 'exiting') return;
+      r.el.classList.add('in');
+      scrambleTo(r.kEl, r.k.toUpperCase(), () => {
+        if (r.meter) return;                    /* the signal answers in blocks */
+        r.vEl.classList.remove('is-pending');
+        scrambleTo(r.vEl, r.v);
+      });
+    }, 380 + i * step));
+
+    setTimeout(() => {
+      if (state !== 'live') return;
+      footL.innerHTML = '<span class="caret">▮</span> Awaiting Entry';
+      startResync();
+    }, 380 + ROWS.length * step);
+
+    /* Hold the threshold back so the sequence is actually watched */
     setTimeout(() => body.classList.add('can-enter'), REDUCE ? 600 : 3400);
+  }
+
+  /* ════════════════════════════════════════
+     RESYNC — the standing drama.
+     Every few seconds one line loses its
+     footing and has to decrypt itself again.
+  ════════════════════════════════════════ */
+  let resyncTimer = null;
+  function startResync() {
+    const next = () => {
+      resyncTimer = setTimeout(() => {
+        if (state !== 'live') return;
+        if (Math.random() < 0.25) {
+          /* the mark itself slips */
+          scrambleTo(markEl, 'STARS*');
+        } else {
+          const pool = ROWS.filter(r => !r.meter);
+          const r = pool[(Math.random() * pool.length) | 0];
+          scrambleTo(r.vEl, r.v);
+        }
+        next();
+      }, 5200 + Math.random() * 5200);
+    };
+    if (!REDUCE) next();
   }
 
   ['pointerdown', 'touchstart', 'keydown'].forEach(evt =>
@@ -958,13 +865,21 @@
     /* Hand the music across to /home so it doesn't restart */
     try { sessionStorage.setItem('stars_audio_t', String(music.currentTime)); } catch (e) {}
 
-    /* One last bloom on the way out */
-    ripple(R * 0.5, 0.75);
-    climax = 1;
+    /* Everything it just told you comes apart on the way out */
+    clearTimeout(resyncTimer);
+    killDecrypts();
+    footL.innerHTML = '<span class="caret">▮</span> Crossing';
+    ROWS.forEach(r => {
+      if (r.meter) return;
+      new Decrypt(r.vEl, r.v, 'eternal').start();
+    });
+    new Decrypt(markEl, 'STARS*', 'eternal').start();
+
     if (gain && audioCtx) {
       try { gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.85); } catch (e) {}
     }
-    setTimeout(() => { window.location.href = '/home'; }, 900);
+    /* long enough that the log is seen coming apart before the black lands */
+    setTimeout(() => { window.location.href = '/home'; }, 1150);
   }
 
   enterBtn.addEventListener('click', enterSite);
