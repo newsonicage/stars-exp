@@ -4,7 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stars* Interface</title>
+  <meta name="description" content="Stars* — furniture, art, merch and music. Upgrade You out now.">
+  <link rel="canonical" href="https://scratchbradley.com/home">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
+
+  <!-- ── Link preview. Without these the domain pastes into a DM as a
+       bare grey URL, which is a click thrown away every single time. ── -->
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="Stars*">
+  <meta property="og:title"       content="Stars* — Upgrade You out now">
+  <meta property="og:description" content="Furniture, art, merch and music.">
+  <meta property="og:url"         content="https://scratchbradley.com/home">
+  <meta property="og:image"       content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:title"      content="Stars* — Upgrade You out now">
+  <meta name="twitter:description" content="Furniture, art, merch and music.">
+  <meta name="twitter:image"      content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -14,6 +32,11 @@
        stubs absorb that; script.js overwrites them with the real functions. */
     function playHover() {}
     function goArchive() { window.location.href = '/archive'; }
+    function goMusic()   { window.location.href = '/music'; }
+    /* analytics.js also loads at the end — a card clicked before it does
+       must still reach the store, just uncounted. */
+    window.Stars = window.Stars || {};
+    window.Stars.out = window.Stars.out || function (url) { window.open(url, '_blank', 'noopener'); };
   </script>
 </head>
 <body class="theme-dark">
@@ -181,6 +204,42 @@
 </div>
 
 <!-- HERO -->
+<!-- ══════════════════════════════════════════
+     RELEASE BAND — the newest record, at the door.
+     Deliberately static markup rather than rendered
+     from music-data.js: this is the first paint of
+     the site's front page and must not wait on a
+     script. music-data.js stays the catalog's source
+     of truth — when a new single lands, add it there
+     and swap the five values below to match.
+══════════════════════════════════════════ -->
+<section class="release-band">
+  <div class="rb-head">
+    <a class="rb-art" href="/upgrade-you" aria-label="Upgrade You — release page">
+      <img src="assets/upgrade-you.jpg" alt="Upgrade You — Stars* &amp; SammO cover art"
+           width="184" height="184" fetchpriority="high">
+    </a>
+    <div class="rb-body">
+      <div class="rb-tag">
+        <span class="rb-dot"></span>
+        <span class="rb-tagtxt">New Release</span>
+      </div>
+      <a class="rb-title" href="/upgrade-you">Upgrade You</a>
+      <p class="rb-by">Stars* <b>&amp;</b> SammO</p>
+    </div>
+  </div>
+  <div class="rb-cta">
+    <a class="rb-buy"
+       href="https://untitled.stream/buy/project/NVZR6Foikt80sX1cZs3ew"
+       target="_blank" rel="noopener"
+       data-track="Buy" data-release="Upgrade You" data-surface="home" data-service="untitled">
+      <span>Buy on untitled</span>
+      <span aria-hidden="true">→</span>
+    </a>
+    <a class="rb-more" href="/upgrade-you">Listen &amp; more →</a>
+  </div>
+</section>
+
 <section class="hero">
   <div class="pillars" id="pillars">
 
@@ -401,6 +460,7 @@
       <span class="section-dot"></span>
       <span class="section-label">Music</span>
       <span class="section-rule-line"></span>
+      <a class="section-more" href="/music">Open the record store →</a>
     </div>
 
     <!-- Albums -->
@@ -419,7 +479,7 @@
             <div class="phov-content">
               <div class="phov-title">Endless</div>
               <div class="phov-type">Album · Stars*</div>
-              <div class="phov-cta">Stream Now →</div>
+              <div class="phov-cta">Notify Me →</div>
             </div>
           </div>
         </div>
@@ -436,7 +496,7 @@
       <!-- product9: Heart of the Underworld -->
       <div class="product-card music-product"
            onmouseenter="playHover(3)"
-           onclick="window.open('https://untitled.stream/library/project/NQrbZCfBX8EdlnnKm7VXx','_blank')">
+           onclick="Stars.out(&quot;https://untitled.stream/library/project/NQrbZCfBX8EdlnnKm7VXx&quot;,{release:&quot;Heart of the Underworld&quot;,surface:&quot;home-music&quot;,service:&quot;untitled&quot;,event:&quot;Stream&quot;})">
         <div class="product-img-wrap">
           <img src="assets/product9.jpg" alt="Heart of the Underworld">
           <div class="music-overlay">
@@ -477,7 +537,7 @@
             <div class="phov-content">
               <div class="phov-title">body skin2skin</div>
               <div class="phov-type">Single · Stars*</div>
-              <div class="phov-cta">Stream Now →</div>
+              <div class="phov-cta">Notify Me →</div>
             </div>
           </div>
         </div>
@@ -494,7 +554,7 @@
       <!-- product1: Pussy Poppin -->
       <div class="product-card music-product"
            onmouseenter="playHover(1)"
-           onclick="window.open('https://untitled.stream/buy/project/uSGiPOOatSAYuy0fGThNX','_blank')">
+           onclick="Stars.out(&quot;https://untitled.stream/buy/project/uSGiPOOatSAYuy0fGThNX&quot;,{release:&quot;Pussy Poppin&quot;,surface:&quot;home-music&quot;,service:&quot;untitled&quot;,event:&quot;Buy&quot;})">
         <div class="product-img-wrap">
           <img src="assets/product1.jpg" alt="Pussy Poppin">
           <div class="music-overlay">
@@ -503,7 +563,7 @@
             <div class="phov-content">
               <div class="phov-title">Pussy Poppin</div>
               <div class="phov-type">Single · Stars*</div>
-              <div class="phov-cta">Stream Now →</div>
+              <div class="phov-cta">Buy Now →</div>
             </div>
           </div>
         </div>
@@ -520,7 +580,7 @@
       <!-- product2: The Lust We Love -->
       <div class="product-card music-product"
            onmouseenter="playHover(2)"
-           onclick="window.open('https://untitled.stream/library/project/9huV2PQNFV599EyUYhODA','_blank')">
+           onclick="Stars.out(&quot;https://untitled.stream/library/project/9huV2PQNFV599EyUYhODA&quot;,{release:&quot;The Lust We Love&quot;,surface:&quot;home-music&quot;,service:&quot;untitled&quot;,event:&quot;Stream&quot;})">
         <div class="product-img-wrap">
           <img src="assets/product2.jpg" alt="The Lust We Love">
           <div class="music-overlay">
@@ -546,7 +606,7 @@
       <!-- product10: take it off -->
       <div class="product-card music-product"
            onmouseenter="playHover(3)"
-           onclick="window.open('https://untitled.stream/library/project/NZVMM3NKhydA7A3nemNxG','_blank')">
+           onclick="Stars.out(&quot;https://untitled.stream/library/project/NZVMM3NKhydA7A3nemNxG&quot;,{release:&quot;take it off&quot;,surface:&quot;home-music&quot;,service:&quot;untitled&quot;,event:&quot;Stream&quot;})">
         <div class="product-img-wrap">
           <img src="assets/product10.jpg" alt="take it off">
           <div class="music-overlay">
@@ -572,7 +632,7 @@
       <!-- product12: Ghost In The City (1995) -->
       <div class="product-card music-product"
            onmouseenter="playHover(1)"
-           onclick="window.open('https://untitled.stream/buy/project/JDEPnFXhxhSBSaxNSzElN','_blank')">
+           onclick="Stars.out(&quot;https://untitled.stream/buy/project/JDEPnFXhxhSBSaxNSzElN&quot;,{release:&quot;Ghost In The City (1995)&quot;,surface:&quot;home-music&quot;,service:&quot;untitled&quot;,event:&quot;Buy&quot;})">
         <div class="product-img-wrap">
           <img src="assets/product12.jpg" alt="Ghost In The City (1995)">
           <div class="music-overlay">
@@ -581,7 +641,7 @@
             <div class="phov-content">
               <div class="phov-title">Ghost In The City (1995)</div>
               <div class="phov-type">Single · Stars*</div>
-              <div class="phov-cta">Stream Now →</div>
+              <div class="phov-cta">Buy Now →</div>
             </div>
           </div>
         </div>
@@ -598,7 +658,7 @@
       <!-- product13: let it play out!! -->
       <div class="product-card music-product"
            onmouseenter="playHover(2)"
-           onclick="window.open('https://untitled.stream/buy/project/75hkHSf53LC6m9MoUdAtA','_blank')">
+           onclick="Stars.out(&quot;https://untitled.stream/buy/project/75hkHSf53LC6m9MoUdAtA&quot;,{release:&quot;let it play out!!&quot;,surface:&quot;home-music&quot;,service:&quot;untitled&quot;,event:&quot;Buy&quot;})">
         <div class="product-img-wrap">
           <img src="assets/product13.jpg" alt="let it play out!!">
           <div class="music-overlay">
@@ -607,7 +667,7 @@
             <div class="phov-content">
               <div class="phov-title">let it play out!!</div>
               <div class="phov-type">Single · Stars*</div>
-              <div class="phov-cta">Stream Now →</div>
+              <div class="phov-cta">Buy Now →</div>
             </div>
           </div>
         </div>
@@ -839,6 +899,7 @@
 </div>
 
 <script src="shopify.js"></script>
+<script src="analytics.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

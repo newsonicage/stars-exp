@@ -148,8 +148,11 @@ function goArchive() {
 /* ════════════════════════════════════════
    MUSIC LINK
 ════════════════════════════════════════ */
+/* Pillar 03 used to hand the visitor to a third-party smart link, which
+   meant the front door of the music left the site entirely. It now opens
+   the catalog, and the catalog owns the outbound links. */
 function goMusic() {
-  window.open("https://too.fm/pussypoppin", "_blank");
+  window.location.href = "/music";
 }
 
 /* ════════════════════════════════════════
@@ -262,7 +265,9 @@ function showCopyToast(msg) {
 }
 
 function copySiteLink() {
-  navigator.clipboard.writeText("https://starsinfern0.com").then(() => {
+  /* starsinfern0.com no longer resolves to this site — the share button was
+     handing out a dead link every time someone pressed it. */
+  navigator.clipboard.writeText("https://scratchbradley.com").then(() => {
     showCopyToast("Link Copied!");
   });
 }

@@ -5,6 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
   <title>Stars*</title>
+  <meta name="description" content="Stars* — furniture, art, merch and music.">
+  <link rel="canonical" href="https://scratchbradley.com/">
+
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="Stars*">
+  <meta property="og:title"       content="Stars*">
+  <meta property="og:description" content="Furniture, art, merch and music. Upgrade You out now.">
+  <meta property="og:url"         content="https://scratchbradley.com/">
+  <meta property="og:image"       content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:title"      content="Stars*">
+  <meta name="twitter:description" content="Furniture, art, merch and music. Upgrade You out now.">
+  <meta name="twitter:image"      content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
+
+  <!-- ══════════════════════════════════════════
+       THE THRESHOLD, ONCE.
+       The boot sequence is the site's front door and it
+       should stay that way — but only the first time.
+       Someone who already crossed it this week and came
+       back is not a new arrival, and making them watch
+       it again is a toll, not a ritual.
+
+       Inline and above everything else on purpose: it has
+       to decide before the first paint, or the splash
+       flashes up and yanks itself away.
+  ══════════════════════════════════════════ -->
+  <script>
+    (function () {
+      var DAYS = 7;
+      try {
+        /* An explicit ?enter=1 always shows the splash — that is the link
+           to send when you want someone to get the full thing. */
+        if (location.search.indexOf('enter=1') > -1) { localStorage.removeItem('stars_crossed'); return; }
+        var last = parseInt(localStorage.getItem('stars_crossed') || '0', 10);
+        if (last && (Date.now() - last) < DAYS * 864e5) {
+          location.replace('/home');
+        }
+      } catch (e) { /* private mode — everyone gets the front door */ }
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
@@ -616,6 +659,7 @@
     </div>
   </div>
 
+  <script src="analytics.js"></script>
   <script src="scramble.js"></script>
   <script>
   /* ════════════════════════════════════════
@@ -822,8 +866,11 @@
       startResync();
     }, 380 + ROWS.length * step);
 
-    /* Hold the threshold back so the sequence is actually watched */
-    setTimeout(() => body.classList.add('can-enter'), REDUCE ? 600 : 3400);
+    /* Hold the threshold back so the sequence is actually watched.
+       Long enough that the boot reads as a boot, short enough that
+       it is never the reason someone leaves. Tune here. */
+    const HOLD_MS = 1800;
+    setTimeout(() => body.classList.add('can-enter'), REDUCE ? 600 : HOLD_MS);
   }
 
   /* ════════════════════════════════════════
@@ -864,6 +911,9 @@
 
     /* Hand the music across to /home so it doesn't restart */
     try { sessionStorage.setItem('stars_audio_t', String(music.currentTime)); } catch (e) {}
+    /* Remember the crossing — the head script reads this and lets a
+       returning visitor straight through for the next week. */
+    try { localStorage.setItem('stars_crossed', String(Date.now())); } catch (e) {}
 
     /* Everything it just told you comes apart on the way out */
     clearTimeout(resyncTimer);
