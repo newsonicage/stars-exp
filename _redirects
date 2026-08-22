@@ -4,3 +4,17 @@
 /home         /home.html  200
 /archive.html /archive 301
 /archive      /archive.html  200
+
+# Music — the catalog as a real page, not a scroll anchor
+/music.html   /music   301
+/music        /music.html  200
+
+# Release pages. These are the links that get posted; they bypass the
+# splash entirely, so arriving from a story lands on the record itself.
+# One line per release — add the next single above this comment's twin.
+/upgrade-you.html /upgrade-you 301
+/upgrade-you      /upgrade-you.html 200
+
+# Short alias so "scratchbradley.com/new" always points at whatever the
+# newest release is. Repoint this one line each time something drops.
+/new          /upgrade-you  302

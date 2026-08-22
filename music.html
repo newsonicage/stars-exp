@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stars* · Music</title>
+<meta name="description" content="The Stars* catalog — albums and singles. Own them on untitled.">
+<link rel="canonical" href="https://scratchbradley.com/music">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
+
+<meta property="og:type"        content="website">
+<meta property="og:site_name"   content="Stars*">
+<meta property="og:title"       content="Stars* · Music">
+<meta property="og:description" content="The full catalog. Albums and singles.">
+<meta property="og:url"         content="https://scratchbradley.com/music">
+<meta property="og:image"       content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:image"      content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --black:#050505;
+  --room:#0a0a0b;
+  --white:#f0f4ff;
+  --green:#39ff6e;
+  --green-glow:rgba(57,255,110,.5);
+  --pink:#ff3b9a;
+  --warm:#ff5e35;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:'Nunito',system-ui,sans-serif;
+  --maxw:1500px;
+  --rule:rgba(255,255,255,.09);
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--room);color:var(--white);
+  font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.mono{font-family:var(--mono);font-variant-ligatures:none}
+img{display:block}
+
+/* ══════════════════════════════════════
+   BAND — the same sticky nav language the
+   archive uses, so the two pages read as
+   rooms in one building.
+══════════════════════════════════════ */
+.band{
+  position:sticky;top:0;z-index:500;display:flex;
+  background:var(--black);border-bottom:1px solid rgba(255,255,255,.06);
+}
+.band::before,.band::after{
+  content:'';position:absolute;left:0;right:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent 0%,var(--pink) 45%,rgba(255,255,255,.95) 50%,var(--pink) 55%,transparent 100%);
+  background-size:40% 100%;animation:trace 4s linear infinite;opacity:.45;
+}
+.band::before{top:0}
+.band::after{bottom:0;animation-direction:reverse;opacity:.24}
+@keyframes trace{0%{background-position:-60% 0}100%{background-position:160% 0}}
+
+.bk{
+  flex:1;height:104px;position:relative;cursor:pointer;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-right:1px solid rgba(255,255,255,.05);background:transparent;
+  transition:flex .5s cubic-bezier(.16,1,.3,1),background .4s,box-shadow .4s,height .4s cubic-bezier(.16,1,.3,1);
+  -webkit-tap-highlight-color:transparent;
+}
+.bk:last-child{border-right:none}
+.bk:hover{flex:1.3}
+.bk-home{flex:0 0 60px;border-right:1px solid rgba(255,255,255,.05);text-decoration:none}
+.bk-home:hover{flex:0 0 60px}
+.bk-star{font-size:15px;color:rgba(255,255,255,.34);transition:color .3s,text-shadow .3s}
+.bk-home:hover .bk-star{color:#fff;text-shadow:0 0 14px rgba(255,255,255,.7)}
+.bk-num{
+  font-family:var(--mono);font-size:8px;letter-spacing:3.4px;margin-bottom:8px;
+  color:rgba(255,59,154,.4);transition:opacity .3s,transform .4s;
+}
+.bk:hover .bk-num,.band.compact .bk-num{opacity:0;transform:translateY(-6px)}
+.bk-title{
+  font-family:var(--sans);font-weight:900;text-transform:uppercase;
+  font-size:clamp(11px,1.2vw,16px);letter-spacing:clamp(2px,.4vw,5px);
+  color:rgba(255,255,255,.3);text-align:center;padding:0 8px;
+  transform:translateY(3px) scale(.96);
+  transition:color .4s,text-shadow .4s,transform .4s,font-size .35s,letter-spacing .35s;
+}
+.bk:hover .bk-title,.bk.on .bk-title{color:#fff;text-shadow:0 0 22px rgba(255,59,154,.6);transform:none}
+.bk-rule{width:0;height:2px;margin-top:10px;background:var(--pink);box-shadow:0 0 12px rgba(255,59,154,.7);transition:width .45s cubic-bezier(.16,1,.3,1)}
+.bk:hover .bk-rule,.bk.on .bk-rule{width:42px}
+.bk:hover{background:rgba(255,59,154,.08);box-shadow:inset 0 0 60px rgba(255,59,154,.06),0 0 0 1px rgba(255,59,154,.22)}
+.band.compact .bk{height:52px}
+.band.compact .bk-title{font-size:clamp(9px,.85vw,11px);letter-spacing:clamp(1.6px,.3vw,3px);transform:none}
+.band.compact .bk-rule{margin-top:6px}
+
+/* ══════════════════════════════════════
+   COUNTER STRIP — count + how you browse
+══════════════════════════════════════ */
+.strip{
+  position:sticky;z-index:490;top:104px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:11px clamp(16px,3vw,34px);
+  background:rgba(5,5,5,.9);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+  transition:top .4s cubic-bezier(.16,1,.3,1);
+}
+.band.compact ~ .strip{top:52px}
+.strip-count{
+  font-family:var(--mono);font-size:9px;letter-spacing:2.8px;text-transform:uppercase;
+  color:rgba(255,255,255,.4);white-space:nowrap;
+}
+.strip-count b{color:var(--white);font-weight:500}
+.views{display:flex;gap:0;border:1px solid rgba(255,255,255,.14);border-radius:50px;overflow:hidden}
+.view-btn{
+  padding:7px 15px;background:transparent;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:2.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.4);transition:background .25s,color .25s;
+  -webkit-tap-highlight-color:transparent;
+}
+.view-btn.on{background:rgba(255,59,154,.16);color:#fff}
+.view-btn:not(.on):hover{color:rgba(255,255,255,.75)}
+
+/* ══════════════════════════════════════
+   FRONT WINDOW — what's new, at the door
+══════════════════════════════════════ */
+.window{
+  max-width:var(--maxw);margin:0 auto;
+  padding:clamp(26px,4vw,46px) clamp(16px,3vw,34px) 0;
+}
+.win-inner{
+  position:relative;display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);
+  gap:clamp(20px,3vw,38px);align-items:center;
+  padding:clamp(20px,3vw,34px);
+  border:1px solid rgba(255,94,53,.24);border-radius:4px;
+  background:
+    radial-gradient(70% 130% at 12% 30%, rgba(255,94,53,.13), transparent 70%),
+    rgba(255,255,255,.017);
+  overflow:hidden;
+}
+.win-inner::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--warm),transparent);
+  background-size:45% 100%;animation:trace 5s linear infinite;opacity:.6;
+}
+.win-art{position:relative;aspect-ratio:1/1;border-radius:3px;overflow:hidden;background:#000;cursor:pointer}
+.win-art img{width:100%;height:100%;object-fit:cover}
+.win-art::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.win-body{display:flex;flex-direction:column;align-items:flex-start}
+.win-tag{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.win-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;
+  box-shadow:0 0 8px var(--green-glow);animation:blink 1.5s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.12}}
+.win-tagtxt{font-family:var(--mono);font-size:8.5px;letter-spacing:3.6px;text-transform:uppercase;color:rgba(255,255,255,.46)}
+.win-title{font-weight:900;font-size:clamp(28px,4.4vw,52px);line-height:1;letter-spacing:-.5px;text-transform:uppercase;margin-bottom:10px}
+.win-by{font-family:var(--mono);font-size:12px;letter-spacing:1.8px;color:rgba(255,255,255,.75);margin-bottom:4px}
+.win-credit{font-family:var(--mono);font-size:9px;letter-spacing:2.4px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:22px}
+.win-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* ══════════════════════════════════════
+   THE ONE BUTTON — same shape everywhere
+══════════════════════════════════════ */
+.buy{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:15px 30px;border:2px solid var(--green);border-radius:50px;
+  background:rgba(57,255,110,.09);color:var(--green);
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;position:relative;overflow:hidden;
+  box-shadow:0 0 20px rgba(57,255,110,.14);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,background .3s,color .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.buy::before{
+  content:'';position:absolute;top:0;bottom:0;left:-120%;width:55%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  transition:left .55s ease;pointer-events:none;
+}
+.buy:hover{transform:scale(1.03);background:var(--green);color:#031a08;box-shadow:0 0 32px var(--green-glow)}
+.buy:hover::before{left:170%}
+.buy:active{transform:scale(.98);transition-duration:.08s}
+
+.ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 24px;border:1px solid rgba(255,255,255,.2);border-radius:50px;
+  background:transparent;color:rgba(255,255,255,.66);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;
+  transition:border-color .25s,color .25s,background .25s,transform .25s;
+  -webkit-tap-highlight-color:transparent;
+}
+.ghost:hover{border-color:rgba(255,255,255,.62);color:#fff;background:rgba(255,255,255,.05);transform:translateY(-2px)}
+
+/* ══════════════════════════════════════
+   RACKS
+══════════════════════════════════════ */
+.racks{max-width:var(--maxw);margin:0 auto;padding:clamp(30px,4vw,54px) clamp(16px,3vw,34px) 80px}
+.rack{margin-bottom:clamp(34px,4vw,58px)}
+.rack:last-child{margin-bottom:0}
+.rack.hidden{display:none}
+.rack-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.rack-dot{width:6px;height:6px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px rgba(255,59,154,.7);flex-shrink:0}
+.rack-label{font-family:var(--mono);font-size:9.5px;letter-spacing:4.4px;text-transform:uppercase;color:rgba(255,255,255,.5);white-space:nowrap}
+.rack-line{flex:1;height:1px;background:linear-gradient(90deg,var(--rule),transparent)}
+.rack-n{font-family:var(--mono);font-size:8.5px;letter-spacing:2px;color:rgba(255,255,255,.24)}
+
+/* ── SHELF: flipping through the bin ── */
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:clamp(14px,1.8vw,26px)}
+.rec{
+  position:relative;cursor:pointer;background:transparent;border:none;padding:0;
+  text-align:left;color:inherit;font:inherit;
+  -webkit-tap-highlight-color:transparent;
+}
+.rec-sleeve{
+  position:relative;aspect-ratio:1/1;border-radius:3px;overflow:hidden;background:#000;
+  transition:transform .42s cubic-bezier(.16,1,.3,1),box-shadow .42s;
+}
+.rec-sleeve img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1),filter .4s}
+.rec-sleeve::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);
+  /* the sheen down a record sleeve as you tilt it out of the bin */
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.07) 48%,transparent 58%);
+  background-size:250% 100%;background-position:150% 0;
+  transition:background-position .7s ease;
+}
+.rec:hover .rec-sleeve{transform:translateY(-7px);box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 0 1px rgba(255,59,154,.32)}
+.rec:hover .rec-sleeve::after{background-position:-70% 0}
+.rec:hover .rec-sleeve img{transform:scale(1.05)}
+.rec:focus-visible .rec-sleeve{outline:2px solid var(--pink);outline-offset:3px}
+
+.rec-frame{position:absolute;width:18px;height:18px;z-index:2;opacity:0;transition:opacity .3s}
+.rec:hover .rec-frame{opacity:.9}
+.rec-frame.tl{top:8px;left:8px;border-top:1.5px solid var(--pink);border-left:1.5px solid var(--pink)}
+.rec-frame.tr{top:8px;right:8px;border-top:1.5px solid var(--pink);border-right:1.5px solid var(--pink)}
+.rec-frame.bl{bottom:8px;left:8px;border-bottom:1.5px solid var(--pink);border-left:1.5px solid var(--pink)}
+.rec-frame.br{bottom:8px;right:8px;border-bottom:1.5px solid var(--pink);border-right:1.5px solid var(--pink)}
+
+.rec-meta{display:flex;flex-direction:column;gap:3px;padding:12px 2px 0}
+.rec-name{font-weight:800;font-size:13.5px;letter-spacing:.3px;color:rgba(255,255,255,.92);line-height:1.25}
+.rec-artist{font-family:var(--mono);font-size:9px;letter-spacing:1.6px;color:rgba(255,255,255,.38)}
+.rec-badge{display:flex;align-items:center;gap:6px;margin-top:5px}
+.rec-bdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.rec-blabel{font-family:var(--mono);font-size:8px;letter-spacing:2.2px;text-transform:uppercase}
+.is-available .rec-bdot{background:var(--green);box-shadow:0 0 7px var(--green-glow)}
+.is-available .rec-blabel{color:rgba(57,255,110,.75)}
+.is-soon .rec-bdot{background:#ffb800;box-shadow:0 0 7px rgba(255,184,0,.6)}
+.is-soon .rec-blabel{color:rgba(255,184,0,.7)}
+.rec-new{
+  position:absolute;top:8px;left:8px;z-index:3;
+  padding:4px 8px;border-radius:2px;background:var(--warm);color:#160500;
+  font-family:var(--mono);font-size:7.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  box-shadow:0 0 16px rgba(255,94,53,.6);
+}
+
+/* ── LIST: the store's back-of-counter index ── */
+.list{display:none;flex-direction:column;border-top:1px solid var(--rule)}
+body.view-list .shelf{display:none}
+body.view-list .list{display:flex}
+.row{
+  display:grid;
+  grid-template-columns:38px 52px minmax(0,1fr) 110px 104px auto;
+  align-items:center;gap:14px;
+  padding:10px 10px;border-bottom:1px solid var(--rule);
+  cursor:pointer;background:transparent;border-left:none;border-right:none;border-top:none;
+  text-align:left;color:inherit;font:inherit;width:100%;
+  transition:background .22s;
+  -webkit-tap-highlight-color:transparent;
+}
+.row:hover{background:rgba(255,59,154,.06)}
+.row:focus-visible{outline:2px solid var(--pink);outline-offset:-2px}
+.row-n{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.24);text-align:right}
+.row-art{width:52px;height:52px;border-radius:2px;overflow:hidden;background:#000;flex-shrink:0}
+.row-art img{width:100%;height:100%;object-fit:cover}
+.row-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.row-name{font-weight:800;font-size:14px;color:rgba(255,255,255,.92);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-artist{font-family:var(--mono);font-size:9px;letter-spacing:1.4px;color:rgba(255,255,255,.36);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-type{font-family:var(--mono);font-size:8.5px;letter-spacing:2.6px;text-transform:uppercase;color:rgba(255,255,255,.34)}
+.row-status{display:flex;align-items:center;gap:7px}
+.row-cta{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:2.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);white-space:nowrap;padding-right:6px;transition:color .22s;
+}
+.row:hover .row-cta{color:var(--green)}
+
+/* ══════════════════════════════════════
+   DETAIL — the listening station
+══════════════════════════════════════ */
+.ov{
+  position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.86);
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+.ov.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;z-index:901;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:20px;pointer-events:none;
+}
+.sheet.on{pointer-events:auto}
+.card{
+  position:relative;width:min(860px,100%);max-height:calc(100vh - 40px);
+  overflow-y:auto;overscroll-behavior:contain;
+  background:#080809;border:1px solid rgba(255,255,255,.12);border-radius:5px;
+  opacity:0;transform:translateY(22px) scale(.97);
+  transition:opacity .4s,transform .45s cubic-bezier(.16,1,.3,1);
+}
+.sheet.on .card{opacity:1;transform:none}
+.card-top{
+  position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;background:rgba(8,8,9,.96);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.card-path{font-family:var(--mono);font-size:8.5px;letter-spacing:2.4px;text-transform:uppercase;color:rgba(255,255,255,.32)}
+.card-x{
+  width:28px;height:28px;border-radius:50%;background:transparent;
+  border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);
+  font-size:13px;cursor:pointer;transition:border-color .25s,color .25s;
+  -webkit-tap-highlight-color:transparent;
+}
+.card-x:hover{border-color:rgba(255,255,255,.6);color:#fff}
+
+.card-body{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:28px;padding:28px}
+.card-art{position:relative;aspect-ratio:1/1;border-radius:3px;overflow:hidden;background:#000}
+.card-art img{width:100%;height:100%;object-fit:cover}
+.card-art::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.card-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.card-type{font-family:var(--mono);font-size:8.5px;letter-spacing:3.4px;text-transform:uppercase;color:rgba(255,255,255,.36);margin-bottom:10px}
+.card-title{font-weight:900;font-size:clamp(24px,3.4vw,38px);line-height:1.04;text-transform:uppercase;letter-spacing:-.3px;margin-bottom:10px}
+.card-by{font-family:var(--mono);font-size:12px;letter-spacing:1.6px;color:rgba(255,255,255,.76);margin-bottom:4px}
+.card-credit{font-family:var(--mono);font-size:9px;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:20px}
+.card-cta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px;width:100%}
+.card-dsplabel{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.24);margin:20px 0 10px}
+.card-dsps{display:flex;flex-wrap:wrap;gap:8px}
+.dsp{
+  display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:50px;
+  border:1px solid rgba(255,255,255,.13);color:rgba(255,255,255,.5);text-decoration:none;
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  transition:border-color .25s,color .25s,background .25s,transform .25s;
+}
+.dsp svg{width:14px;height:14px;flex-shrink:0}
+.dsp:not(.soon):hover{border-color:rgba(255,255,255,.6);color:#fff;background:rgba(255,255,255,.05);transform:translateY(-2px)}
+.dsp.soon{opacity:.32;pointer-events:none}
+.card-embed{grid-column:1/-1;border-radius:24px;overflow:hidden;background:#0b0b0b}
+.card-embed iframe{display:block;width:100%;height:344px;border:0}
+.card-soonmsg{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:2.2px;text-transform:uppercase;
+  color:rgba(255,184,0,.72);padding:14px 18px;border:1px dashed rgba(255,184,0,.34);
+  border-radius:3px;background:rgba(255,184,0,.05);
+}
+
+/* ══════════════════════════════════════
+   FOOT
+══════════════════════════════════════ */
+.foot{
+  border-top:1px solid var(--rule);padding:34px 20px 46px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+}
+.foot-links{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.foot-copy{font-family:var(--mono);font-size:8.5px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.2)}
+
+/* ══════════════════════════════════════
+   MOBILE
+══════════════════════════════════════ */
+@media (max-width:860px){
+  .bk{height:78px}
+  .strip{top:78px}
+  .win-inner{grid-template-columns:1fr;text-align:center}
+  .win-art{max-width:min(260px,38vh);margin:0 auto;width:100%}
+  .win-body{align-items:center}
+  .win-cta{justify-content:center;width:100%}
+  .win-cta .buy{width:100%}
+  .card-body{grid-template-columns:1fr;padding:20px;gap:20px}
+  .card-art{max-width:min(240px,34vh);margin:0 auto;width:100%}
+  .card-info{align-items:center;text-align:center}
+  .card-cta{justify-content:center}
+  .card-cta .buy{width:100%}
+  .card-dsps{justify-content:center}
+  .card{max-height:calc(100vh - 24px)}
+  .sheet{padding:12px}
+  /* the list collapses to what actually fits a thumb */
+  .row{grid-template-columns:44px minmax(0,1fr) auto auto;gap:11px}
+  .row-n,.row-type{display:none}
+}
+@media (max-width:560px){
+  .shelf{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:13px}
+  .row-art{width:44px;height:44px}
+  .row-status .rec-blabel{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body class="view-shelf">
+
+<!-- ══ BAND ══ -->
+<nav class="band" id="band">
+  <a class="bk bk-home" href="/home" aria-label="Home"><span class="bk-star">★</span></a>
+  <button class="bk on" data-filter="all"    type="button"><span class="bk-num">01</span><span class="bk-title">All</span><span class="bk-rule"></span></button>
+  <button class="bk"    data-filter="Album"  type="button"><span class="bk-num">02</span><span class="bk-title">Albums</span><span class="bk-rule"></span></button>
+  <button class="bk"    data-filter="Single" type="button"><span class="bk-num">03</span><span class="bk-title">Singles</span><span class="bk-rule"></span></button>
+</nav>
+
+<!-- ══ COUNTER ══ -->
+<div class="strip">
+  <span class="strip-count"><b id="count-n">—</b> <span id="count-w">releases</span> in the room</span>
+  <div class="views" role="group" aria-label="View">
+    <button class="view-btn on" data-view="shelf" type="button">Shelf</button>
+    <button class="view-btn"    data-view="list"  type="button">List</button>
+  </div>
+</div>
+
+<!-- ══ FRONT WINDOW ══ -->
+<section class="window" id="front-window"></section>
+
+<!-- ══ RACKS ══ -->
+<div class="racks" id="racks"></div>
+
+<!-- ══ DETAIL ══ -->
+<div class="ov" id="ov"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Release detail">
+  <div class="card" id="card"></div>
+</div>
+
+<footer class="foot">
+  <div class="foot-links">
+    <a class="ghost" href="/home#shop">Shop</a>
+    <a class="ghost" href="/archive">Archive</a>
+  </div>
+  <p class="foot-copy">© 2026 Dreamers Extreme</p>
+</footer>
+
+<script src="scramble.js"></script>
+<script src="music-data.js"></script>
+<script src="analytics.js"></script>
+<script>
+/* ══════════════════════════════════════════════════
+   THE ROOM
+   Everything on this page is rendered from CATALOG.
+   Adding a release is a data edit, never a markup one.
+══════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+  };
+
+  /* ── DSP marks. Kept here so a release only has to name a URL. ── */
+  var ICON = {
+    apple:'<path d="M23.997 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 0 0-1.877-.726 10.496 10.496 0 0 0-1.564-.15c-.04-.003-.083-.01-.124-.013H5.988c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.802.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 0 0 1.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 0 0 1.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193v-5.086c0-.11-.024-.19-.075-.245-.052-.056-.13-.076-.243-.055-.096.018-1.166.242-1.166.242l-4.42.92-.152.033c-.31.07-.5.284-.51.6-.002.05-.006.1-.006.15V16.5c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193V7.03c0-.276.04-.55.145-.807.15-.365.42-.6.79-.72.207-.067.42-.106.634-.15l6.32-1.276c.192-.04.386-.07.582-.086.404-.032.72.22.784.62.014.09.02.18.02.27.002 1.746.002 3.49.002 5.234z"/>',
+    spotify:'<path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>',
+    youtube:'<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>'
+  };
+  var DSP_NAME = { apple:'Apple Music', spotify:'Spotify', youtube:'YouTube' };
+
+  function dspRow(rec, surface) {
+    var out = '';
+    ['apple','spotify','youtube'].forEach(function (k) {
+      var url = rec.dsp && rec.dsp[k];
+      var svg = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + ICON[k] + '</svg>';
+      if (url) {
+        out += '<a class="dsp" href="' + esc(url) + '" target="_blank" rel="noopener"' +
+               ' data-track="Stream" data-release="' + esc(rec.title) + '"' +
+               ' data-surface="' + esc(surface) + '" data-service="' + k + '">' + svg + DSP_NAME[k] + '</a>';
+      } else {
+        out += '<span class="dsp soon">' + svg + DSP_NAME[k] + '</span>';
+      }
+    });
+    return out;
+  }
+
+  /* The CTA never lies about where it goes. */
+  function ctaText(rec) {
+    if (rec.status !== 'available' || !rec.link) return null;
+    return rec.linkType === 'buy' ? 'Buy on untitled' : 'Listen on untitled';
+  }
+
+  function buyBtn(rec, surface) {
+    var label = ctaText(rec);
+    if (!label) return '';
+    return '<a class="buy" href="' + esc(rec.link) + '" target="_blank" rel="noopener"' +
+           ' data-track="' + (rec.linkType === 'buy' ? 'Buy' : 'Stream') + '"' +
+           ' data-release="' + esc(rec.title) + '" data-surface="' + esc(surface) + '"' +
+           ' data-service="untitled"><span>' + label + '</span><span aria-hidden="true">&rarr;</span></a>';
+  }
+
+  /* ══ FRONT WINDOW ══ */
+  function renderWindow() {
+    var rec = (typeof LATEST !== 'undefined' && LATEST) || CATALOG[0];
+    if (!rec) return;
+    var page = rec.page
+      ? '<a class="ghost" href="' + esc(rec.page) + '">Full page &rarr;</a>'
+      : '';
+    document.getElementById("front-window").innerHTML =
+      '<div class="win-inner">' +
+        '<div class="win-art" data-open="' + esc(rec.slug) + '">' +
+          '<img src="' + esc(rec.cover) + '" alt="' + esc(rec.title) + ' cover" loading="eager">' +
+        '</div>' +
+        '<div class="win-body">' +
+          '<div class="win-tag"><span class="win-dot"></span><span class="win-tagtxt" id="win-tagtxt">Now In</span></div>' +
+          '<h1 class="win-title" id="win-title">' + esc(rec.title) + '</h1>' +
+          '<p class="win-by">' + esc(rec.artist) + '</p>' +
+          (rec.credit ? '<p class="win-credit">' + esc(rec.credit) + '</p>' : '<p class="win-credit">' + esc(rec.type) + '</p>') +
+          '<div class="win-cta">' + buyBtn(rec, 'music-window') + page + '</div>' +
+        '</div>' +
+      '</div>';
+
+    if (!REDUCE && window.scrambleTo) {
+      scrambleTo(document.getElementById('win-tagtxt'), 'NOW IN');
+      setTimeout(function () {
+        scrambleTo(document.getElementById('win-title'), rec.title.toUpperCase());
+      }, 120);
+    }
+  }
+
+  /* ══ RACKS ══ */
+  var TYPES = ['Album', 'Single', 'EP'];
+  var PLURAL = { Album:'Albums', Single:'Singles', EP:'EPs' };
+
+  function sleeve(rec, i, isNewest) {
+    var st = rec.status === 'available' ? 'is-available' : 'is-soon';
+    var lb = rec.status === 'available' ? 'Available' : 'Coming Soon';
+    return '<button class="rec ' + st + '" type="button" data-open="' + esc(rec.slug) + '">' +
+      '<div class="rec-sleeve">' +
+        (isNewest ? '<span class="rec-new">New</span>' : '') +
+        '<img src="' + esc(rec.cover) + '" alt="' + esc(rec.title) + ' cover" loading="lazy">' +
+        '<span class="rec-frame tl"></span><span class="rec-frame tr"></span>' +
+        '<span class="rec-frame bl"></span><span class="rec-frame br"></span>' +
+      '</div>' +
+      '<div class="rec-meta">' +
+        '<span class="rec-name">' + esc(rec.title) + '</span>' +
+        '<span class="rec-artist">' + esc(rec.artist) + '</span>' +
+        '<span class="rec-badge"><span class="rec-bdot"></span><span class="rec-blabel">' + lb + '</span></span>' +
+      '</div>' +
+    '</button>';
+  }
+
+  function listRow(rec, i, isNewest) {
+    var st = rec.status === 'available' ? 'is-available' : 'is-soon';
+    var lb = rec.status === 'available' ? 'Available' : 'Soon';
+    var cta = ctaText(rec) || 'Notify';
+    return '<button class="row ' + st + '" type="button" data-open="' + esc(rec.slug) + '">' +
+      '<span class="row-n">' + String(i + 1).padStart(2, '0') + '</span>' +
+      '<span class="row-art"><img src="' + esc(rec.cover) + '" alt="" loading="lazy"></span>' +
+      '<span class="row-txt">' +
+        '<span class="row-name">' + esc(rec.title) + (isNewest ? ' &nbsp;·&nbsp; New' : '') + '</span>' +
+        '<span class="row-artist">' + esc(rec.artist) + '</span>' +
+      '</span>' +
+      '<span class="row-type">' + esc(rec.type) + '</span>' +
+      '<span class="row-status"><span class="rec-bdot"></span><span class="rec-blabel">' + lb + '</span></span>' +
+      '<span class="row-cta">' + esc(cta) + ' &rarr;</span>' +
+    '</button>';
+  }
+
+  var newestSlug = (typeof LATEST !== 'undefined' && LATEST) ? LATEST.slug : null;
+
+  function renderRacks() {
+    var html = '';
+    TYPES.forEach(function (type) {
+      var items = CATALOG.filter(function (r) { return r.type === type; });
+      if (!items.length) return;
+      html += '<section class="rack" data-type="' + type + '">' +
+        '<div class="rack-head">' +
+          '<span class="rack-dot"></span>' +
+          '<span class="rack-label">' + PLURAL[type] + '</span>' +
+          '<span class="rack-line"></span>' +
+          '<span class="rack-n">' + String(items.length).padStart(2, '0') + '</span>' +
+        '</div>' +
+        '<div class="shelf">' + items.map(function (r, i) {
+          return sleeve(r, i, r.slug === newestSlug);
+        }).join('') + '</div>' +
+        '<div class="list">' + items.map(function (r, i) {
+          return listRow(r, i, r.slug === newestSlug);
+        }).join('') + '</div>' +
+      '</section>';
+    });
+    document.getElementById('racks').innerHTML = html;
+  }
+
+  /* ══ FILTER ══ */
+  function applyFilter(f) {
+    var shown = 0;
+    document.querySelectorAll('.rack').forEach(function (rack) {
+      var match = (f === 'all' || rack.dataset.type === f);
+      rack.classList.toggle('hidden', !match);
+      if (match) shown += rack.querySelectorAll('.rec').length;
+    });
+    document.getElementById('count-n').textContent = String(shown).padStart(2, '0');
+    document.getElementById('count-w').textContent = shown === 1 ? 'release' : 'releases';
+  }
+
+  document.querySelectorAll('.bk[data-filter]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.bk[data-filter]').forEach(function (b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+      applyFilter(btn.dataset.filter);
+    });
+  });
+
+  /* ══ VIEW ══ */
+  document.querySelectorAll('.view-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.view-btn').forEach(function (b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+      document.body.className = 'view-' + btn.dataset.view;
+      try { localStorage.setItem('stars_music_view', btn.dataset.view); } catch (e) {}
+    });
+  });
+
+  /* ══ DETAIL ══ */
+  var ov = document.getElementById('ov');
+  var sheet = document.getElementById('sheet');
+  var card = document.getElementById('card');
+  var lastFocus = null;
+
+  function open(slug) {
+    var rec = CATALOG.filter(function (r) { return r.slug === slug; })[0];
+    if (!rec) return;
+    lastFocus = document.activeElement;
+
+    var body;
+    if (rec.status === 'available' && rec.link) {
+      body = '<div class="card-cta">' + buyBtn(rec, 'music-detail') +
+             (rec.page ? '<a class="ghost" href="' + esc(rec.page) + '">Full page &rarr;</a>' : '') +
+             '</div>' +
+             '<p class="card-dsplabel">Also streaming on</p>' +
+             '<div class="card-dsps">' + dspRow(rec, 'music-detail') + '</div>';
+    } else {
+      body = '<p class="card-soonmsg">Coming soon · not out yet</p>';
+    }
+
+    card.innerHTML =
+      '<div class="card-top">' +
+        '<span class="card-path">STARS_MUSIC // ' + esc(rec.type.toUpperCase()) + '</span>' +
+        '<button class="card-x" type="button" aria-label="Close">&#10005;</button>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-art"><img src="' + esc(rec.cover) + '" alt="' + esc(rec.title) + ' cover"></div>' +
+        '<div class="card-info">' +
+          '<p class="card-type">' + esc(rec.type) + '</p>' +
+          '<h2 class="card-title">' + esc(rec.title) + '</h2>' +
+          '<p class="card-by">' + esc(rec.artist) + '</p>' +
+          (rec.credit ? '<p class="card-credit">' + esc(rec.credit) + '</p>' : '') +
+          body +
+        '</div>' +
+        /* the iframe is built only on open — nine of these at page load
+           would cost more than the rest of the page combined */
+        (rec.embed
+          ? '<div class="card-embed"><iframe src="https://untitled.stream/embed/' + esc(rec.embed) + '"' +
+            ' width="100%" height="344" allowfullscreen allow="picture-in-picture" loading="lazy"' +
+            ' title="' + esc(rec.title) + ' player"></iframe></div>'
+          : '') +
+      '</div>';
+
+    ov.classList.add('on');
+    sheet.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    card.querySelector('.card-x').addEventListener('click', close);
+    card.querySelector('.card-x').focus();
+    if (window.Stars) Stars.stampAll();
+    if (window.Stars) Stars.track('Release Opened', { release: rec.title, surface: 'music' });
+  }
+
+  function close() {
+    ov.classList.remove('on');
+    sheet.classList.remove('on');
+    document.body.style.overflow = '';
+    /* drop the iframe so its audio cannot keep playing behind the page */
+    setTimeout(function () { if (!sheet.classList.contains('on')) card.innerHTML = ''; }, 420);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('[data-open]');
+    if (t) { open(t.dataset.open); return; }
+    if (e.target === ov || (sheet.classList.contains('on') && e.target === sheet)) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && sheet.classList.contains('on')) close();
+  });
+
+  /* ══ BAND COLLAPSE ══ */
+  var band = document.getElementById('band');
+  window.addEventListener('scroll', function () {
+    band.classList.toggle('compact', window.scrollY > 90);
+  }, { passive: true });
+
+  /* ══ BOOT ══ */
+  renderWindow();
+  renderRacks();
+  applyFilter('all');
+  try {
+    var v = localStorage.getItem('stars_music_view');
+    if (v === 'list') {
+      document.body.className = 'view-list';
+      document.querySelectorAll('.view-btn').forEach(function (b) {
+        b.classList.toggle('on', b.dataset.view === 'list');
+      });
+    }
+  } catch (e) {}
+  if (window.Stars) Stars.stampAll();
+})();
+</script>
+</body>
+</html>

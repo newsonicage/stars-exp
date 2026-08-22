@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upgrade You — Stars* &amp; SammO</title>
+<meta name="description" content="Upgrade You. Stars* &amp; SammO. Produced by Stars*. Out now — own it on untitled.">
+<link rel="canonical" href="https://scratchbradley.com/upgrade-you">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
+
+<!-- ── The link preview. This is the first thing anyone sees when the URL
+     is pasted into a DM, a story, or a group chat. ── -->
+<meta property="og:type"        content="music.song">
+<meta property="og:site_name"   content="Stars*">
+<meta property="og:title"       content="Upgrade You — Stars* &amp; SammO">
+<meta property="og:description" content="Out now. Produced by Stars*.">
+<meta property="og:url"         content="https://scratchbradley.com/upgrade-you">
+<meta property="og:image"       content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Upgrade You — Stars* &amp; SammO">
+<meta name="twitter:description" content="Out now. Produced by Stars*.">
+<meta name="twitter:image"       content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/upgrade-you.jpg">
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --black:#050505;
+  --white:#f0f4ff;
+  --green:#39ff6e;
+  --green-glow:rgba(57,255,110,.5);
+  /* pulled off the cover — the page wears the record's own colour */
+  --warm:#ff5e35;
+  --warm-dim:rgba(255,94,53,.16);
+  --cool:#6ea8c4;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:'Nunito',system-ui,sans-serif;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+/* the same film grain the archive wears */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.mono{font-family:var(--mono);font-variant-ligatures:none}
+
+/* ══════════════════════════════════════
+   AMBIENT — the cover bleeding into the room
+══════════════════════════════════════ */
+.amb{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60vw 60vw at 22% 18%, rgba(255,94,53,.13), transparent 68%),
+    radial-gradient(50vw 50vw at 82% 76%, rgba(110,168,196,.09), transparent 70%);
+}
+
+/* ══════════════════════════════════════
+   HEADER — one line, two exits, no menu
+══════════════════════════════════════ */
+.hdr{
+  position:sticky;top:0;z-index:400;
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:rgba(5,5,5,.72);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.hdr-logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit}
+.hdr-star{font-size:13px;color:var(--warm);text-shadow:0 0 12px rgba(255,94,53,.7)}
+.hdr-brand{font-weight:900;font-size:14px;letter-spacing:3.4px;text-transform:uppercase;color:rgba(255,255,255,.86)}
+.hdr-right{display:flex;gap:18px}
+.hdr-link{
+  font-family:var(--mono);font-size:9px;letter-spacing:2.6px;text-transform:uppercase;
+  color:rgba(255,255,255,.42);text-decoration:none;transition:color .25s,text-shadow .25s;
+  padding:6px 0;
+}
+.hdr-link:hover{color:var(--white);text-shadow:0 0 14px rgba(255,255,255,.5)}
+
+/* ══════════════════════════════════════
+   THE RELEASE
+══════════════════════════════════════ */
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:34px 20px 60px}
+
+.rel{
+  display:grid;
+  grid-template-columns:minmax(0,420px) minmax(0,1fr);
+  gap:44px;
+  align-items:center;
+}
+
+/* ── Cover ── */
+.art{position:relative;border-radius:4px;overflow:hidden;background:#0b0b0b;aspect-ratio:1/1}
+.art img{width:100%;height:100%;object-fit:cover;display:block}
+.art::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.09), inset 0 0 90px rgba(0,0,0,.45);
+}
+.art-glow{
+  position:absolute;inset:-10% -10% -14%;z-index:-1;
+  background:radial-gradient(closest-side, rgba(255,94,53,.4), transparent 72%);
+  filter:blur(46px);
+}
+
+/* corner brackets — the site's frame language */
+.afr{position:absolute;width:26px;height:26px;z-index:2;opacity:.8}
+.afr.tl{top:9px;left:9px;border-top:1.5px solid var(--warm);border-left:1.5px solid var(--warm)}
+.afr.tr{top:9px;right:9px;border-top:1.5px solid var(--warm);border-right:1.5px solid var(--warm)}
+.afr.bl{bottom:9px;left:9px;border-bottom:1.5px solid var(--warm);border-left:1.5px solid var(--warm)}
+.afr.br{bottom:9px;right:9px;border-bottom:1.5px solid var(--warm);border-right:1.5px solid var(--warm)}
+
+/* ── Info column ── */
+.info{display:flex;flex-direction:column;align-items:flex-start;gap:0}
+
+.tag{display:flex;align-items:center;gap:9px;margin-bottom:16px}
+.tag-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;
+  box-shadow:0 0 8px var(--green-glow),0 0 18px rgba(57,255,110,.3);
+  animation:blink 1.5s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.12}}
+.tag-txt{
+  font-family:var(--mono);font-size:9px;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(255,255,255,.46);
+}
+
+.title{
+  font-weight:900;font-size:clamp(38px,7vw,68px);line-height:.98;
+  letter-spacing:-1px;text-transform:uppercase;
+  text-shadow:0 0 40px rgba(255,94,53,.3);
+  margin-bottom:14px;
+}
+.by{
+  font-family:var(--mono);font-size:13px;letter-spacing:2px;
+  color:rgba(255,255,255,.82);margin-bottom:6px;
+}
+.by b{color:var(--warm);font-weight:600}
+.credit{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;
+  color:rgba(255,255,255,.34);margin-bottom:26px;
+}
+
+/* ── PRIMARY. Nothing else on this page is this loud. ── */
+.buy{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;max-width:400px;
+  padding:19px 28px;
+  border:2px solid var(--green);
+  border-radius:50px;
+  background:rgba(57,255,110,.09);
+  color:var(--green);
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  letter-spacing:5px;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;position:relative;overflow:hidden;
+  box-shadow:0 0 24px rgba(57,255,110,.16);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,background .3s,color .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.buy::before{
+  content:'';position:absolute;top:0;bottom:0;left:-120%;width:55%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  transition:left .55s ease;pointer-events:none;
+}
+.buy:hover{
+  transform:scale(1.03);
+  background:var(--green);color:#031a08;
+  box-shadow:0 0 34px var(--green-glow),0 0 80px rgba(57,255,110,.22);
+}
+.buy:hover::before{left:170%}
+.buy:active{transform:scale(.98);transition-duration:.08s}
+.buy-sub{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:2.6px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);margin-top:11px;
+}
+
+/* ── SECONDARY. Streaming, when it lands. ── */
+.dsp-label{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:3.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.26);margin:30px 0 12px;
+}
+.dsp-row{display:flex;flex-wrap:wrap;gap:9px}
+.dsp{
+  display:flex;align-items:center;gap:8px;
+  padding:11px 16px;border-radius:50px;
+  border:1px solid rgba(255,255,255,.14);
+  background:transparent;color:rgba(255,255,255,.5);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:2.2px;text-transform:uppercase;
+  text-decoration:none;
+  transition:border-color .25s,color .25s,background .25s,transform .25s;
+}
+.dsp svg{width:15px;height:15px;flex-shrink:0}
+.dsp:not(.soon):hover{
+  border-color:rgba(255,255,255,.6);color:var(--white);
+  background:rgba(255,255,255,.05);transform:translateY(-2px);
+}
+/* processing — visible, honest, and not clickable */
+.dsp.soon{opacity:.34;cursor:default;pointer-events:none}
+.dsp-note{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:2.2px;text-transform:uppercase;
+  color:rgba(255,255,255,.24);margin-top:12px;
+}
+
+/* ══════════════════════════════════════
+   LISTEN — the preview, below the fold on
+   purpose. Hearing it is what sells it, but
+   the buy button gets the first look.
+══════════════════════════════════════ */
+.listen{margin-top:56px}
+.lsn-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.lsn-label{
+  font-family:var(--mono);font-size:9px;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(255,255,255,.42);white-space:nowrap;
+}
+.lsn-rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(255,94,53,.4),transparent)}
+.embed-wrap{border-radius:24px;overflow:hidden;background:#0b0b0b;min-height:344px}
+.embed-wrap iframe{display:block;width:100%;height:344px;border:0}
+
+/* ══════════════════════════════════════
+   ONWARD — the hub, not a dead end
+══════════════════════════════════════ */
+.onward{
+  margin-top:62px;padding-top:34px;
+  border-top:1px solid rgba(255,255,255,.08);
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.ow{
+  display:flex;flex-direction:column;gap:7px;
+  padding:22px 24px;border-radius:3px;
+  border:1px solid rgba(255,255,255,.1);
+  text-decoration:none;color:inherit;
+  transition:border-color .3s,background .3s,transform .3s;
+}
+.ow:hover{border-color:rgba(255,94,53,.45);background:rgba(255,94,53,.05);transform:translateY(-2px)}
+.ow-num{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.3)}
+.ow-title{font-weight:900;font-size:17px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.9)}
+.ow-sub{font-family:var(--mono);font-size:9px;letter-spacing:1.8px;color:rgba(255,255,255,.34)}
+
+.foot{
+  margin-top:44px;text-align:center;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,.2);
+}
+
+/* ══════════════════════════════════════
+   MOBILE — the rule: BUY stays above the fold.
+   The cover is capped so it can never push it down.
+══════════════════════════════════════ */
+@media (max-width:860px){
+  .wrap{padding:22px 18px 48px}
+  .rel{grid-template-columns:1fr;gap:24px}
+  .art{max-width:min(300px,42vh);margin:0 auto;width:100%}
+  .info{align-items:center;text-align:center}
+  .title{font-size:clamp(32px,10vw,46px)}
+  .buy{max-width:none}
+  .dsp-row{justify-content:center}
+  .dsp-label{margin:24px 0 11px}
+  .listen{margin-top:42px}
+  .onward{grid-template-columns:1fr}
+}
+@media (max-width:420px){
+  .art{max-width:min(260px,36vh)}
+  .credit{margin-bottom:20px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div class="amb"></div>
+
+<header class="hdr">
+  <a class="hdr-logo" href="/home" aria-label="Stars* home">
+    <span class="hdr-star">★</span>
+    <span class="hdr-brand">Stars*</span>
+  </a>
+  <nav class="hdr-right">
+    <a class="hdr-link" href="/music">Music</a>
+    <a class="hdr-link" href="/home#shop">Shop</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="rel">
+
+    <!-- ── COVER ── -->
+    <div class="art">
+      <div class="art-glow"></div>
+      <img src="assets/upgrade-you.jpg" alt="Upgrade You — Stars* &amp; SammO cover art" width="1400" height="1400">
+      <span class="afr tl"></span><span class="afr tr"></span>
+      <span class="afr bl"></span><span class="afr br"></span>
+    </div>
+
+    <!-- ── INFO + THE ONE BUTTON ── -->
+    <div class="info">
+      <div class="tag">
+        <span class="tag-dot"></span>
+        <span class="tag-txt" id="tag-txt">New Release</span>
+      </div>
+
+      <h1 class="title" id="rel-title">Upgrade You</h1>
+      <p class="by">Stars* <b>&amp;</b> SammO</p>
+      <p class="credit">Produced by Stars*</p>
+
+      <a class="buy" id="buy-btn"
+         href="https://untitled.stream/buy/project/NVZR6Foikt80sX1cZs3ew"
+         target="_blank" rel="noopener"
+         data-track="Buy" data-release="Upgrade You" data-surface="landing" data-service="untitled">
+        <span>Buy on untitled</span>
+        <span aria-hidden="true">→</span>
+      </a>
+      <p class="buy-sub">Own the file · Support directly</p>
+
+      <p class="dsp-label">Also streaming on</p>
+      <div class="dsp-row">
+        <span class="dsp soon">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.997 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 0 0-1.877-.726 10.496 10.496 0 0 0-1.564-.15c-.04-.003-.083-.01-.124-.013H5.988c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.802.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 0 0 1.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 0 0 1.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193v-5.086c0-.11-.024-.19-.075-.245-.052-.056-.13-.076-.243-.055-.096.018-1.166.242-1.166.242l-4.42.92-.152.033c-.31.07-.5.284-.51.6-.002.05-.006.1-.006.15V16.5c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193V7.03c0-.276.04-.55.145-.807.15-.365.42-.6.79-.72.207-.067.42-.106.634-.15l6.32-1.276c.192-.04.386-.07.582-.086.404-.032.72.22.784.62.014.09.02.18.02.27.002 1.746.002 3.49.002 5.234z"/></svg>
+          Apple Music
+        </span>
+        <span class="dsp soon">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+          Spotify
+        </span>
+        <span class="dsp soon">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          YouTube
+        </span>
+      </div>
+      <p class="dsp-note">In processing · links go live on delivery</p>
+    </div>
+
+  </section>
+
+  <!-- ── LISTEN ── -->
+  <section class="listen" id="listen">
+    <div class="lsn-head">
+      <span class="lsn-label">Listen</span>
+      <span class="lsn-rule"></span>
+    </div>
+    <div class="embed-wrap">
+      <iframe src="https://untitled.stream/embed/50ViiKxOIUXB"
+              width="100%" height="344" allowfullscreen
+              allow="picture-in-picture" loading="lazy"
+              title="Upgrade You — player"></iframe>
+    </div>
+  </section>
+
+  <!-- ── ONWARD ── -->
+  <nav class="onward">
+    <a class="ow" href="/music">
+      <span class="ow-num">01</span>
+      <span class="ow-title">Music</span>
+      <span class="ow-sub">The full catalog</span>
+    </a>
+    <a class="ow" href="/home#shop">
+      <span class="ow-num">02</span>
+      <span class="ow-title">Shop</span>
+      <span class="ow-sub">Furniture · Art · Merch</span>
+    </a>
+  </nav>
+
+  <p class="foot">© 2026 Dreamers Extreme</p>
+
+</main>
+
+<script src="scramble.js"></script>
+<script src="analytics.js"></script>
+<script>
+/* The house effect, used once and briefly. The title is in the HTML
+   above so it is readable with JS off and to a crawler; this only
+   re-resolves it on arrival. The buy button never waits on it. */
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var t = document.getElementById('rel-title');
+  var g = document.getElementById('tag-txt');
+  scrambleTo(g, 'NEW RELEASE');
+  setTimeout(function () { scrambleTo(t, 'UPGRADE YOU'); }, 140);
+})();
+
+/* Did they get far enough to see the button, and far enough to hear it? */
+if (window.Stars) {
+  Stars.watchOnce('#buy-btn', 'Buy Visible', { release: 'Upgrade You', surface: 'landing' });
+  Stars.watchOnce('#listen',  'Player Reached', { release: 'Upgrade You', surface: 'landing' });
+}
+</script>
+</body>
+</html>
