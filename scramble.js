@@ -55,6 +55,19 @@ function decryptInto(el,value){
 }
 function killDecrypts(){liveDecrypts.forEach(d=>d.stop());liveDecrypts.clear()}
 
+/* requestAnimationFrame is throttled to a standstill in a background tab, so a
+   decrypt started there freezes mid-glyph and the line sits there as noise
+   until somebody looks at it. A link opened in a new tab does exactly that.
+   Hold the effect until the page is actually visible. */
+function whenVisible(fn){
+  if(!document.hidden){fn();return}
+  document.addEventListener('visibilitychange',function once(){
+    if(document.hidden)return;
+    document.removeEventListener('visibilitychange',once);
+    fn();
+  });
+}
+
 /* Resolve a string into an element, once. Returns the Decrypt so callers can
    hang an ondone off it and chain the next line of a sequence. */
 function scrambleTo(el,text,ondone){
