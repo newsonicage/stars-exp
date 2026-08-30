@@ -427,9 +427,78 @@ body.view-list .list{display:flex}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01ms!important}
 }
+/* ══════════════════════════════════════
+   NEW RELEASE STRIP
+   In flow rather than fixed: the band below it is
+   sticky, so the strip rides down with the page and
+   the band pins itself to the top once the strip has
+   scrolled past. No offset maths, and nothing to keep
+   in sync with the band's three heights.
+══════════════════════════════════════ */
+.nb{
+  position:relative;z-index:600;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  background:#000;border-bottom:1px solid rgba(255,255,255,.09);
+}
+.nb-a{
+  display:flex;align-items:center;gap:9px;height:30px;padding:0 16px;
+  text-decoration:none;white-space:nowrap;overflow:hidden;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:2.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+  -webkit-tap-highlight-color:transparent;
+}
+.nb-a b{color:#fff;font-weight:600}
+.nb-sep{opacity:.35}
+.nb-dot{
+  flex:0 0 5px;width:5px;height:5px;border-radius:50%;background:#39ff6e;
+  box-shadow:0 0 7px rgba(57,255,110,.75);animation:nbBlink 1.6s ease-in-out infinite;
+}
+@keyframes nbBlink{0%,100%{opacity:1}50%{opacity:.15}}
+.nb-go{color:#39ff6e;transition:text-shadow .25s}
+.nb-a:hover .nb-go{text-shadow:0 0 12px rgba(57,255,110,.6)}
+.nb-x{
+  position:absolute;right:0;top:0;width:34px;height:30px;
+  background:none;border:none;cursor:pointer;
+  color:rgba(255,255,255,.3);font-size:10px;line-height:1;
+  -webkit-tap-highlight-color:transparent;
+}
+.nb-x:hover{color:rgba(255,255,255,.75)}
+html.nb-off .nb{display:none}
+@media (max-width:520px){
+  .nb-a{gap:7px;padding:0 34px 0 12px;font-size:8px;letter-spacing:1.8px}
+  .nb-hide{display:none}
+}
 </style>
+<script>
+/* NEW RELEASE STRIP — the dismissal, read before first paint so a closed
+   strip never flashes on the way in. The stored value is the release slug,
+   not a boolean: ship the next single, change the slug, and everyone who
+   closed this one sees the new one. */
+(function () {
+  var K = 'nb-seen', V = 'upgrade-you';
+  try { if (localStorage.getItem(K) === V) document.documentElement.className += ' nb-off'; } catch (e) {}
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest || !e.target.closest('.nb-x')) return;
+    document.documentElement.className += ' nb-off';
+    try { localStorage.setItem(K, V); } catch (e) {}
+  });
+})();
+</script>
 </head>
 <body class="view-shelf">
+
+<!-- ══ NEW RELEASE STRIP ══
+     Repoint the href, the title and the slug in the head script above
+     when the next record lands. -->
+<div class="nb">
+  <a class="nb-a" href="/upgrade-you"
+     data-track="Release Strip" data-release="Upgrade You" data-surface="music" data-service="landing">
+    <span class="nb-dot"></span>
+    <span class="nb-txt"><b>New Release</b> <span class="nb-sep">·</span> Upgrade You<span class="nb-hide"> — Stars* &amp; SammO</span></span>
+    <span class="nb-go">Listen →</span>
+  </a>
+  <button class="nb-x" type="button" aria-label="Dismiss new release notice">✕</button>
+</div>
 
 <!-- ══ BAND ══ -->
 <nav class="band" id="band">
@@ -491,14 +560,28 @@ body.view-list .list{display:flex}
   var ICON = {
     apple:'<path d="M23.997 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 0 0-1.877-.726 10.496 10.496 0 0 0-1.564-.15c-.04-.003-.083-.01-.124-.013H5.988c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.802.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 0 0 1.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 0 0 1.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193v-5.086c0-.11-.024-.19-.075-.245-.052-.056-.13-.076-.243-.055-.096.018-1.166.242-1.166.242l-4.42.92-.152.033c-.31.07-.5.284-.51.6-.002.05-.006.1-.006.15V16.5c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193V7.03c0-.276.04-.55.145-.807.15-.365.42-.6.79-.72.207-.067.42-.106.634-.15l6.32-1.276c.192-.04.386-.07.582-.086.404-.032.72.22.784.62.014.09.02.18.02.27.002 1.746.002 3.49.002 5.234z"/>',
     spotify:'<path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>',
-    youtube:'<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>'
+    youtube:'<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>',
+    amazon:'<path d="M16.55 2.62a.6.6 0 0 1 .75.58v8.9a3.1 3.1 0 1 1-1.62-2.72V5.08L10.1 6.25v7.72a3.1 3.1 0 1 1-1.62-2.72V5.6c0-.4.28-.74.67-.83z"/><path d="M2.63 18.72c-.27.35.07.82.47.63A19.7 19.7 0 0 0 12 21.3c2.87 0 5.7-.6 8.3-1.74.5-.22.14-.97-.36-.83A24 24 0 0 1 12 19.8a23.7 23.7 0 0 1-8.6-1.58.64.64 0 0 0-.77.5z"/><path d="M21.35 17.98c-.3-.38-1.95-.18-2.7-.09-.22.03-.26-.17-.06-.31.94-.65 2.46-.46 2.64-.24.18.22-.05 1.75-.93 2.48-.13.11-.26.05-.2-.09.2-.5.64-1.38.44-1.65z"/>',
+    itunes:'<circle cx="12" cy="12" r="10.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M15.9 5.92c.3-.07.56.16.56.46v8.1a2.6 2.6 0 1 1-1.36-2.28V8.05l-4.7 1.04v6.4a2.6 2.6 0 1 1-1.36-2.29V8.42c0-.31.22-.58.52-.65z"/>',
+    tidal:'<path d="M12.012 3.992 8.008 7.996 4.004 3.992 0 7.996 4.004 12l4.004-4.004L12.012 12l-4.004 4.004 4.004 4.004 4.004-4.004L12.012 12l4.004-4.004L20.02 12l4.004-4.004-4.004-4.004-4.004 4.004z"/>',
+    soundcloud:'<rect x="0" y="12.6" width="1.5" height="4.6" rx=".75"/><rect x="2.7" y="11" width="1.5" height="6.2" rx=".75"/><rect x="5.4" y="9.5" width="1.5" height="7.7" rx=".75"/><rect x="8.1" y="11.4" width="1.5" height="5.8" rx=".75"/><path d="M11.1 17.2V8.9a5.1 5.1 0 0 1 7.62 3.2 3.55 3.55 0 0 1-.62 7.05h-6.05a.95.95 0 0 1-.95-.95z"/>',
+    audiomack:'<rect x="1" y="10.4" width="2.1" height="3.2" rx="1.05"/><rect x="4.6" y="7.6" width="2.1" height="8.8" rx="1.05"/><rect x="8.2" y="3.4" width="2.1" height="17.2" rx="1.05"/><rect x="11.8" y="6.2" width="2.1" height="11.6" rx="1.05"/><rect x="15.4" y="8.8" width="2.1" height="6.4" rx="1.05"/><rect x="19" y="10.4" width="2.1" height="3.2" rx="1.05"/>'
   };
-  var DSP_NAME = { apple:'Apple Music', spotify:'Spotify', youtube:'YouTube' };
+  var DSP_NAME = {
+    spotify:'Spotify', apple:'Apple Music', amazon:'Amazon Music', itunes:'iTunes Store',
+    tidal:'Tidal', youtube:'YouTube', soundcloud:'SoundCloud', audiomack:'Audiomack'
+  };
+  /* The house order. A record only renders the services it actually names,
+     so an older single with three keys still draws three marks — but when a
+     release ships everywhere, the row follows this sequence rather than
+     whatever order the object literal happened to be typed in. */
+  var DSP_ORDER = ['spotify','apple','amazon','itunes','tidal','youtube','soundcloud','audiomack'];
 
   function dspRow(rec, surface) {
     var out = '';
-    ['apple','spotify','youtube'].forEach(function (k) {
-      var url = rec.dsp && rec.dsp[k];
+    var dsp = rec.dsp || {};
+    DSP_ORDER.filter(function (k) { return k in dsp; }).forEach(function (k) {
+      var url = dsp[k];
       var svg = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + ICON[k] + '</svg>';
       if (url) {
         out += '<a class="dsp" href="' + esc(url) + '" target="_blank" rel="noopener"' +

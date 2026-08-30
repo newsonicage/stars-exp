@@ -481,9 +481,78 @@ body.in-work .backbar{transform:none}
   *{animation-duration:.01ms!important;transition-duration:.01ms!important}
   html{scroll-behavior:auto}
 }
+/* ══════════════════════════════════════
+   NEW RELEASE STRIP
+   In flow rather than fixed: the band below it is
+   sticky, so the strip rides down with the page and
+   the band pins itself to the top once the strip has
+   scrolled past. This page is paper-white — the strip
+   stays black, which is the point of it.
+══════════════════════════════════════ */
+.nb{
+  position:relative;z-index:600;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  background:#000;border-bottom:1px solid rgba(255,255,255,.09);
+}
+.nb-a{
+  display:flex;align-items:center;gap:9px;height:30px;padding:0 16px;
+  text-decoration:none;white-space:nowrap;overflow:hidden;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:2.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+  -webkit-tap-highlight-color:transparent;
+}
+.nb-a b{color:#fff;font-weight:600}
+.nb-sep{opacity:.35}
+.nb-dot{
+  flex:0 0 5px;width:5px;height:5px;border-radius:50%;background:var(--sgreen);
+  box-shadow:0 0 7px rgba(57,255,110,.75);animation:nbBlink 1.6s ease-in-out infinite;
+}
+@keyframes nbBlink{0%,100%{opacity:1}50%{opacity:.15}}
+.nb-go{color:var(--sgreen);transition:text-shadow .25s}
+.nb-a:hover .nb-go{text-shadow:0 0 12px rgba(57,255,110,.6)}
+.nb-x{
+  position:absolute;right:0;top:0;width:34px;height:30px;
+  background:none;border:none;cursor:pointer;
+  color:rgba(255,255,255,.3);font-size:10px;line-height:1;
+  -webkit-tap-highlight-color:transparent;
+}
+.nb-x:hover{color:rgba(255,255,255,.75)}
+html.nb-off .nb{display:none}
+@media (max-width:520px){
+  .nb-a{gap:7px;padding:0 34px 0 12px;font-size:8px;letter-spacing:1.8px}
+  .nb-hide{display:none}
+}
 </style>
+<script>
+/* NEW RELEASE STRIP — the dismissal, read before first paint so a closed
+   strip never flashes on the way in. The stored value is the release slug,
+   not a boolean: ship the next single, change the slug, and everyone who
+   closed this one sees the new one. */
+(function () {
+  var K = 'nb-seen', V = 'upgrade-you';
+  try { if (localStorage.getItem(K) === V) document.documentElement.className += ' nb-off'; } catch (e) {}
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest || !e.target.closest('.nb-x')) return;
+    document.documentElement.className += ' nb-off';
+    try { localStorage.setItem(K, V); } catch (e) {}
+  });
+})();
+</script>
 </head>
 <body>
+
+<!-- ══ NEW RELEASE STRIP ══
+     Repoint the href, the title and the slug in the head script above
+     when the next record lands. -->
+<div class="nb">
+  <a class="nb-a" href="/upgrade-you"
+     data-track="Release Strip" data-release="Upgrade You" data-surface="archive" data-service="landing">
+    <span class="nb-dot"></span>
+    <span class="nb-txt"><b>New Release</b> <span class="nb-sep">·</span> Upgrade You<span class="nb-hide"> — Stars* &amp; SammO</span></span>
+    <span class="nb-go">Listen →</span>
+  </a>
+  <button class="nb-x" type="button" aria-label="Dismiss new release notice">✕</button>
+</div>
 
 <nav class="band" id="band">
   <a class="bk bk-home" href="/home" aria-label="Home"><span class="bk-star">★</span></a>

@@ -19,7 +19,12 @@
      link      untitled URL, null while unreleased
      linkType  'buy' → the CTA says buy · 'library' → it says stream
      page      dedicated landing page path, or null
-     dsp       { apple, spotify, youtube } — null value = still processing
+     released  ISO date the record went live, or null while unreleased
+     dsp       one key per service, listed in the order they should be shown.
+               A null value means that store has not delivered yet — the mark
+               renders greyed rather than vanishing, so a half-shipped release
+               still reads as deliberate. Known keys: spotify, apple, amazon,
+               itunes, tidal, youtube, soundcloud, audiomack.
 ══════════════════════════════════════════════════════════ */
 const CATALOG = [
 
@@ -35,7 +40,17 @@ const CATALOG = [
     link: 'https://untitled.stream/buy/project/NVZR6Foikt80sX1cZs3ew',
     linkType: 'buy',
     page: '/upgrade-you',
-    dsp: { apple: null, spotify: null, youtube: null }
+    released: '2026-08-28',
+    dsp: {
+      spotify:    'https://open.spotify.com/album/4oyx0iktcQP3FcNGgfCqgX',
+      apple:      'https://geo.music.apple.com/us/album/upgrade-you-single/6806324006?app=music&ls=1',
+      amazon:     'https://music.amazon.com/albums/B0HH3GHMNN?ref=dm_ff_amazonmusic_3p',
+      itunes:     'https://geo.music.apple.com/us/album/upgrade-you-single/6806324006?app=itunes&ls=1',
+      tidal:      'https://www.tidal.com/album/556568804',
+      youtube:    'https://www.youtube.com/playlist?list=OLAK5uy_l74MuGod47BI0lOz_NDyPAyvZTuNQfMiY',
+      soundcloud: 'https://soundcloud.com/starstory-music/upgrade-you?utm_medium=api&utm_campaign=social_sharing&utm_source=id_172153',
+      audiomack:  'https://audiomack.com/stars-69015599d358b/song/upgrade-you?utm_source=featurefm&utm_campaign=onelink&utm_medium=website'
+    }
   },
 
   {

@@ -42,6 +42,87 @@ body {
 }
 
 /* ═══════════════════════════════════════════
+   NEW RELEASE STRIP
+   One black line above everything, for the person
+   who came here for a chair and has no idea a
+   record just dropped. It is the same markup on
+   every page; only this page's header is fixed,
+   so only here does the strip have to be fixed
+   too — and the body padding grows to match.
+   Dismissible, and it remembers, but the memory
+   is keyed to the release: the next single shows
+   the strip again to someone who closed this one.
+═══════════════════════════════════════════ */
+.nb {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 600;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  border-bottom: 1px solid rgba(255,255,255,0.09);
+}
+body.has-nb { padding-top: 82px; }        /* 30 strip + 52 header */
+body.has-nb .site-header { top: 30px; }
+
+.nb-a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 30px;
+  padding: 0 16px;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 8.5px;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.62);
+  -webkit-tap-highlight-color: transparent;
+}
+.nb-a b { color: #fff; font-weight: 600; }
+.nb-sep { opacity: 0.35; }
+.nb-dot {
+  flex: 0 0 5px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #39ff6e;
+  box-shadow: 0 0 7px rgba(57,255,110,0.75);
+  animation: nbBlink 1.6s ease-in-out infinite;
+}
+@keyframes nbBlink { 0%,100% { opacity: 1 } 50% { opacity: 0.15 } }
+.nb-go { color: #39ff6e; transition: text-shadow 0.25s; }
+.nb-a:hover .nb-go { text-shadow: 0 0 12px rgba(57,255,110,0.6); }
+
+.nb-x {
+  position: absolute;
+  right: 0; top: 0;
+  width: 34px; height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255,255,255,0.3);
+  font-size: 10px;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+.nb-x:hover { color: rgba(255,255,255,0.75); }
+
+/* Set in <head> before first paint, so a dismissed strip never flashes. */
+html.nb-off .nb { display: none; }
+html.nb-off body.has-nb { padding-top: 52px; }
+html.nb-off body.has-nb .site-header { top: 0; }
+
+@media (max-width: 520px) {
+  .nb-a { gap: 7px; padding: 0 34px 0 12px; font-size: 8px; letter-spacing: 1.8px; }
+  .nb-hide { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .nb-dot { animation: none } }
+
+/* ═══════════════════════════════════════════
    CIRCUIT TRACE (shared keyframe)
 ═══════════════════════════════════════════ */
 @keyframes circuitTrace {

@@ -38,8 +38,37 @@
     window.Stars = window.Stars || {};
     window.Stars.out = window.Stars.out || function (url) { window.open(url, '_blank', 'noopener'); };
   </script>
+  <script>
+    /* NEW RELEASE STRIP — the dismissal, read before first paint so a
+       closed strip never flashes on the way in. The stored value is the
+       release slug, not a boolean: ship the next single, change the slug
+       below, and everyone who closed this one sees the new one. */
+    (function () {
+      var K = 'nb-seen', V = 'upgrade-you';
+      try { if (localStorage.getItem(K) === V) document.documentElement.className += ' nb-off'; } catch (e) {}
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest || !e.target.closest('.nb-x')) return;
+        document.documentElement.className += ' nb-off';
+        try { localStorage.setItem(K, V); } catch (e) {}
+      });
+    })();
+  </script>
 </head>
-<body class="theme-dark">
+<body class="theme-dark has-nb">
+
+<!-- ══ NEW RELEASE STRIP ══
+     Repoint the href, the title and the slug in the head script above
+     when the next record lands. -->
+<div class="nb">
+  <a class="nb-a" href="/upgrade-you"
+     data-track="Release Strip" data-release="Upgrade You" data-surface="home" data-service="landing">
+    <span class="nb-dot"></span>
+    <span class="nb-txt"><b>New Release</b> <span class="nb-sep">·</span> Upgrade You<span class="nb-hide"> — Stars* &amp; SammO</span></span>
+    <span class="nb-go">Listen →</span>
+  </a>
+  <button class="nb-x" type="button" aria-label="Dismiss new release notice">✕</button>
+</div>
+
 
 <!-- AUDIO -->
 <audio id="bg-music" loop>

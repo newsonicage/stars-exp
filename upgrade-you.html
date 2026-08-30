@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Upgrade You — Stars* &amp; SammO</title>
-<meta name="description" content="Upgrade You. Stars* &amp; SammO. Produced by Stars*. Out now — own it on untitled.">
+<meta name="description" content="Upgrade You. Stars* &amp; SammO. Produced by Stars*. Out now — August 28, 2026. Stream it anywhere or own the file.">
+<meta name="theme-color" content="#050505">
 <link rel="canonical" href="https://scratchbradley.com/upgrade-you">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦇</text></svg>">
 
@@ -13,20 +14,25 @@
 <meta property="og:type"        content="music.song">
 <meta property="og:site_name"   content="Stars*">
 <meta property="og:title"       content="Upgrade You — Stars* &amp; SammO">
-<meta property="og:description" content="Out now. Produced by Stars*.">
+<meta property="og:description" content="Out now. Stream it anywhere, or own the file.">
 <meta property="og:url"         content="https://scratchbradley.com/upgrade-you">
 <meta property="og:image"       content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
 <meta property="og:image:width"  content="1200">
 <meta property="og:image:height" content="630">
+<meta property="music:release_date" content="2026-08-28">
 <meta name="twitter:card"        content="summary_large_image">
 <meta name="twitter:title"       content="Upgrade You — Stars* &amp; SammO">
-<meta name="twitter:description" content="Out now. Produced by Stars*.">
+<meta name="twitter:description" content="Out now. Stream it anywhere, or own the file.">
 <meta name="twitter:image"       content="https://scratchbradley.com/assets/og-upgrade-you.jpg">
 
+<!-- The cover is the largest paint on the page; it starts downloading
+     before the stylesheet finishes so the fold is never empty. -->
+<link rel="preload" as="image" href="assets/upgrade-you.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/upgrade-you.jpg">
+<!-- Two weights, not six. Every extra weight is another font file on a
+     phone connection, for type nobody on this page reads. -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&amp;family=IBM+Plex+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
 
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -45,7 +51,7 @@
   --sans:'Nunito',system-ui,sans-serif;
 }
 
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
   background:var(--black);
   color:var(--white);
@@ -103,9 +109,9 @@ body::after{
 
 .rel{
   display:grid;
-  grid-template-columns:minmax(0,420px) minmax(0,1fr);
+  grid-template-columns:minmax(0,400px) minmax(0,1fr);
   gap:44px;
-  align-items:center;
+  align-items:start;
 }
 
 /* ── Cover ── */
@@ -144,10 +150,10 @@ body::after{
 }
 
 .title{
-  font-weight:900;font-size:clamp(38px,7vw,68px);line-height:.98;
+  font-weight:900;font-size:clamp(38px,7vw,64px);line-height:.98;
   letter-spacing:-1px;text-transform:uppercase;
   text-shadow:0 0 40px color-mix(in srgb, var(--warm) 32%, transparent);
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 .by{
   font-family:var(--mono);font-size:13px;letter-spacing:2px;
@@ -155,8 +161,8 @@ body::after{
 }
 .by b{color:var(--warm);font-weight:600}
 .credit{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;
-  color:rgba(255,255,255,.34);margin-bottom:26px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:2.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.34);margin-bottom:24px;
 }
 
 /* ── PRIMARY. Nothing else on this page is this loud. ── */
@@ -192,31 +198,51 @@ body::after{
   color:rgba(255,255,255,.3);margin-top:11px;
 }
 
-/* ── SECONDARY. Streaming, when it lands. ── */
-.dsp-label{
+/* ══════════════════════════════════════
+   THE SERVICES
+   One row per service — mark on the left, verb on the
+   right, and the whole row is the link. Nobody has to
+   aim at a small button: on a phone the row IS the
+   button, 62px tall, and there is no state to read
+   except the name of the app you already use.
+══════════════════════════════════════ */
+.svcs{width:100%;margin-top:28px}
+.svc-head{
   font-family:var(--mono);font-size:8.5px;letter-spacing:3.4px;text-transform:uppercase;
-  color:rgba(255,255,255,.26);margin:30px 0 12px;
+  color:rgba(255,255,255,.28);margin-bottom:11px;
 }
-.dsp-row{display:flex;flex-wrap:wrap;gap:9px}
-.dsp{
-  display:flex;align-items:center;gap:8px;
-  padding:11px 16px;border-radius:50px;
-  border:1px solid rgba(255,255,255,.14);
-  background:transparent;color:rgba(255,255,255,.5);
-  font-family:var(--mono);font-size:9.5px;letter-spacing:2.2px;text-transform:uppercase;
-  text-decoration:none;
-  transition:border-color .25s,color .25s,background .25s,transform .25s;
+.svc-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.svc{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  min-height:62px;padding:0 12px 0 16px;
+  border:1px solid rgba(255,255,255,.11);border-radius:10px;
+  background:rgba(255,255,255,.02);
+  text-decoration:none;color:inherit;
+  transition:border-color .22s,background .22s,transform .22s;
+  -webkit-tap-highlight-color:transparent;
 }
-.dsp svg{width:15px;height:15px;flex-shrink:0}
-.dsp:not(.soon):hover{
-  border-color:rgba(255,255,255,.6);color:var(--white);
-  background:rgba(255,255,255,.05);transform:translateY(-2px);
+.svc:hover{border-color:color-mix(in srgb, var(--bc) 55%, transparent);background:rgba(255,255,255,.055)}
+.svc:active{transform:scale(.985);transition-duration:.06s}
+.svc-mark{display:flex;align-items:center;gap:12px;min-width:0}
+.svc-mark svg{width:22px;height:22px;flex:0 0 22px;color:var(--bc)}
+.svc-name{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.88);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-/* processing — visible, honest, and not clickable */
-.dsp.soon{opacity:.34;cursor:default;pointer-events:none}
-.dsp-note{
+.svc-go{
+  flex:0 0 auto;padding:9px 16px;border-radius:50px;
+  border:1px solid rgba(255,255,255,.16);
+  font-family:var(--mono);font-size:9px;letter-spacing:2.2px;text-transform:uppercase;
+  color:rgba(255,255,255,.6);
+  transition:border-color .22s,color .22s,background .22s;
+}
+.svc:hover .svc-go{
+  border-color:var(--bc);color:var(--bc);
+  background:color-mix(in srgb, var(--bc) 13%, transparent);
+}
+.svc-note{
   font-family:var(--mono);font-size:8.5px;letter-spacing:2.2px;text-transform:uppercase;
-  color:rgba(255,255,255,.24);margin-top:12px;
+  color:rgba(255,255,255,.24);margin-top:14px;
 }
 
 /* ══════════════════════════════════════
@@ -247,36 +273,31 @@ body::after{
 
 /* ══════════════════════════════════════
    MOBILE — the rule: BUY stays above the fold.
-   The cover is capped so it can never push it down.
+   The cover is capped so it can never push the button
+   down, and capped tight enough that the first service
+   row peeks in underneath it. That peek is the only
+   scroll cue this page needs.
 ══════════════════════════════════════ */
 @media (max-width:860px){
-  .wrap{padding:22px 18px 48px}
-  .rel{grid-template-columns:1fr;gap:24px}
-  .art{max-width:min(300px,42vh);margin:0 auto;width:100%}
+  .wrap{padding:20px 16px 48px}
+  .rel{grid-template-columns:1fr;gap:22px}
+  .art{max-width:min(280px,34vh);margin:0 auto;width:100%}
   .info{align-items:center;text-align:center}
   .title{font-size:clamp(32px,10vw,46px)}
   .buy{max-width:none}
-  .dsp-row{justify-content:center}
-  .dsp-label{margin:24px 0 11px}
+  .svc-list{grid-template-columns:1fr;gap:9px}
+  .svc-head,.svc-note{text-align:center}
   .onward{grid-template-columns:1fr}
 }
-/* Three labelled pills will not sit on one line on any phone — they always
-   broke 2 + 1, which reads as a mistake rather than a row. On phones the
-   marks carry it alone: one row, guaranteed, and a 46px circle is a real
-   tap target for when these go live. The label stays in the DOM for
-   screen readers. */
-@media (max-width:480px){
-  .dsp-row{gap:12px}
-  .dsp{
-    width:46px;height:46px;padding:0;border-radius:50%;
-    justify-content:center;gap:0;font-size:0;letter-spacing:0;
-  }
-  .dsp svg{width:19px;height:19px}
-}
 
-@media (max-width:420px){
-  .art{max-width:min(260px,36vh)}
+@media (max-width:480px){
+  .art{max-width:min(228px,28vh)}
   .credit{margin-bottom:20px}
+  .buy{padding:17px 24px;letter-spacing:4px}
+  .svcs{margin-top:24px}
+  .svc{min-height:60px;padding:0 10px 0 14px}
+  .svc-name{font-size:10.5px;letter-spacing:1.1px}
+  .svc-go{padding:8px 13px;font-size:8.5px;letter-spacing:1.8px}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -306,7 +327,7 @@ body::after{
     <!-- ── COVER ── -->
     <div class="art">
       <div class="art-glow"></div>
-      <img src="assets/upgrade-you.jpg" alt="Upgrade You — Stars* &amp; SammO cover art" width="1400" height="1400">
+      <img src="assets/upgrade-you.jpg" alt="Upgrade You — Stars* &amp; SammO cover art" width="1400" height="1400" fetchpriority="high">
       <span class="afr tl"></span><span class="afr tr"></span>
       <span class="afr bl"></span><span class="afr br"></span>
     </div>
@@ -315,12 +336,12 @@ body::after{
     <div class="info">
       <div class="tag">
         <span class="tag-dot"></span>
-        <span class="tag-txt" id="tag-txt">New Release</span>
+        <span class="tag-txt" id="tag-txt">Out Now</span>
       </div>
 
       <h1 class="title" id="rel-title">Upgrade You</h1>
       <p class="by">Stars* <b>&amp;</b> SammO</p>
-      <p class="credit">Produced by Stars*</p>
+      <p class="credit">Single · Produced by Stars* · <time datetime="2026-08-28">Aug 28, 2026</time></p>
 
       <a class="buy" id="buy-btn"
          href="https://untitled.stream/buy/project/NVZR6Foikt80sX1cZs3ew"
@@ -331,22 +352,117 @@ body::after{
       </a>
       <p class="buy-sub">Own the file · Support directly</p>
 
-      <p class="dsp-label">Also streaming on</p>
-      <div class="dsp-row">
-        <span class="dsp soon">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.997 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 0 0-1.877-.726 10.496 10.496 0 0 0-1.564-.15c-.04-.003-.083-.01-.124-.013H5.988c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.802.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 0 0 1.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 0 0 1.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193v-5.086c0-.11-.024-.19-.075-.245-.052-.056-.13-.076-.243-.055-.096.018-1.166.242-1.166.242l-4.42.92-.152.033c-.31.07-.5.284-.51.6-.002.05-.006.1-.006.15V16.5c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193V7.03c0-.276.04-.55.145-.807.15-.365.42-.6.79-.72.207-.067.42-.106.634-.15l6.32-1.276c.192-.04.386-.07.582-.086.404-.032.72.22.784.62.014.09.02.18.02.27.002 1.746.002 3.49.002 5.234z"/></svg>
-          Apple Music
-        </span>
-        <span class="dsp soon">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-          Spotify
-        </span>
-        <span class="dsp soon">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          YouTube
-        </span>
-      </div>
-      <p class="dsp-note">In processing · links go live on delivery</p>
+      <!-- ══ SERVICES ══
+           Order is deliberate: the two apps most people already have open
+           sit at the top, so the common case is the first tap. -->
+      <section class="svcs" aria-labelledby="svc-head">
+        <p class="svc-head" id="svc-head">Or choose your service</p>
+        <div class="svc-list">
+
+          <a class="svc" style="--bc:#1db954" href="https://open.spotify.com/album/4oyx0iktcQP3FcNGgfCqgX"
+             target="_blank" rel="noopener"
+             data-track="Stream" data-release="Upgrade You" data-surface="landing" data-service="spotify">
+            <span class="svc-mark">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+              <span class="svc-name">Spotify</span>
+            </span>
+            <span class="svc-go">Play</span>
+          </a>
+
+          <a class="svc" style="--bc:#fa243c" href="https://geo.music.apple.com/us/album/upgrade-you-single/6806324006?app=music&amp;ls=1"
+             target="_blank" rel="noopener"
+             data-track="Stream" data-release="Upgrade You" data-surface="landing" data-service="apple">
+            <span class="svc-mark">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.997 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 0 0-1.877-.726 10.496 10.496 0 0 0-1.564-.15c-.04-.003-.083-.01-.124-.013H5.988c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.802.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 0 0 1.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 0 0 1.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193v-5.086c0-.11-.024-.19-.075-.245-.052-.056-.13-.076-.243-.055-.096.018-1.166.242-1.166.242l-4.42.92-.152.033c-.31.07-.5.284-.51.6-.002.05-.006.1-.006.15V16.5c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536-.142-.773.227-1.624 1.038-2.022.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.876.876 0 0 0 .02-.193V7.03c0-.276.04-.55.145-.807.15-.365.42-.6.79-.72.207-.067.42-.106.634-.15l6.32-1.276c.192-.04.386-.07.582-.086.404-.032.72.22.784.62.014.09.02.18.02.27.002 1.746.002 3.49.002 5.234z"/></svg>
+              <span class="svc-name">Apple Music</span>
+            </span>
+            <span class="svc-go">Play</span>
+          </a>
+
+          <a class="svc" style="--bc:#25d1da" href="https://music.amazon.com/albums/B0HH3GHMNN?ref=dm_ff_amazonmusic_3p"
+             target="_blank" rel="noopener"
+             data-track="Stream" data-release="Upgrade You" data-surface="landing" data-service="amazon">
+            <span class="svc-mark">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16.55 2.62a.6.6 0 0 1 .75.58v8.9a3.1 3.1 0 1 1-1.62-2.72V5.08L10.1 6.25v7.72a3.1 3.1 0 1 1-1.62-2.72V5.6c0-.4.28-.74.67-.83z"/>
+                <path d="M2.63 18.72c-.27.35.07.82.47.63A19.7 19.7 0 0 0 12 21.3c2.87 0 5.7-.6 8.3-1.74.5-.22.14-.97-.36-.83A24 24 0 0 1 12 19.8a23.7 23.7 0 0 1-8.6-1.58.64.64 0 0 0-.77.5z"/>
+                <path d="M21.35 17.98c-.3-.38-1.95-.18-2.7-.09-.22.03-.26-.17-.06-.31.94-.65 2.46-.46 2.64-.24.18.22-.05 1.75-.93 2.48-.13.11-.26.05-.2-.09.2-.5.64-1.38.44-1.65z"/>
+              </svg>
+              <span class="svc-name">Amazon Music</span>
+            </span>
+            <span class="svc-go">Play</span>
+          </a>
+
+          <a class="svc" style="--bc:#f452b8" href="https://geo.music.apple.com/us/album/upgrade-you-single/6806324006?app=itunes&amp;ls=1"
+             target="_blank" rel="noopener"
+             data-track="Buy" data-release="Upgrade You" data-surface="landing" data-service="itunes">
+            <span class="svc-mark">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+                <path fill="currentColor" d="M15.9 5.92c.3-.07.56.16.56.46v8.1a2.6 2.6 0 1 1-1.36-2.28V8.05l-4.7 1.04v6.4a2.6 2.6 0 1 1-1.36-2.29V8.42c0-.31.22-.58.52-.65z"/>
+              </svg>
+              <span class="svc-name">iTunes Store</span>
+            </span>
+            <span class="svc-go">Download</span>
+          </a>
+
+          <a class="svc" style="--bc:#ffffff" href="https://www.tidal.com/album/556568804"
+             target="_blank" rel="noopener"
+             data-track="Stream" data-release="Upgrade You" data-surface="landing" data-service="tidal">
+            <span class="svc-mark">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.012 3.992 8.008 7.996 4.004 3.992 0 7.996 4.004 12l4.004-4.004L12.012 12l-4.004 4.004 4.004 4.004 4.004-4.004L12.012 12l4.004-4.004L20.02 12l4.004-4.004-4.004-4.004-4.004 4.004z"/></svg>
+              <span class="svc-name">Tidal</span>
+            </span>
+            <span class="svc-go">Play</span>
+          </a>
+
+          <a class="svc" style="--bc:#ff0000" href="https://www.youtube.com/playlist?list=OLAK5uy_l74MuGod47BI0lOz_NDyPAyvZTuNQfMiY"
+             target="_blank" rel="noopener"
+             data-track="Stream" data-release="Upgrade You" data-surface="landing" data-service="youtube">
+            <span class="svc-mark">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              <span class="svc-name">YouTube</span>
+            </span>
+            <span class="svc-go">Play</span>
+          </a>
+
+          <a class="svc" style="--bc:#ff5500" href="https://soundcloud.com/starstory-music/upgrade-you?utm_medium=api&amp;utm_campaign=social_sharing&amp;utm_source=id_172153"
+             target="_blank" rel="noopener"
+             data-track="Stream" data-release="Upgrade You" data-surface="landing" data-service="soundcloud">
+            <span class="svc-mark">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="0"   y="12.6" width="1.5" height="4.6" rx=".75"/>
+                <rect x="2.7" y="11"   width="1.5" height="6.2" rx=".75"/>
+                <rect x="5.4" y="9.5"  width="1.5" height="7.7" rx=".75"/>
+                <rect x="8.1" y="11.4" width="1.5" height="5.8" rx=".75"/>
+                <path d="M11.1 17.2V8.9a5.1 5.1 0 0 1 7.62 3.2 3.55 3.55 0 0 1-.62 7.05h-6.05a.95.95 0 0 1-.95-.95z"/>
+              </svg>
+              <span class="svc-name">SoundCloud</span>
+            </span>
+            <span class="svc-go">Play</span>
+          </a>
+
+          <a class="svc" style="--bc:#ffa200" href="https://audiomack.com/stars-69015599d358b/song/upgrade-you?utm_source=featurefm&amp;utm_campaign=onelink&amp;utm_medium=website"
+             target="_blank" rel="noopener"
+             data-track="Stream" data-release="Upgrade You" data-surface="landing" data-service="audiomack">
+            <span class="svc-mark">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="1"    y="10.4" width="2.1" height="3.2"  rx="1.05"/>
+                <rect x="4.6"  y="7.6"  width="2.1" height="8.8"  rx="1.05"/>
+                <rect x="8.2"  y="3.4"  width="2.1" height="17.2" rx="1.05"/>
+                <rect x="11.8" y="6.2"  width="2.1" height="11.6" rx="1.05"/>
+                <rect x="15.4" y="8.8"  width="2.1" height="6.4"  rx="1.05"/>
+                <rect x="19"   y="10.4" width="2.1" height="3.2"  rx="1.05"/>
+              </svg>
+              <span class="svc-name">Audiomack</span>
+            </span>
+            <span class="svc-go">Play</span>
+          </a>
+
+        </div>
+        <p class="svc-note">Every link opens the record directly</p>
+      </section>
+
     </div>
 
   </section>
@@ -369,26 +485,56 @@ body::after{
 
 </main>
 
-<script src="scramble.js"></script>
-<script src="analytics.js"></script>
-<script>
-/* The house effect, used once and briefly. The title is in the HTML
-   above so it is readable with JS off and to a crawler; this only
-   re-resolves it on arrival. The buy button never waits on it. */
-(function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var t = document.getElementById('rel-title');
-  var g = document.getElementById('tag-txt');
-  whenVisible(function () {
-    scrambleTo(g, 'NEW RELEASE');
-    setTimeout(function () { scrambleTo(t, 'UPGRADE YOU'); }, 140);
-  });
-})();
-
-/* Did they get far enough to see the button? */
-if (window.Stars) {
-  Stars.watchOnce('#buy-btn', 'Buy Visible', { release: 'Upgrade You', surface: 'landing' });
+<!-- The record, told to machines. This is the half of "the site is the
+     smart link" that a person never sees: a crawler reading this page
+     gets the release date and every destination in one pass. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicRecording",
+  "name": "Upgrade You",
+  "byArtist": [
+    { "@type": "MusicGroup", "name": "Stars*" },
+    { "@type": "MusicGroup", "name": "SammO" }
+  ],
+  "producer": { "@type": "Person", "name": "Stars*" },
+  "datePublished": "2026-08-28",
+  "image": "https://scratchbradley.com/assets/upgrade-you.jpg",
+  "url": "https://scratchbradley.com/upgrade-you",
+  "sameAs": [
+    "https://open.spotify.com/album/4oyx0iktcQP3FcNGgfCqgX",
+    "https://music.apple.com/us/album/upgrade-you-single/6806324006",
+    "https://music.amazon.com/albums/B0HH3GHMNN",
+    "https://www.tidal.com/album/556568804",
+    "https://www.youtube.com/playlist?list=OLAK5uy_l74MuGod47BI0lOz_NDyPAyvZTuNQfMiY",
+    "https://soundcloud.com/starstory-music/upgrade-you",
+    "https://audiomack.com/stars-69015599d358b/song/upgrade-you"
+  ]
 }
+</script>
+
+<script src="scramble.js" defer></script>
+<script src="analytics.js" defer></script>
+<script>
+/* Deferred scripts finish before DOMContentLoaded, so this waits rather
+   than racing them — and nothing on the page depends on it. The title is
+   in the HTML above: readable with JS off, and to a crawler. The house
+   effect only re-resolves it on arrival. */
+window.addEventListener('DOMContentLoaded', function () {
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      typeof whenVisible === 'function') {
+    var t = document.getElementById('rel-title');
+    var g = document.getElementById('tag-txt');
+    whenVisible(function () {
+      scrambleTo(g, 'OUT NOW');
+      setTimeout(function () { scrambleTo(t, 'UPGRADE YOU'); }, 140);
+    });
+  }
+  /* Did they get far enough to see the button? */
+  if (window.Stars) {
+    Stars.watchOnce('#buy-btn', 'Buy Visible', { release: 'Upgrade You', surface: 'landing' });
+  }
+});
 </script>
 </body>
 </html>
